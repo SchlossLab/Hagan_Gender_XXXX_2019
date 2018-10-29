@@ -1,0 +1,101 @@
+---
+title: "Gender representation in ASM journals"
+author: "Ada Hagan"
+date: "July 17, 2018"
+output:
+  html_document:
+    df_print: paged
+csl: asm.csl
+bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Abstract
+
+#Introduction
+
+  + Gender disparity in stem
+  
+  + Studies evaluating gender in publications
+      + Nature
+      + JAMA
+      + Glam journals
+      + Science?
+      + Ecology (Cho, 2014; Pettorelli, 2013; Buckley, 2014)
+      + Medical (Amrein, 2011; del Carmen, 2003)
+      + Authorship analyis of 8 million papers - West, 2013
+      + Reviewer practice by gender - Grod, 2008
+      + recognition for group work - Sarsons, 2017
+  
+  + Few look at submissions to understand source of disparity
+      + AGU
+      + JAMA (Gilbert & Williams)
+      + (Buckley, 2014)
+      + elife preprint
+  
+  + This study
+      + Cumulative data since 2012 to see where ASM stands
+      + Use submissions and compare to membership to see where disparity exists (if at all)
+
+#Results
+
+##Validating gender analysis
+
+  + predicted vs percieved gender of editors
+  
+  + predicted names by country (countries associated w. NA genders?)
+  
+  + Nicole's dataset?
+
+##Current status
+   + gender of all editors over time
+   
+   + breakdown into editor type: e.g., EiC, senior, associate?
+   
+   + gender of all reviewers over time
+   
+   + gender of all senior/coresponding authors over time
+   
+   + gender of all first authors over time
+   
+   + gender of all authors
+   
+   + proportion of gender at each stage: e.g., author, reviewer, editor by type
+   
+   + invited manuscripts by gender
+   
+   + submitted manuscripts by gender
+   
+   + male/female dominated categories? journals?
+   
+#Discussion
+  + Compare to global micro stats (Elsiever Gender report)
+  
+  + compare proportions to ASM membership
+  
+  + impact of under rep in publication process (Leahey, 2007; )
+  
+  + future directions
+      + are female-authored papers handled differently from male-authored (number of revisions/decisions)
+      + M/F reviewer/editor recommendations differ by gender of author/editor/reviewer
+      + publication frequency & authorship prestige of M vs F 
+
+#Data and Methods
+
+###Data
+
+All manuscripts handled by ASM journals (mBio...) that recieved an editorial decision between January 1st, 2012 and August 31st, 2018 were supplied as XML files by ASM's publishing platform, eJP. Data were extracted from the XML documents provided using R statistical software (version 3.4.4) and the `XML` package. Data manipulation was handled using the `tidyverse` and `lubridate` R packages. Variables of interest included: the manuscript number assigned to each submission, manuscript type (e.g., full length research, erratum, editorial), category (e.g., microbial ecology), related (previously submitted) manuscripts, versions submitted, dates (e.g., submission, decision), author data (e.g., first, last, and corresponding authorships, total number of authors), reviewer data (e.g., reviewer score, recommendation, editor decision), and person data (names, institutions, country) of the editors, authors, and reviewers. 
+
+It is common practice at ASM journals for manuscripts whose reviewers recommend extensive experimental revisions be given a decision of "reject with resubmission encouraged". If resubmitted, the authors are asked to note the previous (related) manuscript and the resubmission is assigned a new manuscript number. Multiple related manuscripts were tracked together by generating a unique grouped manuscript number based on the recorded related manuscript numbers. This grouped manuscript number served multiple purposes including: tracking a single manuscript through multiple rejections or transfers between ASM journals and to avoid duplicate counts of the same authors. 
+
+###Gender assignment
+
+The gender assignment API genderize.io was used to predict an indivdual's gender based on their given names, and country where possible. The genderize.io platform uses data gathered from social media to predict gender based on given names with the option to include an associated language or country to enhance the odds of succesful prediction. Since all manuscripts are submitted in English, we matched each individuals country against the list of X country names accepted by genderize.io. All unique given names associated with an accepted country were submitted to the genderize.io API and any names returned without a predictive assignment of either male or female were resubmitted without an associated country. All predictive assignments of either male or female are returned with a probability match of 0.50 or greater. The predicted genders of all given names (with and without an associated country) whose probabilities were greater or equal to our arbitrary success cut off of 0.65 were used to assign predicted gender to the individuals in our dataset. Predicted genders were assigned to individuals in the following order: first names and country, first names, middle names and country, middle names. Individuals who were not assigned a gender are given values of "N/A" and referred to in the analysis as those with an "unknown" gender. The predicted (male/female) gender of editors and senior editors in our dataset was hand validated using Google. 
+
+###Data analysis and presentation
+
+
+#References
