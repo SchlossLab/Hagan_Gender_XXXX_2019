@@ -1,18 +1,18 @@
 #analyze people data
 
-num_people <- research_only %>% select(person.id.y) %>% distinct() %>% nrow() #how many different people
+num_people <- data %>% select(random.person.id.y) %>% distinct() %>% nrow() #how many different people
 
-num_authors <- research_only %>% filter(role == "author") %>% select(person.id.y) %>% distinct() %>% nrow() #how many authors
+num_authors <- data %>% filter(role.y == "author") %>% select(random.person.id.y) %>% distinct() %>% nrow() #how many authors
 
-num_editors <- research_only %>% filter(role == "editor") %>% select(person.id.y) %>% distinct() %>% nrow() #how many in editor roles
+num_editors <- data %>% filter(role.y == "editor") %>% select(random.person.id.y) %>% distinct() %>% nrow() #how many in editor roles
 
-num_sen_ed <- research_only %>% filter(role == "senior.editor") %>% select(person.id.y) %>% distinct() %>% nrow() #
+num_sen_ed <- data %>% filter(role.y == "senior.editor") %>% select(random.person.id.y) %>% distinct() %>% nrow() #
 
-num_reviewers <- research_only %>% filter(role == "reviewer") %>% select(person.id.y) %>% distinct() %>% nrow() #how many reviewers
+num_reviewers <- data %>% filter(role.y == "reviewer") %>% select(random.person.id.y) %>% distinct() %>% nrow() #how many reviewers
 
-gender_people <- research_only %>% group_by(gender) %>% distinct(person.id.y) %>% summarise(n = n()) #gender breakdown
+gender_people <- data %>% group_by(gender.y) %>% distinct(random.person.id.y) %>% summarise(n = n()) #gender breakdown
 
-gender_roles <- research_only %>% group_by(role, gender) %>% distinct(person.id.y) %>% summarise(n = n()) %>% as.tibble()
+gender_roles <- data %>% group_by(role.y, gender.y) %>% distinct(random.person.id.y) %>% summarise(n = n()) %>% as.tibble()
 
 get_role_total <- function(x){
   case_when(
@@ -23,12 +23,12 @@ get_role_total <- function(x){
   )
 }
 
-gender_roles_prop <- gender_roles %>% mutate(total = get_role_total(role)) %>% 
+gender_roles_prop <- gender_roles %>% mutate(total = get_role_total(role.y)) %>% 
   mutate(prop = round((n/total)*100, digits = 2))
 
 gender_roles_prop %>% 
-  ggplot(aes(x = gender, y = prop, fill = gender)) +
+  ggplot(aes(x = gender.y, y = prop, fill = gender.y)) +
   geom_col() +
-  facet_grid(~role)
+  facet_grid(~role.y)
 
-ggsave("Results/Plots/gender_prop_subs.jpg")
+ggsave("results/gender_prop_subs.jpg")

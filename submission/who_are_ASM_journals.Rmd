@@ -1,56 +1,93 @@
 ---
-title: "Gender bias at ASM journals"
+title: "Who are ASM journals: an analysis of authors, reviewers, and editors"
 author: "Ada Hagan"
-date: "July 17, 2018"
-output:
-  html_document:
-    df_print: paged
-csl: asm.csl
-bibliography: references.bib
+date: "October 30, 2018"
+output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 #Abstract
 
 #Introduction
 
-  + Gender disparity in stem
+  + STEM has a representation problem - cite papers on gender/minority representation in publishing
   
-  + Studies evaluating gender in publications
-      + Nature
-      + JAMA
-      + Glam journals
-      + Science?
-      + Ecology (Cho, 2014; Pettorelli, 2013; Buckley, 2014)
-      + Medical (Amrein, 2011; del Carmen, 2003)
-      + Authorship analyis of 8 million papers - West, 2013
-      + Reviewer practice by gender - Grod, 2008
-      + recognition for group work - Sarsons, 2017
+  + Increasing globalization of journals/peer review
   
-  + Few look at submissions to understand source of disparity
-      + AGU
-      + JAMA (Gilbert & Williams)
-      + (Buckley, 2014)
-      + elife preprint
+  + Increasing awareness of diversity metrics & impacts on productivity/innovation
   
+  + History and mission of ASM journals
+
   + This study
+      + Serve membership - accountability
       + Cumulative data since 2012 to see where ASM stands
       + Use submissions and compare to membership to see where disparity exists (if at all)
 
 #Results
+
+##Validating gender analysis
+
+  + predicted vs percieved gender of editors
+  
+  + predicted names by country (countries associated w. NA genders?)
+  
+  + Nicole's dataset?
+
+##Gender
+   + gender of all editors over time
+   
+   + breakdown into editor type: e.g., EiC, senior, associate?
+   
+   + gender of all reviewers over time
+   
+   + gender of all senior/coresponding authors over time
+   
+   + gender of all first authors over time
+   
+   + gender of all authors
+   
+   + proportion of gender at each stage: e.g., author, reviewer, editor by type
+   
+   + invited manuscripts by gender
+   
+   + male/female dominated categories? journals?
+   
+##Geographic
+   
+   + geographic origin of all editors over time
+   
+   + breakdown into editor type: e.g., EiC, senior, associate?
+   
+   + geographic dist of all reviewers over time
+   
+   + geographic of all senior/coresponding authors over time
+   
+   + geographic of all first authors over time
+   
+   + geographic of all authors
+   
+   + proportion of geography at each stage: e.g., author, reviewer, editor by type
+   
+   + invited manuscripts by gender
+   
+   + submitted manuscripts by gender
+   
+   + geographically dominated categories? journals?
+
+   
+#Discussion
+  + Compare to global micro stats (Elsiever Gender report)
+  
+  + compare proportions to ASM membership
+  
+  + impact of under rep in publication process (Leahey, 2007; )
+  
+  + describe society health checklist - apply to journals
+  
+  + future directions
+      + lay out forth coming papers to use this data to examine ASM peer review for gender & geographic bias
       + are female-authored papers handled differently from male-authored (number of revisions/decisions)
       + M/F reviewer/editor recommendations differ by gender of author/editor/reviewer
       + publication frequency & authorship prestige of M vs F 
-      + reviewer score
-      + % accepted by gender of first author/last/corres/editor/reviewer
-
-#Discussion
-
-  + future directions
-      + 
 
 #Data and Methods
 

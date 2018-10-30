@@ -26,30 +26,29 @@ gender <- results %>% group_by(gender) %>% summarise(n = n()) %>%
 unknown_by_count <- results %>% filter(is.na(gender)) %>% group_by(country) %>% summarise(n = n()) %>% 
   as.data.frame() %>% mutate(percent = get_percent(n, num_na_gender)) %>% arrange(desc(percent))
 
-#% authors gender assigned by country
+#% authors gender assigned by country ----
 
-country_list <- results %>% pull(country) %>% unique()
+country_list <- results %>% filter(!is.na(country)) %>% pull(country) %>% unique()
 
 percent_assigned <- map_df(country_list, function(x){
+  
   num_country <- results %>% filter(country == x) %>% nrow()
   
   gender_df <- results %>% filter(country == x) %>% group_by(gender) %>% summarise(n = n()) %>% 
   as.data.frame() %>% mutate(percent = get_percent(n, num_country))
   
-  country_gender <- cbind(country = paste(x), gender_df) #can't get this to work...
+  country <- x
+  
+  country_gender <- cbind(country, gender_df)
   
   return(country_gender)
 }
 )
 
-#US authors gender assigned
-num_us <- results %>% filter(country == "United States") %>% nrow()
+num_na_country <- results %>% filter(is.na(country)) %>% nrow()
 
-us_gender <- results %>% filter(country == "United States") %>% group_by(gender) %>% summarise(n = n()) %>% 
-  as.data.frame() %>% cbind(country = "United States", .) %>% mutate(percent = get_percent(n, num_us))
+na_country_assigned <- results %>% filter(is.na(country)) %>% group_by(gender) %>% 
+  summarise(n = n()) %>% as.data.frame() %>% mutate(percent = get_percent(n, num_na_country)) %>% 
+  cbind(country = NA, .)
 
-#Japan authors gender assigned
-num_japan <- results %>% filter(country == "Japan") %>% nrow()
-
-japan_gender <- results %>% filter(country == "Japan") %>% group_by(gender) %>% summarise(n = n()) %>% 
-  as.data.frame() %>% mutate(percent = get_percent(n, num_japan))
+percent_assigned <- percent_assigned %>% rbind(na_country_assigned)
