@@ -4,12 +4,19 @@ author: "Ada Hagan"
 date: "October 30, 2018"
 output: html_document
 ---
+```{r, setup}
+source("code/analysis_functions.R")
+source("code/load_data.R")
+source("code/get_plot_options.R")
+```
 
 #Abstract
 
 #Introduction
 
   + STEM has a representation problem - cite papers on gender/minority representation in publishing
+  
+  Evidence has accumulated over the decades that academic research has a representation problem. With regards to gender, while at least 50% of biology Ph.D. graduates are women, the number of women in postdoctoral posiitions and tenure-track positions are less than X and X%, respectively. Studies examining other metrics such as race and ethnicity find that .... Predictabily, the disparities increase along with academic rank. There have been many proposed reasons for 
   
   + Increasing globalization of journals/peer review
   
@@ -37,7 +44,7 @@ output: html_document
 ##Gender
    + gender of all editors over time
    
-   + breakdown into editor type: e.g., EiC, senior, associate?
+   + breakdown into editor type: e.g., EiC, senior, associate? (ed_gender_time.R)
    
    + gender of all reviewers over time
    

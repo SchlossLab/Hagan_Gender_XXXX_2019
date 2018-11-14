@@ -24,11 +24,18 @@ get_role_total <- function(x){
 }
 
 gender_roles_prop <- gender_roles %>% mutate(total = get_role_total(role.y)) %>% 
-  mutate(prop = round((n/total)*100, digits = 2))
+  mutate(prop = round((n/total)*100, digits = 2)) %>% 
+  mutate(gender.y = fct_explicit_na(gender.y, na_level = "none"))
+
+role_labels <- c(author = "Author", editor = "Editor", reviewer = "Reviewer", senior.editor = "Editor-in-Chief")
 
 gender_roles_prop %>% 
   ggplot(aes(x = gender.y, y = prop, fill = gender.y)) +
   geom_col() +
-  facet_grid(~role.y)
+  facet_grid(~role.y, labeller = labeller(role.y = role_labels))+
+  scale_fill_manual(values = gen_colors)+
+  scale_x_discrete(labels = gen_labels)+
+  labs(x = "Predicted Gender", y = "Proportion in Role")+
+  my_theme_horiz
 
 ggsave("results/gender_prop_subs.jpg")
