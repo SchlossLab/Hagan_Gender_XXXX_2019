@@ -16,6 +16,8 @@ output: html_document
   + Increasing awareness of diversity metrics & impacts on productivity/innovation
   
   + History and mission of ASM journals
+      + Why publish with ASM: "Reinvest in and support your scientific community"; "quality peer review and editorial leadership"
+      + ASM mission: "ASM is an inclusive organization, engaging with and responding to the needs of its diverse constituencies."; "Enhance ASM's ability to address all members' needs through development and assessment of programs and services"
 
   + This study
       + Serve membership - accountability
@@ -77,7 +79,7 @@ output: html_document
 #Discussion
   + Compare to global micro stats (Elsiever Gender report)
   
-  + compare proportions to ASM membership
+  + compare proportions to ASM membership: 37% self-reported as F in 2012
   
   + impact of under rep in publication process (Leahey, 2007; )
   
