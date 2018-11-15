@@ -41,18 +41,20 @@ source("code/get_plot_options.R")
   
   + Nicole's dataset?
 
-##Gender
+##Gender (pre or post publication?)
    + gender of all editors over time
    
    + breakdown into editor type: e.g., EiC, senior, associate? (ed_gender_time.R)
    
-   + gender of all reviewers over time
+   + gender of all reviewers over time (reviewer_gender_time.R)
    
-   + gender of all senior/coresponding authors over time
+   + gender of all senior/coresponding authors over time (last_gender_time.R/corres_gender_time.R)
    
-   + gender of all first authors over time
+   + gender of all first authors over time (first_gender_time.R)
    
-   + gender of all authors
+   + gender of middle authors over time (middle_gender_time.R)
+   
+   + gender of all authors (auth_gender_time.R)
    
    + proportion of gender at each stage: e.g., author, reviewer, editor by type
    
