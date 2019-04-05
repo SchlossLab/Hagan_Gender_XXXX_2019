@@ -10,6 +10,15 @@ bibliography: references.bib
 ---
 
 ```{r setup, include=FALSE}
+#library(knitr)
+#library(kableExtra)
+#library(markdown)
+#library(rmarkdown)
+#library(formattable)
+
+source("code/analysis_functions.R")
+source("code/load_data.R")
+source("code/get_plot_options.R")
 knitr::opts_chunk$set(echo = TRUE)
 ```
 

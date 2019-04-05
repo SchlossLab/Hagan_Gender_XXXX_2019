@@ -1,4 +1,4 @@
-source("code/load_data.R") #loads and cleans all data for use
+#source("code/load_data.R") #loads and cleans all data for use
 
 num_subs <- data %>% select(random.manu.num) %>% distinct() %>% nrow()
 

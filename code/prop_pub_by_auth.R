@@ -3,11 +3,11 @@ source("code/manu_meta.R")
 #select authorship roles----
 first_auth <- data %>% filter(author.seq == "1")
 
-corres_auth <- data %>% filter(author.corres == "true")
+corres_auth <- data %>% filter(author.corres == "TRUE")
 
-last_auth <- data %>% filter(author.last == "true")
+last_auth <- data %>% filter(author.last == "TRUE")
 
-middle_auth <- data %>% filter(author.seq != "1" & author.last == "false")
+middle_auth <- data %>% filter(author.seq != "1" & author.last == "FALSE")
 
 #count number of unique individuals in each role----
 num_first <- first_auth %>% select(random.person.id.y) %>% distinct() %>% nrow()
@@ -31,13 +31,13 @@ middle_auth_gen <- middle_auth %>% group_by(gender.y) %>% distinct(grouped.rando
 first_auth_pub <- data %>% filter(published == "yes" & author.seq == "1") %>% 
   group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as.tibble()
 
-corres_auth_pub <- data %>% filter(published == "yes" & author.corres == "true") %>% 
+corres_auth_pub <- data %>% filter(published == "yes" & author.corres == "TRUE") %>% 
   group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as.tibble()
 
-last_auth_pub <- data %>% filter(published == "yes" & author.last == "true") %>% 
+last_auth_pub <- data %>% filter(published == "yes" & author.last == "TRUE") %>% 
   group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as.tibble()
 
-middle_auth_pub <- data %>% filter(published == "yes" & author.last == "false" & author.seq != "1") %>% 
+middle_auth_pub <- data %>% filter(published == "yes" & author.last == "FALSE" & author.seq != "1") %>% 
   group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as.tibble()
 
 #summary of published vs rejected authors in each role----
@@ -69,7 +69,8 @@ prop_pub_by_auth <- rbind(prop_corres_auth_gen, prop_first_auth_gen, prop_last_a
 prop_pub_by_auth %>% 
   ggplot(aes(x = gender.y, y = prop, fill = gender.y)) +
   geom_col()+
-  facet_grid(~author, labeller = labeller(author = str_to_title))+
+  coord_flip()+
+  facet_wrap(~author, labeller = labeller(author = str_to_title), ncol = 1)+
   geom_hline(yintercept = percent_pubbed)+
   scale_fill_manual(values = gen_colors)+
   scale_x_discrete(labels = gen_labels)+
@@ -77,4 +78,4 @@ prop_pub_by_auth %>%
        caption = paste0("Black line indicates the overall publication rate of ", percent_pubbed, "%"))+
   my_theme_horiz
 
-ggsave("results/prop_pub_by_auth.jpg")
+#ggsave("results/prop_pub_by_auth.jpg")
