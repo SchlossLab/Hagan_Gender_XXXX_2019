@@ -29,16 +29,16 @@ middle_auth_gen <- middle_auth %>% group_by(gender.y) %>% distinct(grouped.rando
 
 #summary of published individuals in each role by gender (per grouped manu)----
 first_auth_pub <- data %>% filter(published == "yes" & author.seq == "1") %>% 
-  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as.tibble()
+  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
 
 corres_auth_pub <- data %>% filter(published == "yes" & author.corres == "TRUE") %>% 
-  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as.tibble()
+  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
 
 last_auth_pub <- data %>% filter(published == "yes" & author.last == "TRUE") %>% 
-  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as.tibble()
+  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
 
 middle_auth_pub <- data %>% filter(published == "yes" & author.last == "FALSE" & author.seq != "1") %>% 
-  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as.tibble()
+  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
 
 #summary of published vs rejected authors in each role----
 num_first_auth <- first_auth %>% group_by(published) %>% distinct(grouped.random) %>% summarise(n = n())
