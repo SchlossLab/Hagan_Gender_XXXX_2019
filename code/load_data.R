@@ -15,8 +15,3 @@ data <- left_join(manu_data, reviews_data, by = c("random.manu.num", "grouped.ra
   rename("reviewer.country" = "country.x", "reviewer.institution" = "institution.x", "reviewer.gender" = "gender.x", "reviewer.random.id" = "random.person.id.x") %>% #rename.x person info to reviewer info
   select(-role.x) %>% #drop unneeded role.x column (b/c all reviewer)
   filter(year(submitted.date) >= "2011") #drop anything submitted in 2011
-
-#below is commented out b/c I already did this when I generated the 2018_*_ready.csv files----
-#research_articles <- c("Full-length text", "Full-Length Text", "New-Data Letter", "Observation", "Research Article", "Short Form", "Short-Form Paper", "Opinion/Hypothesis", "AAM Contribution-Observation", "AAM Contribution-Research Article")
-
-#research_only <- data %>% filter(manuscript.type %in% research_articles)

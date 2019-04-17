@@ -2,7 +2,7 @@
 
 #other interesting variables not included here: # reviewers, # versions, days.pending, 
 
-genders <- c("0", "1", "2")
+genders <- c("male", "female", "none")
 
 reg_data <- data %>% 
   select(role.y, published, author.seq, author.corres, author.last, gender.y, reviewer.gender, reviewer.random.id, random.manu.num, random.person.id.y) %>% 
@@ -21,7 +21,7 @@ reg_data <- data %>%
 
 first_auth <- reg_data %>% 
   select(published, first.auth, random.manu.num) %>% 
-  filter(first.auth %in% genders) %>% View()
+  filter(first.auth %in% genders) %>% distinct()
   mutate(first.auth = fct_lump(first.auth, n = 3)) %>% distinct() 
 
 corres_auth <- reg_data %>% 
@@ -72,4 +72,4 @@ reg2_data <- full_join(first_auth, corres_auth, by = c("published", "random.manu
   full_join(., sen_editor, by = c("published", "random.manu.num")) %>% distinct() %>% 
   full_join(., men_rev_data, by = "random.manu.num") %>% distinct() %>% 
   #mutate_at(gender_cols, fct_recode(., 0 = "0", 1 = "1", 2 = "2")) %>% 
-  mutate_if(is.character, as.factor)
+  mutate_all(as.factor)
