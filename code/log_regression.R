@@ -4,6 +4,10 @@
 
 genders <- c("male", "female", "none")
 
+gender_cols <- c("first.auth", "corres.auth", "last.auth")
+
+editor_cols <- c("editor", "sen.editor")
+
 reg_data <- data %>% 
   select(role.y, published, author.seq, author.corres, author.last, gender.y, reviewer.gender, reviewer.random.id, random.manu.num, random.person.id.y) %>% 
   distinct() %>% 
@@ -22,7 +26,7 @@ reg_data <- data %>%
 first_auth <- reg_data %>% 
   select(published, first.auth, random.manu.num) %>% 
   filter(first.auth %in% genders) %>% distinct()
-  mutate(first.auth = fct_lump(first.auth, n = 3)) %>% distinct() 
+  #mutate(first.auth = fct_lump(first.auth, n = 3)) %>% distinct() 
 
 corres_auth <- reg_data %>% 
   select(published, corres.auth, random.manu.num) %>% 
@@ -59,9 +63,6 @@ men_rev_data <- map_dfr(uniq.manu, function(x){
   ))
 }) %>% select(random.manu.num, men.rev) %>% distinct()
 
-gender_cols <- c("first.auth", "corres.auth", "last.auth")
-
-editor_cols <- c("editor", "sen.editor")
 
 reg2_data <- full_join(first_auth, corres_auth, by = c("published", "random.manu.num")) %>% 
   distinct() %>% 
@@ -73,3 +74,5 @@ reg2_data <- full_join(first_auth, corres_auth, by = c("published", "random.manu
   full_join(., men_rev_data, by = "random.manu.num") %>% distinct() %>% 
   #mutate_at(gender_cols, fct_recode(., 0 = "0", 1 = "1", 2 = "2")) %>% 
   mutate_all(as.factor)
+
+write_csv(reg2_data, path = "data/gender_log_reg.csv")
