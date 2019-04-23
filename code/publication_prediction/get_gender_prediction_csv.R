@@ -1,3 +1,4 @@
+#requires source("code/load_data.r")
 #impact of variables on whether or not an article is published: editor gender, reviewer gender, first author gender, last author gender, corresponding author gender 
 
 #other interesting variables not included here: # reviewers, # versions, days.pending, 
@@ -13,8 +14,7 @@ reg_data <- data %>%
   distinct() %>% 
   mutate(gender.y = fct_explicit_na(gender.y, na_level = "none"),
          reviewer.gender = fct_explicit_na(gender.y, na_level = "none")) %>% 
-  mutate(published = if_else(published == "yes", 1, 0),
-         first.auth = if_else(author.seq == 1, paste(gender.y), paste("NA")),
+  mutate(first.auth = if_else(author.seq == 1, paste(gender.y), paste("NA")),
          corres.auth = if_else(author.corres == "TRUE", paste(gender.y), paste("NA")),
          last.auth = if_else(author.last == "TRUE", paste(gender.y), paste("NA")),
          editor = if_else(role.y == "editor", paste(gender.y), paste("NA")),
@@ -54,13 +54,13 @@ men_rev_data <- map_dfr(uniq.manu, function(x){
   reviewers %>% filter(random.manu.num == x) %>% 
   group_by(random.manu.num, reviewer.gender) %>% 
   summarise(n = n()) %>% 
-  mutate(prop = n/sum(n)) %>% 
-  mutate(men.rev = case_when(
-    prop >= 0.75 & prop <= 1 ~ 0,
-    prop >= 0.5 & prop <= 0.74 ~ 1,
-    prop >= 0.1 & prop <= 0.49 ~ 2,
-    prop == 0 ~ 3
-  ))
+  mutate(men.rev = n/sum(n)) #%>% 
+#  mutate(men.rev = case_when(
+#    prop >= 0.75 & prop <= 1 ~ 0,
+#    prop >= 0.5 & prop <= 0.74 ~ 1,
+#    prop >= 0.1 & prop <= 0.49 ~ 2,
+#    prop == 0 ~ 3
+#  ))
 }) %>% select(random.manu.num, men.rev) %>% distinct()
 
 
@@ -72,7 +72,7 @@ reg2_data <- full_join(first_auth, corres_auth, by = c("published", "random.manu
   distinct() %>% 
   full_join(., sen_editor, by = c("published", "random.manu.num")) %>% distinct() %>% 
   full_join(., men_rev_data, by = "random.manu.num") %>% distinct() %>% 
-  #mutate_at(gender_cols, fct_recode(., 0 = "0", 1 = "1", 2 = "2")) %>% 
+  mutate(reviewed = if_else(is.na(men.rev), 0, 1)) %>% 
   mutate_all(as.factor)
 
 write_csv(reg2_data, path = "data/gender_log_reg.csv")
