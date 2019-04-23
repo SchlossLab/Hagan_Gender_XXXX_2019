@@ -1,0 +1,2 @@
+cv_aucs,test_aucs,model
+0.5028501124000199,0.5,L1_Linear_SVM
