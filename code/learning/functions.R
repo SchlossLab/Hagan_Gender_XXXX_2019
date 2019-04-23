@@ -35,7 +35,7 @@ read_files <- function(filenames){
 
 # Get model name with sub from file name
 get_model_name <- function(files){
-  pat1 <- "data/process/walltime_"
+  pat1 <- "code/learning/data/process/walltime_"
   name_files <- sub(pat1, "", files)
   pat2 <- ".csv"
   names <- sub(pat2, "", name_files)

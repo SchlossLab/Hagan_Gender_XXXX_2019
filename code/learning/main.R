@@ -93,7 +93,7 @@ secs <- toc()
 # Save elapsed time
 walltime <- secs$toc-secs$tic
 # Save wall-time
-write.csv(walltime, file=paste0("data/temp/walltime_", model, "_", seed, ".csv"), row.names=F)
+write.csv(walltime, file=paste0("code/learning/data/temp/walltime_", model, "_", seed, ".csv"), row.names=F)
 ###################################################################
 
 
