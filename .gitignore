@@ -1,4 +1,4 @@
 *.pbs*
 data/
-!code/learning/data
+!code/learning/data/process/
 .Rproj.user
