@@ -46,7 +46,7 @@ source('code/learning/permutation_importance.R')
 ######################## DATA PREPARATION #############################
 # Read in the gender data
 data <- read.csv("code/learning/gender_log_reg.csv") %>%
-  select(-random.manu.num) %>%
+  select(-random.manu.num, -last.auth) %>%
   filter(reviewed==1) %>%
   select(-reviewed)  %>%
   filter_all(all_vars(. != "none" )) %>%
@@ -54,11 +54,11 @@ data <- read.csv("code/learning/gender_log_reg.csv") %>%
   droplevels()
 
 ## Converting to factors
-for (i in c("first.auth","published","last.auth","editor", "sen.editor")){
+for (i in c("first.auth","published","editor", "sen.editor")){
   data[,i]=as.factor(data[,i])
 }
 # Create dummy variables
-new_data <- dummy.data.frame(data, names=c("published", "first.auth", "last.auth","editor", "sen.editor"), sep=".")
+new_data <- dummy.data.frame(data, names=c("published", "first.auth","editor", "sen.editor"), sep=".")
 # Convert the label to a factor
 new_data$corres.auth <- as.factor(new_data$corres.auth)
 
