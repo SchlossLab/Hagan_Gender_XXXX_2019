@@ -5,23 +5,23 @@
 ######################################################################
 
 ######################################################################
-# Description: 
+# Description:
 
 # This script will read in data from Ada's ASM dataset
 
 # It will run the following machine learning pipelines:
-#     - L2 Logistic Regression 
+#     - L2 Logistic Regression
 #     - L1 and L2 Linear SVM
 
 ######################################################################
 
 ######################################################################
-# Dependencies and Outputs: 
+# Dependencies and Outputs:
 
 # Be in the project directory.
 
 # The outputs are:
-#   (1) AUC values for cross-validation and testing for each data-split 
+#   (1) AUC values for cross-validation and testing for each data-split
 #   (2) meanAUC values for each hyper-parameter tested during each split.
 ######################################################################
 
@@ -44,29 +44,30 @@ source('code/learning/permutation_importance.R')
 ######################################################################
 
 ######################## DATA PREPARATION #############################
-# Read in the gender data 
-data <- read.csv("code/learning/gender_log_reg.csv") %>% 
-  select(-random.manu.num) %>% 
-  drop_na() %>% 
-  filter(reviewed==1) %>% 
-  select(-reviewed)
+# Read in the gender data
+data <- read.csv("code/learning/gender_log_reg.csv") %>%
+  select(-random.manu.num) %>%
+  drop_na() %>%
+  filter(reviewed==1) %>%
+  select(-reviewed)  %>%
+  filter_all(all_vars(. != "none" ))
 
 
 ## Converting to factors
-for (i in c("first.auth","corres.auth","last.auth","editor", "sen.editor")){
+for (i in c("first.auth","published","last.auth","editor", "sen.editor")){
   data[,i]=as.factor(data[,i])
 }
-# Create dummy variables 
-new_data <- dummy.data.frame(data, names=c("first.auth","corres.auth","last.auth","editor", "sen.editor"), sep=".")
+# Create dummy variables
+new_data <- dummy.data.frame(data, names=c("published", "first.auth", "last.auth","editor", "sen.editor"), sep=".")
 # Convert the label to a factor
-new_data$published <- as.factor(new_data$published)
+new_data$corres.auth <- as.factor(new_data$corres.auth)
 
 ###################################################################
 
 ######################## RUN PIPELINE #############################
 # Choose which classification methods we want to run on command line
-#                "L2_Logistic_Regression", 
-#                "L1_Linear_SVM", 
+#                "L2_Logistic_Regression",
+#                "L1_Linear_SVM",
 #                "L2_Linear_SVM",
 
 # We will run main.R from command line with arguments
@@ -74,7 +75,7 @@ new_data$published <- as.factor(new_data$published)
 #  - First argument is the seed number which is the array index
 #  - Second argument is the model name (one of the list above)
 
-input <- commandArgs(trailingOnly=TRUE) 
+input <- commandArgs(trailingOnly=TRUE)
 seed <- as.numeric(input[1])
 model <- input[2]
 
@@ -95,7 +96,3 @@ walltime <- secs$toc-secs$tic
 # Save wall-time
 write.csv(walltime, file=paste0("code/learning/data/temp/walltime_", model, "_", seed, ".csv"), row.names=F)
 ###################################################################
-
-
-
-
