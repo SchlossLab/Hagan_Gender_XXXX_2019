@@ -1,4 +1,4 @@
-#requires source("code/load_data.r")
+#requires source("code/load_data.R")
 #impact of variables on whether or not an article is published: editor gender, reviewer gender, first author gender, last author gender, corresponding author gender 
 
 #other interesting variables not included here: # reviewers, # versions, days.pending, 
@@ -10,8 +10,8 @@ gender_cols <- c("first.auth", "corres.auth", "last.auth")
 editor_cols <- c("editor", "sen.editor")
 
 reg_data <- data %>% 
-  select(role.y, published, author.seq, author.corres, author.last, gender.y, reviewer.gender, reviewer.random.id, random.manu.num, random.person.id.y) %>% 
-  distinct() %>% 
+  select(role.y, published, doi, journal, num.versions, num.authors, contains("days"), author.seq, author.corres, author.last, gender.y, reviewer.gender, review.score, reviewer.random.id, grouped.random, random.manu.num, random.person.id.y) %>% 
+  distinct() %>%
   mutate(gender.y = fct_explicit_na(gender.y, na_level = "none"),
          reviewer.gender = fct_explicit_na(gender.y, na_level = "none")) %>% 
   mutate(first.auth = if_else(author.seq == 1, paste(gender.y), paste("NA")),
@@ -75,4 +75,4 @@ reg2_data <- full_join(first_auth, corres_auth, by = c("published", "random.manu
   mutate(reviewed = if_else(is.na(men.rev), 0, 1)) %>% 
   mutate_all(as.factor)
 
-write_csv(reg2_data, path = "data/gender_log_reg.csv")
+#write_csv(reg2_data, path = "data/gender_log_reg.csv")
