@@ -50,9 +50,8 @@ data <- read.csv("code/learning/gender_log_reg.csv") %>%
   filter(reviewed==1) %>%
   select(-reviewed)  %>%
   filter_all(all_vars(. != "none" )) %>%
-  drop_na() %>% 
+  drop_na() %>%
   droplevels()
-
 
 ## Converting to factors
 for (i in c("first.auth","published","last.auth","editor", "sen.editor")){
