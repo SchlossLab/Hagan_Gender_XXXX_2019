@@ -47,10 +47,10 @@ source('code/learning/permutation_importance.R')
 # Read in the gender data
 data <- read.csv("code/learning/gender_log_reg.csv") %>%
   select(-random.manu.num) %>%
-  drop_na() %>%
   filter(reviewed==1) %>%
   select(-reviewed)  %>%
-  filter_all(all_vars(. != "none" ))
+  filter_all(all_vars(. != "none" )) %>%
+   drop_na()
 
 
 ## Converting to factors
