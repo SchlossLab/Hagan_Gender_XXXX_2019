@@ -36,30 +36,31 @@ rev_score_data %>%
   filter(!is.na(review.score)) %>% 
   ggplot()+
   geom_violin(aes(x = gender.y, y = review.score), scale = "area")+
-  facet_wrap(~journal)
+  facet_wrap(~journal)+
+  my_theme_horiz
+
+ggsave("results/rev_score_violin.jpg")
 
 rev_score_data %>% 
   filter(!is.na(review.score)) %>% 
   ggplot()+
   geom_boxplot(aes(x = gender.y, y = review.score))+
-  facet_wrap(~journal)
+  facet_wrap(~journal)+
+  my_theme_horiz
+
+ggsave("results/rev_score_boxplot.jpg")
 
 rev_score_data %>% 
   filter(!is.na(review.score)) %>% 
   filter(!is.na(gender.y)) %>% 
   ggplot()+
-  geom_density(aes(x = review.score, fill = gender.y), alpha = 0.5)+
+  geom_density(aes(x = review.score, fill = gender.y), alpha = 0.25)+
   scale_fill_manual(values = gen_ed_colors)+
-  facet_wrap(~journal, scales = "free_y")
+  facet_wrap(~journal, scales = "free_y")+
+  my_theme_horiz
 
-rev_score_data %>% 
-  filter(!is.na(review.score)) %>% 
-  filter(!is.na(gender.y)) %>% 
-  ggplot(aes(x = review.score, y = as.factor(gender.y)))+
-  geom_density_ridges(alpha = 0.5)+
-  scale_y_discrete(expand = c(0.01, 0))+
-  scale_x_continuous(expand = c(0,0))+
-  facet_wrap(~journal)
+ggsave("results/rev_score_density.jpg")
+
 
 #graphs of reviews scores & cites----
 rev_score_data %>% 
@@ -68,12 +69,66 @@ rev_score_data %>%
   mutate(cites.per.month = total.cites/`Published Months`) %>% 
   ggplot()+
   geom_boxplot(aes(x = review.score, y = cites.per.month, group = review.score))+
-  facet_wrap(~journal)
+  facet_wrap(~journal)+
+  my_theme_horiz
+
+ggsave("results/rev_score_citespermon_box.jpg")
+
+rev_score_data %>% 
+  filter(!is.na(`Published Months`)) %>% 
+  filter(between(`Published Months`, 24, 48)) %>% 
+  mutate(cites.per.month = total.cites/`Published Months`) %>% 
+  ggplot()+
+  geom_jitter(aes(x = as.numeric(review.score), y = cites.per.month, group = review.score))+
+  facet_wrap(~journal, scales = "free_y")+
+  my_theme_horiz
+
+ggsave("results/rev_score_citespermon_point.jpg")
 
 rev_score_data %>% 
   filter(!is.na(`Published Months`)) %>% 
   filter(between(`Published Months`, 1, 12)) %>% 
-  mutate(views.per.month = `Total Abstract`/`Published Months`) %>% 
+  mutate(abs.views.per.month = `Total Abstract`/`Published Months`) %>% 
   ggplot()+
-  geom_boxplot(aes(x = review.score, y = views.per.month, group = review.score))+
-  facet_wrap(~journal)
+  geom_boxplot(aes(x = review.score, y = abs.views.per.month, group = review.score))+
+  facet_wrap(~journal)+
+  my_theme_horiz
+
+ggsave("results/rev_score_absviewspermon_box.jpg")
+
+rev_score_data %>% 
+  filter(!is.na(`Published Months`)) %>% 
+  filter(between(`Published Months`, 1, 12)) %>% 
+  mutate(abs.views.per.month = `Total Abstract`/`Published Months`) %>% 
+  ggplot()+
+  geom_jitter(aes(x = as.numeric(review.score), y = abs.views.per.month, group = review.score))+
+  facet_wrap(~journal)+
+  my_theme_horiz
+
+ggsave("results/rev_score_absviewspermon_jitter.jpg")
+
+rev_score_data %>% 
+  filter(!is.na(`Published Months`)) %>% 
+  filter(between(`Published Months`, 1, 12)) %>% 
+  mutate(html.views.per.month = `Total HTML`/`Published Months`) %>% 
+  mutate(pdf.views.per.month = `Total PDF`/`Published Months`) %>% 
+  mutate(full.views.per.month = html.views.per.month + pdf.views.per.month) %>% 
+  ggplot()+
+  geom_boxplot(aes(x = review.score, y = full.views.per.month, group = review.score))+
+  facet_wrap(~journal, scales = "free_y")+
+  my_theme_horiz
+
+ggsave("results/rev_score_fullviewspermon_box.jpg")
+
+rev_score_data %>% 
+  filter(!is.na(`Published Months`)) %>% 
+  filter(between(`Published Months`, 1, 12)) %>% 
+mutate(html.views.per.month = `Total HTML`/`Published Months`) %>% 
+  mutate(pdf.views.per.month = `Total PDF`/`Published Months`) %>% 
+  mutate(full.views.per.month = html.views.per.month + pdf.views.per.month) %>% 
+  ggplot()+
+  geom_jitter(aes(x = as.numeric(review.score), y = full.views.per.month, group = review.score))+
+  facet_wrap(~journal, scales = "free_y")+
+  my_theme_horiz
+
+ggsave("results/rev_score_fullviewspermon_jitter.jpg")

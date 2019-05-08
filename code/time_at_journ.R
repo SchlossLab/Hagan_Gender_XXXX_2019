@@ -20,40 +20,70 @@ manu_summary %>%
   filter(gender.y != "none") %>% 
   filter(total.decision >= 0 & total.decision <= 200) %>% 
   ggplot()+
-  geom_density(aes(x = total.decision, fill = gender.y))+
-  scale_fill_manual(values = gen_colors)
+  geom_density(aes(x = total.decision, fill = gender.y), alpha = 0.5)+
+  scale_fill_manual(values = gen_colors)+
+  my_theme_leg_horiz
+
+ggsave("results/total_decision_density.jpg")
 
 manu_summary %>% 
   filter(gender.y != "none") %>% 
   filter(total.decision >= 0 & total.decision <= 200) %>% 
   ggplot()+
-  geom_density(aes(x = total.decision, fill = gender.y))+
+  geom_density(aes(x = total.decision, fill = gender.y), alpha = 0.5)+
   facet_wrap(~journal)+
-  scale_fill_manual(values = gen_colors)
+  scale_fill_manual(values = gen_colors)+
+  my_theme_leg_horiz
+
+ggsave("results/total_decision_journ_density.jpg")
 
 manu_summary %>% 
   filter(total.decision >= 0 & total.decision <= 200) %>% 
   ggplot()+
   geom_boxplot(aes(x = gender.y, y = total.decision, fill = gender.y))+
-  scale_fill_manual(values = gen_colors)
+  scale_fill_manual(values = gen_colors)+
+  my_theme_horiz
+
+ggsave("results/total_decision_box.jpg")
 
 manu_summary %>% 
   filter(gender.y != "none") %>% 
   ggplot()+
-  geom_density(aes(x = num.versions, fill = gender.y))+
-  scale_fill_manual(values = gen_colors)
+  geom_density(aes(x = as.numeric(num.versions), fill = gender.y), 
+               alpha = 0.5)+
+  scale_fill_manual(values = gen_colors)+
+  my_theme_leg_horiz
+
+ggsave("results/numversion_density.jpg")
+
+manu_summary %>% 
+  filter(gender.y != "none") %>% 
+  ggplot()+
+  geom_density(aes(x = as.numeric(num.versions), fill = gender.y), 
+               alpha = 0.5)+
+  facet_wrap(~journal)+
+  scale_fill_manual(values = gen_colors)+
+  my_theme_leg_horiz
+
+ggsave("results/numvers_journ_density.jpg")
 
 manu_summary %>% 
   ggplot()+
-  geom_boxplot(aes(x = gender.y, y = num.versions, fill = gender.y))+
-  scale_fill_manual(values = gen_colors)
+  geom_boxplot(aes(x = gender.y, y = as.numeric(num.versions), 
+                   fill = gender.y))+
+  scale_fill_manual(values = gen_colors)+
+  my_theme_horiz
 
+ggsave("results/numversion_box.jpg")
 
 manu_summary %>% 
   ggplot()+
   geom_boxplot(aes(x = gender.y, y = num.versions, fill = gender.y))+
   facet_wrap(~journal)+
-  scale_fill_manual(values = gen_colors)
+  scale_fill_manual(values = gen_colors)+
+  my_theme_horiz
+
+ggsave("results/numvers_journ_box.jpg")
 
 #days from initial submission to ready for production date
 manu_pending <- map_df(manus, function(x){

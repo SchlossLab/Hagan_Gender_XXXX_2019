@@ -38,6 +38,8 @@ rej_by_auth %>%
   labs(x = "Predicted Gender", y = "Percent of Manuscripts Rejected")+
   my_theme_horiz
 
+ggsave("results/asm_rej_by_gender.jpg")
+
 #rejection rates by gender and journal----
 rej_by_journ <- map_df(auth_types, function(x){
   
@@ -73,3 +75,5 @@ rej_by_journ %>%
   geom_hline(data = journ_rej_rates, aes(yintercept = prop_rej))+
   labs(x = "Predicted Gender", y = "Percent of Manuscripts Rejected")+
   my_theme_horiz
+
+ggsave("results/asm_rej_by_journal.jpg")

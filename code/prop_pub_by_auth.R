@@ -78,4 +78,4 @@ prop_pub_by_auth %>%
        caption = paste0("Black line indicates the overall publication rate of ", percent_pubbed, "%"))+
   my_theme_horiz
 
-#ggsave("results/prop_pub_by_auth.jpg")
+ggsave("results/prop_pub_by_auth.jpg")
