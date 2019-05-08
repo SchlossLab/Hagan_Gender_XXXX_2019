@@ -2,7 +2,6 @@
 
 acc_data <- data %>% filter(published == "yes") %>% 
   mutate(gender.y = fct_explicit_na(gender.y, na_level = "none")) %>% 
-  mutate(days.pending = as.duration(ymd_hms(submitted.date) %--% ymd_hms(ready.for.production.date))/ddays(1)) %>% 
   filter(role.y == "author" & author.corres == "TRUE") %>% 
   select(version, grouped.random, random.manu.num, gender.y, 
          EJP.decision, days.to.decision, journal, days.pending,
@@ -99,19 +98,21 @@ manu_pending %>%
   geom_density(aes(x = days.pending, fill = gender.y))+
   scale_fill_manual(values = gen_colors)
 
+ggsave("results/dayspend_journ_box.jpg")
+
 manu_pending %>% 
-  #filter(days.pending <= 300) %>% 
   ggplot()+
   geom_boxplot(aes(x = gender.y, y = days.pending, fill = gender.y))+
-  #scale_y_log10()+
   coord_cartesian(ylim = c(0,200))+
   scale_fill_manual(values = gen_colors)
 
+ggsave("results/dayspend_journ_box.jpg")
+
 manu_pending %>% 
-  #filter(days.pending <= 300) %>% 
   ggplot()+
   geom_boxplot(aes(x = gender.y, y = days.pending, fill = gender.y))+
   facet_wrap(~journal)+
-  #scale_y_log10()+
   coord_cartesian(ylim = c(0,200))+
   scale_fill_manual(values = gen_colors)
+
+ggsave("results/dayspend_journ_box.jpg")
