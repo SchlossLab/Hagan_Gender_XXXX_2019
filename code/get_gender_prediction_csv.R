@@ -2,7 +2,7 @@
 #impact of variables on whether or not an article is published: editor gender, reviewer gender, first author gender, last author gender, corresponding author gender 
 
 #other interesting variables not included here: # reviewers, # versions, days.pending, 
-
+#setup----
 cites <- read_csv("data/cites.csv") %>% 
   select(`Published Months`, `Article DOI`, Cites, `Citation Date`) %>%
   group_by(`Published Months`, `Article DOI`) %>% summarise(total.cites = sum(Cites))
@@ -16,18 +16,17 @@ gender_cols <- c("first.auth", "corres.auth", "last.auth")
 
 editor_cols <- c("editor", "sen.editor")
 
+#select data----
 reg_data <- data %>% 
-  select(role.y, published, doi, journal, num.versions, num.authors, contains("days"), author.seq, author.corres, author.last, gender.y, reviewer.gender, review.score, reviewer.random.id, grouped.random, random.manu.num, random.person.id.y) %>% 
+  select(role.y, published, doi, journal, num.versions, num.authors, contains("days"), author.seq, author.corres, gender.y, reviewer.gender, review.score, reviewer.random.id, grouped.random, random.manu.num, random.person.id.y, EJP.decision) %>% 
   distinct() %>%
   mutate(gender.y = fct_explicit_na(gender.y, na_level = "none"),
          reviewer.gender = fct_explicit_na(gender.y, na_level = "none")) %>% 
-  mutate(first.auth = if_else(author.seq == 1, paste(gender.y), paste("NA")),
-         corres.auth = if_else(author.corres == "TRUE", paste(gender.y), paste("NA")),
-         last.auth = if_else(author.last == "TRUE", paste(gender.y), paste("NA")),
+  mutate(corres.auth = if_else(author.corres == "TRUE", paste(gender.y), paste("NA")),
          editor = if_else(role.y == "editor", paste(gender.y), paste("NA")),
          sen.editor = if_else(role.y == "senior.editor", paste(gender.y), paste("NA"))
          ) %>% 
-  select(-role.y, -author.seq, -author.corres, -author.last, -gender.y, -random.person.id.y) %>%
+  select(-author.seq, -author.corres) %>%
   distinct() 
 
 cites_usage <- reg_data %>% select(doi, grouped.random, random.manu.num, num.versions, num.authors, contains("days"), journal) %>% 
@@ -41,19 +40,10 @@ cites_usage <- reg_data %>% select(doi, grouped.random, random.manu.num, num.ver
          pdf.views.month = `Total PDF`/`Published Months`) %>% 
   select(-contains("Total"), -`Published Months`)
 
-first_auth <- reg_data %>% 
-  select(published, first.auth, grouped.random, random.manu.num) %>% 
-  filter(first.auth %in% genders) %>% distinct()
-  #mutate(first.auth = fct_lump(first.auth, n = 3)) %>% distinct() 
-
 corres_auth <- reg_data %>% 
   select(published, corres.auth, grouped.random, random.manu.num) %>% 
   filter(corres.auth %in% genders) %>% distinct()
   
-last_auth <- reg_data %>% 
-  select(published, last.auth, grouped.random, random.manu.num) %>% 
-  filter(last.auth %in% genders) %>% distinct()
-
 editor <- reg_data %>% 
   select(published, editor, grouped.random, random.manu.num) %>% 
   filter(editor %in% genders) %>% distinct()
@@ -62,34 +52,43 @@ sen_editor <- reg_data %>%
   select(published, sen.editor, grouped.random, random.manu.num) %>% 
   filter(sen.editor %in% genders) %>% distinct()
 
-reviewers <- data %>% 
-  select(reviewer.gender, reviewer.random.id, grouped.random, random.manu.num) %>% 
+reviewers <- reg_data %>% 
+  select(review.score, reviewer.gender, reviewer.random.id, grouped.random, random.manu.num) %>% 
   filter(!is.na(reviewer.random.id)) %>% distinct()
 
 uniq.manu <- reviewers %>% pull(random.manu.num) %>% unique()
 
 men_rev_data <- map_dfr(uniq.manu, function(x){
-  reviewers %>% filter(random.manu.num == x) %>% 
-  group_by(random.manu.num, reviewer.gender) %>% 
+  reviewers %>% filter(random.manu.num == x) %>% distinct() %>% 
+  group_by(random.manu.num, reviewer.gender, review.score) %>% 
   summarise(n = n()) %>% 
-  mutate(men.rev = n/sum(n),
-         num.rev = sum(n)) #%>% 
+  mutate(avg.rev = (review.score*n)/sum(n),
+    prop.men.rev = n/sum(n),
+    num.rev = sum(n)) #%>% 
 #  mutate(men.rev = case_when(
 #    prop >= 0.75 & prop <= 1 ~ 0,
 #    prop >= 0.5 & prop <= 0.74 ~ 1,
 #    prop >= 0.1 & prop <= 0.49 ~ 2,
 #    prop == 0 ~ 3
 #  ))
-}) %>% select(random.manu.num, men.rev, num.rev) %>% distinct()
+}) %>% select(random.manu.num, prop.men.rev, num.rev, avg.rev) %>% distinct()
 
+auth_data <- reg_data %>% 
+  filter(role.y == "author") %>% 
+  select(random.manu.num, num.authors, random.person.id.y, gender.y)
 
-reg2_data <- full_join(first_auth, corres_auth, by = c("published", "random.manu.num", "grouped.random")) %>% 
-  distinct() %>% 
-  full_join(.,  last_auth, by = c("published", "random.manu.num", "grouped.random")) %>% 
-  distinct() %>% 
-  full_join(., editor, by = c("published", "random.manu.num", "grouped.random")) %>% 
+author_ratio <- map_dfr(uniq.manu, function(x){
+  auth_data %>% 
+  filter(random.manu.num == x) %>% distinct() %>% 
+  mutate(if.female = if_else(gender.y == "female", 1, 0),
+         prop.fem.auth = sum(if.female)/num.authors) %>% 
+  select(random.manu.num, prop.fem.auth, num.authors) %>% distinct()
+})
+
+reg2_data <- full_join(corres_auth, editor, by = c("published", "random.manu.num", "grouped.random")) %>% 
   distinct() %>% 
   full_join(., sen_editor, by = c("published", "random.manu.num", "grouped.random")) %>% distinct() %>% 
+  full_join(., author_ratio, by = "random.manu.num") %>% distinct() %>% 
   full_join(., men_rev_data, by = "random.manu.num") %>% distinct() %>% 
   full_join(., cites_usage, by = c("random.manu.num", "grouped.random")) %>% 
   distinct() %>% 
