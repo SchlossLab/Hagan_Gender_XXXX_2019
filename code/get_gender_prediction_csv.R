@@ -18,13 +18,13 @@ editor_cols <- c("editor", "sen.editor")
 
 #select data----
 reg_data <- data %>% 
-  select(role.y, published, doi, journal, num.versions, num.authors, contains("days"), author.seq, author.corres, gender.y, reviewer.gender, review.score, reviewer.random.id, grouped.random, random.manu.num, random.person.id.y, EJP.decision) %>% 
+  select(role, published, doi, journal, num.versions, num.authors, contains("days"), author.seq, author.corres, gender, reviewer.gender, review.score, reviewer.random.id, grouped.random, random.manu.num, random.person.id, EJP.decision) %>% 
   distinct() %>%
-  mutate(gender.y = fct_explicit_na(gender.y, na_level = "none"),
-         reviewer.gender = fct_explicit_na(gender.y, na_level = "none")) %>% 
-  mutate(corres.auth = if_else(author.corres == "TRUE", paste(gender.y), paste("NA")),
-         editor = if_else(role.y == "editor", paste(gender.y), paste("NA")),
-         sen.editor = if_else(role.y == "senior.editor", paste(gender.y), paste("NA"))
+  mutate(gender = fct_explicit_na(gender, na_level = "none"),
+         reviewer.gender = fct_explicit_na(gender, na_level = "none")) %>% 
+  mutate(corres.auth = if_else(author.corres == "TRUE", paste(gender), paste("NA")),
+         editor = if_else(role == "editor", paste(gender), paste("NA")),
+         sen.editor = if_else(role == "senior.editor", paste(gender), paste("NA"))
          ) %>% 
   select(-author.seq, -author.corres) %>%
   distinct() 
@@ -74,13 +74,13 @@ men_rev_data <- map_dfr(uniq.manu, function(x){
 }) %>% select(random.manu.num, prop.men.rev, num.rev, avg.rev) %>% distinct()
 
 auth_data <- reg_data %>% 
-  filter(role.y == "author") %>% 
-  select(random.manu.num, num.authors, random.person.id.y, gender.y)
+  filter(role == "author") %>% 
+  select(random.manu.num, num.authors, random.person.id, gender)
 
 author_ratio <- map_dfr(uniq.manu, function(x){
   auth_data %>% 
   filter(random.manu.num == x) %>% distinct() %>% 
-  mutate(if.female = if_else(gender.y == "female", 1, 0),
+  mutate(if.female = if_else(gender == "female", 1, 0),
          prop.fem.auth = sum(if.female)/num.authors) %>% 
   select(random.manu.num, prop.fem.auth, num.authors) %>% distinct()
 })

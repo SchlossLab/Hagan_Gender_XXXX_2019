@@ -2,8 +2,7 @@
 
 #setup----
 acc_rej_data <- data %>% 
-  filter(EJP.decision == "Accept, no revision" | EJP.decision == "Reject") %>% 
-  mutate(gender.y = fct_explicit_na(gender.y, na_level = "none"))
+  filter(EJP.decision == "Accept, no revision" | EJP.decision == "Reject") 
 
 auth_types <- c("first", "middle", "last", "corres")
 
@@ -11,9 +10,9 @@ auth_types <- c("first", "middle", "last", "corres")
 rej_by_auth <- map_df(auth_types, function(x){
   
   get_auth_type(x, acc_rej_data) %>% 
-  filter(role.y == "author") %>% 
-  select(gender.y, EJP.decision, grouped.random) %>% distinct() %>% 
-  group_by(gender.y, EJP.decision) %>% summarise(n = n()) %>% 
+  filter(role == "author") %>% 
+  select(gender, EJP.decision, grouped.random) %>% distinct() %>% 
+  group_by(gender, EJP.decision) %>% summarise(n = n()) %>% 
   spread(key = EJP.decision, value = n) %>% 
   mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) %>% 
     mutate(., auth_type = x)
@@ -30,7 +29,7 @@ ASM_rej_rate <- acc_rej_data %>%
 
 rej_by_auth %>% 
   ggplot() + 
-  geom_col(aes(x = gender.y, y = prop_rej, fill = gender.y)) +
+  geom_col(aes(x = gender, y = prop_rej, fill = gender)) +
   facet_wrap(~auth_type)+
   scale_fill_manual(values = gen_colors)+
   annotate(geom = "text", x = 1, y = (ASM_rej_rate[[3]]+3), label = "ASM rejection rate")+
@@ -44,9 +43,9 @@ ggsave("results/asm_rej_by_gender.jpg")
 rej_by_journ <- map_df(auth_types, function(x){
   
   get_auth_type(x, acc_rej_data) %>% 
-    filter(role.y == "author") %>% 
-    select(journal, gender.y, EJP.decision, grouped.random) %>% distinct() %>% 
-    group_by(journal, gender.y, EJP.decision) %>% summarise(n = n()) %>% 
+    filter(role == "author") %>% 
+    select(journal, gender, EJP.decision, grouped.random) %>% distinct() %>% 
+    group_by(journal, gender, EJP.decision) %>% summarise(n = n()) %>% 
     spread(key = EJP.decision, value = n) %>% 
     mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) %>% 
     mutate(., auth_type = x)
@@ -68,7 +67,7 @@ journ_rej_rates <- map_df(journals, function(x){
 
 rej_by_journ %>% 
   ggplot() + 
-  geom_col(aes(x = auth_type, y = prop_rej, fill = gender.y), 
+  geom_col(aes(x = auth_type, y = prop_rej, fill = gender), 
            position = "dodge") +
   facet_wrap(~journal)+
   scale_fill_manual(values = gen_colors)+

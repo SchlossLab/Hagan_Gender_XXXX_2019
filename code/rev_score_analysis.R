@@ -11,7 +11,7 @@ usage <- read_csv("data/usage.csv") %>%
 no_score_journ <- c("AEM", "JVI", "IAI", "MCB", "JB")
 
 rev_score_data <- data %>% filter(author.corres == TRUE) %>% 
-  select(gender.y, journal, published, review.score, reviewer.gender, 
+  select(gender, journal, published, review.score, reviewer.gender, 
          reviewer.random.id, random.manu.num, version.reviewed, EJP.decision, doi) %>% distinct() %>% 
   filter(!is.na(review.score)) %>% 
   mutate(doi = str_to_lower(doi)) %>% 
@@ -35,7 +35,7 @@ rev_score_data %>%
 rev_score_data %>% 
   filter(!is.na(review.score)) %>% 
   ggplot()+
-  geom_violin(aes(x = gender.y, y = review.score), scale = "area")+
+  geom_violin(aes(x = gender, y = review.score), scale = "area")+
   facet_wrap(~journal)+
   my_theme_horiz
 
@@ -44,7 +44,7 @@ ggsave("results/rev_score_violin.jpg")
 rev_score_data %>% 
   filter(!is.na(review.score)) %>% 
   ggplot()+
-  geom_boxplot(aes(x = gender.y, y = review.score))+
+  geom_boxplot(aes(x = gender, y = review.score))+
   facet_wrap(~journal)+
   my_theme_horiz
 
@@ -52,9 +52,9 @@ ggsave("results/rev_score_boxplot.jpg")
 
 rev_score_data %>% 
   filter(!is.na(review.score)) %>% 
-  filter(!is.na(gender.y)) %>% 
+  filter(!is.na(gender)) %>% 
   ggplot()+
-  geom_density(aes(x = review.score, fill = gender.y), alpha = 0.25)+
+  geom_density(aes(x = review.score, fill = gender), alpha = 0.25)+
   scale_fill_manual(values = gen_ed_colors)+
   facet_wrap(~journal, scales = "free_y")+
   my_theme_horiz

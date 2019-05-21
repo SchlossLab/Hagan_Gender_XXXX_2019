@@ -187,4 +187,6 @@ binned_inst <- data %>% #deal w. multiple inst?
 data <- data %>% 
   mutate(institution = str_to_lower(institution),
     US.inst = if_else(country == "United States", "yes", "no")) %>% 
-  left_join(., binned_inst, by = "institution") %>% distinct()
+  left_join(., binned_inst, by = "institution") %>% distinct() %>% 
+  mutate(gender = fct_explicit_na(gender, na_level = "none"),
+         reviewer.gender = fct_explicit_na(reviewer.gender, na_level = "none"))
