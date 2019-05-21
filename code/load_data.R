@@ -11,10 +11,15 @@ people_data <- read_csv("data/2018_people_ready.csv")
 
 reviews_data <- read_csv("data/2018_reviews_ready.csv")
 
-data <- left_join(manu_data, reviews_data, by = c("random.manu.num", "grouped.random")) %>% 
+gender_reviews <- people_data %>% 
+  select(-role, -contains("auth"), -random.manu.num, -grouped.random, -title) %>% 
+  left_join(reviews_data, ., by = "random.person.id") %>% distinct() %>% 
+  rename("reviewer.country" = "country", "reviewer.institution" = "institution", "reviewer.gender" = "gender", "reviewer.random.id" = "random.person.id") #rename.x person info to reviewer info
+
+data <- left_join(manu_data, gender_reviews, 
+                  by = c("random.manu.num", "grouped.random")) %>% 
   left_join(., people_data, by = c("grouped.random", "random.manu.num")) %>% 
-  rename("reviewer.country" = "country.x", "reviewer.institution" = "institution.x", "reviewer.gender" = "gender.x", "reviewer.random.id" = "random.person.id.x") %>% #rename.x person info to reviewer info
-  select(-role.x) %>% #drop unneeded role.x column (b/c all reviewer)
+  distinct() %>% 
   filter(year(submitted.date) >= "2011") #drop anything submitted in 2011
 
 #carnegie classifications (R1, R2 research etc)----
@@ -51,7 +56,7 @@ industry <- c("abbott", "abbvie", "accelerate", "achaogen", "achillion", "amgen"
               "glaxosmithkline", "genesis biotechnology group", "sanofi",
               "laboratories", "profectus biosciences", "emergent biosolutions",
               "integral molecular", "jackson laboratory", "roche",
-              "neomed") %>% 
+              "neomed", "bayer", "cerexa", "gsk") %>% 
   paste0(., collapse = "|")
 
 govt <- c("usda", "agricultural research service", "air force", "nih", "edgewood",
@@ -66,7 +71,8 @@ govt <- c("usda", "agricultural research service", "air force", "nih", "edgewood
           "national animal disease center", "national institute of allergy and",
           "united states geological survey", "naval medical research",
           "wadsworth center, new york state dept health", "niddk",
-          "national oceanic and atmospheric administration", "united states") %>% 
+          "national oceanic and atmospheric administration", "united states", 
+          "va ann arbor") %>% 
   paste0(., collapse = "|")
 
 medical <- c("mayo clinic", "scripps research", "research hospital", 
@@ -89,7 +95,7 @@ medical <- c("mayo clinic", "scripps research", "research hospital",
              "international aids vaccine initiative", "woods hole",
              "aaron diamond aids research center", "school of med",
              "oklahoma medical research foundation", "marine biological laboratory",
-             "scripps institution") %>% 
+             "scripps institution", "university of medicine") %>% 
   paste0(., collapse = "|")
 
 r1 <- c("harvard", "binghamton", "cornell", "ucsd", "uc davis", "tulane university",
@@ -165,14 +171,20 @@ low <- c("baptist health", "california state", "university of washington",
   paste0(., collapse = "|")
 
 #bin US institutions----
+binned_inst <- data %>% #deal w. multiple inst?
+  mutate(institution = str_to_lower(institution)) %>% 
+  filter(country == "United States") %>% 
+  select(institution) %>% distinct() %>% 
+  mutate(US.inst.type = case_when(
+      institution %in% us_industries | str_detect(institution, industry) ~ "Industry Research",
+      institution %in% R1 | str_detect(institution, r1) ~ "R1 Institution",
+      str_detect(institution, medical) ~ "Institute or Medical School",
+      institution %in% R2 | str_detect(institution, r2) ~ "R2  Institution",
+      institution %in% low_research | str_detect(institution, low) ~ "Low Research  Institution",
+      institution %in% fed_labs | str_detect(institution, govt) ~ "Federal Research"))
+
+#merge final dataset ----
 data <- data %>% 
-  mutate(institution.y = str_to_lower(institution.y)) %>% 
-  mutate(
-    US.inst = if_else(country.y == "United States", "yes", "no"), #deal w. multiple inst?
-    US.inst.type = case_when(
-      institution.y %in% us_industries | str_detect(institution.y, industry) ~ "Industry Research",
-      institution.y %in% R1 | str_detect(institution.y, r1) ~ "R1 Institution",
-      str_detect(institution.y, medical) ~ "Institute or Medical School",
-      institution.y %in% R2 | str_detect(institution.y, r2) ~ "R2  Institution",
-      institution.y %in% low_research | str_detect(institution.y, low) ~ "Low Research  Institution",
-      institution.y %in% fed_labs | str_detect(institution.y, govt) ~ "Federal Research"))
+  mutate(institution = str_to_lower(institution),
+    US.inst = if_else(country == "United States", "yes", "no")) %>% 
+  left_join(., binned_inst, by = "institution") %>% distinct()
