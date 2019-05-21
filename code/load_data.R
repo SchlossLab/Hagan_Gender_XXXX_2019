@@ -7,7 +7,8 @@ source("code/get_plot_options.R") #plotting preferences & variables
 
 manu_data <- read_csv("data/2018_manu_ready.csv")
 
-people_data <- read_csv("data/2018_people_ready.csv")
+people_data <- read_csv("data/2018_people_ready.csv") %>% 
+  select(-number_authors)
 
 reviews_data <- read_csv("data/2018_reviews_ready.csv")
 
