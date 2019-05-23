@@ -28,8 +28,11 @@ reg_data <- data %>%
   select(-author.seq, -author.corres, -days.to.review) %>%
   distinct() 
 
-cites_usage <- reg_data %>% select(doi, grouped.random, random.manu.num, 
-                                   num.versions, contains("days"), journal) %>% 
+cites_usage <- reg_data %>% 
+  filter(corres.auth != "NA") %>% 
+  select(doi, grouped.random, random.manu.num, 
+                                   num.versions, contains("days"), journal,
+                                   EJP.decision, US.inst, US.inst.type) %>% 
   mutate(doi = str_to_lower(doi)) %>% 
   left_join(., cites, by = c("doi" = "Article DOI")) %>% 
   left_join(., usage, by = c("doi" = "Article DOI (article_metadata)")) %>% 
