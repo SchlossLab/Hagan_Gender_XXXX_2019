@@ -96,17 +96,19 @@ manu_pending %>%
   filter(days.pending <= 300) %>% 
   ggplot()+
   geom_density(aes(x = days.pending, fill = gender))+
+  facet_wrap(~EJP.decision)+
   scale_fill_manual(values = gen_colors)
 
-ggsave("results/dayspend_journ_box.jpg")
+ggsave("results/dayspend_density.jpg")
 
 manu_pending %>% 
   ggplot()+
   geom_boxplot(aes(x = gender, y = days.pending, fill = gender))+
   coord_cartesian(ylim = c(0,200))+
+  facet_wrap(~EJP.decision)+
   scale_fill_manual(values = gen_colors)
 
-ggsave("results/dayspend_journ_box.jpg")
+ggsave("results/dayspend_box.jpg")
 
 manu_pending %>% 
   ggplot()+
@@ -116,3 +118,39 @@ manu_pending %>%
   scale_fill_manual(values = gen_colors)
 
 ggsave("results/dayspend_journ_box.jpg")
+
+#days from submission to final decision
+manu_final <- map_df(manus, function(x){
+  acc_data %>% filter(version == 0 & grouped.random == x) %>% 
+    select(-random.manu.num, -days.to.decision, -days.pending,
+           -days.to.production) %>% distinct() %>% 
+    arrange(desc(days.final)) %>% head(n = 1)
+})
+
+manu_final %>% 
+  filter(gender != "none") %>% 
+  filter(days.final >= 0 & days.final <=300) %>% 
+  ggplot()+
+  facet_wrap(~EJP.decision)+
+  geom_density(aes(x = days.final, fill = gender))+
+  scale_fill_manual(values = gen_colors)
+
+ggsave("results/daysfinal_density.jpg")
+
+manu_final %>% 
+  ggplot()+
+  geom_boxplot(aes(x = gender, y = days.final, fill = gender))+
+  facet_wrap(~EJP.decision)+
+  coord_cartesian(ylim = c(0,200))+
+  scale_fill_manual(values = gen_colors)
+
+ggsave("results/daysfinal_box.jpg")
+
+manu_final %>% 
+  ggplot()+
+  geom_boxplot(aes(x = gender, y = days.final, fill = gender))+
+  facet_wrap(~journal)+
+  coord_cartesian(ylim = c(0,200))+
+  scale_fill_manual(values = gen_colors)
+
+ggsave("results/daysfinal_journ_box.jpg")
