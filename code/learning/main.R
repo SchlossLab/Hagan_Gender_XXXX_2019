@@ -1,7 +1,7 @@
 ######################################################################
 # Author: Begum Topcuoglu
 # Date: 2018-04-23
-# Title: Main pipeline for 2 classifiers for gender bias
+# Title: Main pipeline learning and testing classifier for gender bias
 ######################################################################
 
 ######################################################################
@@ -11,7 +11,6 @@
 
 # It will run the following machine learning pipelines:
 #     - L2 Logistic Regression
-#     - L1 and L2 Linear SVM
 
 ######################################################################
 
@@ -46,21 +45,20 @@ source('code/learning/permutation_importance.R')
 ######################## DATA PREPARATION #############################
 # Read in the gender data
 data <- read.csv("code/learning/gender_log_reg.csv") %>%
-  select(-random.manu.num, -last.auth) %>%
-  filter(reviewed==1) %>%
-  select(-reviewed)  %>%
-  filter_all(all_vars(. != "none" )) %>%
+  select(-avg.rev, num.authors, -prop.men.rev, -num.rev, -num.versions, -days.to.decision, -days.to.production, -days.pending, -days.final, -US.inst.type, -cites.month, -abstract.views.month, -html.views.month, -pdf.views.month, -reviewed, -EJP.decision, US.inst) %>% 
+  filter(corres.auth != "none") %>%
+  #filter(journal %in% c("MCB", "JB", "AAC")) %>%  
   drop_na() %>%
   droplevels()
 
 ## Converting to factors
-for (i in c("first.auth","published","editor", "sen.editor")){
+for (i in c("corres.auth","editor", "sen.editor", "journal", "US.inst")){
   data[,i]=as.factor(data[,i])
 }
 # Create dummy variables
-new_data <- dummy.data.frame(data, names=c("published", "first.auth","editor", "sen.editor"), sep=".")
+new_data <- dummy.data.frame(data, names=c("editor", "sen.editor", "journal", "corres.auth", "US.inst"), sep=".")
 # Convert the label to a factor
-new_data$corres.auth <- as.factor(new_data$corres.auth)
+new_data$published <- as.factor(new_data$published)
 
 ###################################################################
 
