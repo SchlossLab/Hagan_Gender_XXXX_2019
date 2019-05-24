@@ -72,4 +72,4 @@ performance <- ggplot(best_performance, aes(x = fct_reorder(model, AUC), y = AUC
 #-----------------------Save figure as .pdf ------------------------ #
 ######################################################################
 
-ggsave("model_performance.pdf", plot = performance, device = 'pdf', path = 'results', width = 15, height = 10)
+ggsave("model_performance.pdf", plot = performance, device = 'pdf', width = 5, height = 5)
