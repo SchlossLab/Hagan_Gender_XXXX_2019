@@ -10,35 +10,35 @@ last_auth <- data %>% filter(author.last == "TRUE")
 middle_auth <- data %>% filter(author.seq != "1" & author.last == "FALSE")
 
 #count number of unique individuals in each role----
-num_first <- first_auth %>% select(random.person.id.y) %>% distinct() %>% nrow()
+num_first <- first_auth %>% select(random.person.id) %>% distinct() %>% nrow()
 
-num_corres <- corres_auth %>% select(random.person.id.y) %>% distinct() %>% nrow()
+num_corres <- corres_auth %>% select(random.person.id) %>% distinct() %>% nrow()
 
-num_last <- last_auth %>% select(random.person.id.y) %>% distinct() %>% nrow()
+num_last <- last_auth %>% select(random.person.id) %>% distinct() %>% nrow()
 
-num_middle <- middle_auth %>% select(random.person.id.y) %>% distinct() %>% nrow()
+num_middle <- middle_auth %>% select(random.person.id) %>% distinct() %>% nrow()
 
 #summary of submitting indivduals in each role by gender (per grouped manuscripts)----
-first_auth_gen <- first_auth %>% group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n())
+first_auth_gen <- first_auth %>% group_by(gender) %>% distinct(grouped.random) %>% summarise(n = n())
 
-corres_auth_gen <- corres_auth %>% group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n())
+corres_auth_gen <- corres_auth %>% group_by(gender) %>% distinct(grouped.random) %>% summarise(n = n())
 
-last_auth_gen <- corres_auth %>% group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n())
+last_auth_gen <- corres_auth %>% group_by(gender) %>% distinct(grouped.random) %>% summarise(n = n())
 
-middle_auth_gen <- middle_auth %>% group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n())
+middle_auth_gen <- middle_auth %>% group_by(gender) %>% distinct(grouped.random) %>% summarise(n = n())
 
 #summary of published individuals in each role by gender (per grouped manu)----
 first_auth_pub <- data %>% filter(published == "yes" & author.seq == "1") %>% 
-  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
+  group_by(gender) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
 
 corres_auth_pub <- data %>% filter(published == "yes" & author.corres == "TRUE") %>% 
-  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
+  group_by(gender) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
 
 last_auth_pub <- data %>% filter(published == "yes" & author.last == "TRUE") %>% 
-  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
+  group_by(gender) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
 
 middle_auth_pub <- data %>% filter(published == "yes" & author.last == "FALSE" & author.seq != "1") %>% 
-  group_by(gender.y) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
+  group_by(gender) %>% distinct(grouped.random) %>% summarise(n = n()) %>% as_tibble()
 
 #summary of published vs rejected authors in each role----
 num_first_auth <- first_auth %>% group_by(published) %>% distinct(grouped.random) %>% summarise(n = n())
@@ -63,11 +63,11 @@ prop_middle_auth_gen <- middle_auth_gen %>% cbind(n_pub = middle_auth_pub$n) %>%
   mutate(prop = round((n_pub/n)*100, 2)) %>% mutate(author = "middle")
 
 prop_pub_by_auth <- rbind(prop_corres_auth_gen, prop_first_auth_gen, prop_last_auth_gen, prop_middle_auth_gen) %>% 
-  mutate(gender.y = fct_explicit_na(gender.y, na_level = "none"))
+  mutate(gender = fct_explicit_na(gender, na_level = "none"))
 
 #plot ----
 prop_pub_by_auth %>% 
-  ggplot(aes(x = gender.y, y = prop, fill = gender.y)) +
+  ggplot(aes(x = gender, y = prop, fill = gender)) +
   geom_col()+
   coord_flip()+
   facet_wrap(~author, labeller = labeller(author = str_to_title), ncol = 1)+
@@ -78,4 +78,4 @@ prop_pub_by_auth %>%
        caption = paste0("Black line indicates the overall publication rate of ", percent_pubbed, "%"))+
   my_theme_horiz
 
-#ggsave("results/prop_pub_by_auth.jpg")
+ggsave("results/prop_pub_by_auth.jpg")
