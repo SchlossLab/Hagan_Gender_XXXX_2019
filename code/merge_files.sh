@@ -49,4 +49,4 @@ cp $SEARCH_DIR/"$DATA"_"$MODEL"_0.csv $FINAL_DIR/combined_"$DATA"_"$MODEL".csv
 #        "tail -n +2" makes tail print lines from 2nd line to the end
 #        "-q" tells it to not print the header with the file name
 #        ">>" adds all the tail stuff from every file to the combined file
-tail -n +2 -q $SEARCH_DIR/"$DATA"_"$MODEL"_{1..99}.csv >> $FINAL_DIR/combined_"$DATA"_"$MODEL".csv
+tail -n +2 -q $SEARCH_DIR/"$DATA"_"$MODEL"_{1..24}.csv >> $FINAL_DIR/combined_"$DATA"_"$MODEL".csv
