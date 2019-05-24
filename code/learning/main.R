@@ -45,8 +45,9 @@ source('code/learning/permutation_importance.R')
 ######################## DATA PREPARATION #############################
 # Read in the gender data
 data <- read.csv("code/learning/gender_log_reg.csv") %>%
-  select(-avg.rev, num.authors, -prop.men.rev, -num.rev, -num.versions, -days.to.decision, -days.to.production, -days.pending, -days.final, -US.inst.type, -cites.month, -abstract.views.month, -html.views.month, -pdf.views.month, -reviewed, -EJP.decision, US.inst) %>% 
+  select(-avg.rev, -num.authors, -prop.men.rev, -num.rev, -num.versions, -days.to.decision, -days.to.production, -days.pending, -days.final, -US.inst.type, -cites.month, -abstract.views.month, -html.views.month, -pdf.views.month, -reviewed, -EJP.decision, US.inst) %>% 
   filter(corres.auth != "none") %>%
+  filter(editor != "none") %>%
   #filter(journal %in% c("MCB", "JB", "AAC")) %>%  
   select(-journal) %>% 
   drop_na() %>%
