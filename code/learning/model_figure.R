@@ -39,8 +39,8 @@ performance <- ggplot(best_performance, aes(x = fct_reorder(model, AUC), y = AUC
   geom_boxplot(alpha=0.7) +
   scale_fill_manual(values=c("#999999", "#E69F00")) +
   scale_y_continuous(name = "AUROC",
-                     breaks = seq(0.5, 0.7, 0.02),
-                     limits=c(0.5, 0.7),
+                     breaks = seq(0.5, 1, 0.02),
+                     limits=c(0.5, 1),
                      expand=c(0,0)) +
   scale_x_discrete(name = "") +
   #                 labels=c("L2 Linear SVM",
