@@ -28,7 +28,8 @@ rev_score_data %>%
   group_by(journal, EJP.decision, review.score) %>% 
   summarise(n = n()) %>% 
   ggplot()+
-  geom_col(aes(x = EJP.decision, y = n, fill = review.score), position = "dodge")+
+  geom_col(aes(x = EJP.decision, y = n, fill = review.score), 
+           position = "dodge")+
   facet_wrap(~journal, scales = "free_y")+
   my_theme_leg
 
@@ -52,7 +53,7 @@ ggsave("results/rev_score_boxplot.jpg")
 
 rev_score_data %>% 
   filter(!is.na(review.score)) %>% 
-  filter(!is.na(gender)) %>% 
+  filter(gender != "none") %>% 
   ggplot()+
   geom_density(aes(x = review.score, fill = gender), alpha = 0.25)+
   scale_fill_manual(values = gen_ed_colors)+
