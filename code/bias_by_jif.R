@@ -6,7 +6,12 @@ acc_data <- data %>% filter(published == "yes") %>%
          EJP.decision, journal, contains("days"),
          num.versions) %>% distinct()
 
-#add hist_jif back
+hist_jif <- read_csv("data/jif_2010_17.csv") %>% 
+  separate("Journal;Impact Factor;Year", 
+           into = c("Journal", "JIF", "year"), sep = ";") %>% 
+  filter(JIF != "n/a") %>% 
+  group_by(Journal) %>% 
+  summarise(n = n(), sum.JIF = sum(as.numeric(JIF)))
 
 max_jif <- read_csv("data/max_jif.csv") %>% 
   separate("Journal;max.JIF;year.founded", 
@@ -23,7 +28,10 @@ jif_acc_data <- left_join(acc_data, max_jif,
 jif_acc_data %>% 
   filter(gender != "none") %>% 
   ggplot()+
-  geom_density(aes(x = percieved.JIF, fill = gender), alpha = 0.5)+
+  geom_density(aes(x = percieved.JIF, fill = gender), 
+               alpha = 0.5)+
   facet_wrap(~EJP.decision)+
   scale_fill_manual(values = gen_colors)+
   my_theme_leg_horiz
+
+ggsave("percieved_jif_density.png")
