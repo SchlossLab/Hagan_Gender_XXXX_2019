@@ -39,7 +39,7 @@ performance <- ggplot(best_performance, aes(x = fct_reorder(model, AUC), y = AUC
   geom_boxplot(alpha=0.7) +
   scale_fill_manual(values=c("#999999", "#E69F00")) +
   scale_y_continuous(name = "AUROC",
-                     breaks = seq(0.5, 1, 0.02),
+                     breaks = seq(0.5, 1, 0.1),
                      limits=c(0.5, 1),
                      expand=c(0,0)) +
   scale_x_discrete(name = "") +
@@ -72,4 +72,4 @@ performance <- ggplot(best_performance, aes(x = fct_reorder(model, AUC), y = AUC
 #-----------------------Save figure as .pdf ------------------------ #
 ######################################################################
 
-ggsave("model_performance.pdf", plot = performance, device = 'pdf', width = 5, height = 5)
+ggsave("model_performance.pdf", plot = performance, device = 'pdf', width = 5, height = 8)

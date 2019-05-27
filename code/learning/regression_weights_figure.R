@@ -72,7 +72,7 @@ get_interp_info <- function(data, model_name){
     #     d) select the OTU names, mean weights with their signs and the sd
     imp <- weights %>% 
       arrange(desc(mean_weights)) %>% 
-      head(n=5) %>% 
+      head(n=10) %>% 
       mutate(mean_weights = case_when(sign=="negative" ~ mean_weights*-1,
                                       sign=="positive"~ mean_weights)) %>% 
       select(key, mean_weights, sd_weights)
@@ -124,8 +124,6 @@ get_interp_info <- function(data, model_name){
 
 # ----------- Read in saved combined feature importances ---------->
 # List the important features files by defining a pattern in the path
-# Correlated files are:
-cor_files <- list.files(path= "code/learning/data/process/", pattern='combined_all_imp_features_cor_.*', full.names = TRUE)
 # Non-correlated files are:
 non_cor_files <-  list.files(path= "code/learning/data/process/", pattern='combined_all_imp_features_non_cor_.*', full.names = TRUE)
 # -------------------------------------------------------------------->
@@ -136,13 +134,6 @@ non_cor_files <-  list.files(path= "code/learning/data/process/", pattern='combi
 #   2. Get the model name from the file
 #   3. Use te get_interp_info() for each model. 
 #   4. Save the top 10 features and their mean, sd importance value in a .tsv file
-for(file_name in cor_files){
-  importance_data <- read_files(file_name)
-  model_name <- as.character(importance_data$model[1]) # get the model name from table
-  get_interp_info(importance_data, model_name) %>% 
-    as.data.frame() %>% 
-    write_tsv(., paste0("code/learning/data/process/", model_name, "_cor_importance.tsv"))
-}
 
 for(file_name in non_cor_files){
   importance_data <- read_files(file_name)
@@ -172,7 +163,7 @@ base_plot <-  function(data, x_axis, y_axis){
           panel.grid.minor = element_blank(),
           panel.background = element_blank(),
           text = element_text(size = 12),
-          axis.text.x=element_text(size = 12, colour='black'),
+          axis.text.x=element_text(size = 8, colour='black'),
           axis.text.y=element_text(size = 12, colour='black'),
           axis.title.y=element_text(size = 13),
           axis.title.x=element_text(size = 13), 
@@ -184,7 +175,7 @@ base_plot <-  function(data, x_axis, y_axis){
 # ----------------------------------------------------------------------->
 
 # ------------------- L2 logistic regression ---------------------------->
-logit <- read.delim("data/process/L2_Logistic_Regression_non_cor_importance.tsv", header=T, sep='\t') 
+logit <- read.delim("code/learning/data/process/L2_Logistic_Regression_non_cor_importance.tsv", header=T, sep='\t') 
 logit_plot <- base_plot(logit, x=logit$key, y=logit$mean_weights) +
   scale_y_continuous(name="L2 logistic regression coefficients",
                      limits = c(-2, 2),
@@ -201,7 +192,7 @@ logit_plot <- base_plot(logit, x=logit$key, y=logit$mean_weights) +
 #combine with cowplot
 linear <- plot_grid(logit_plot, labels = c("A"))
 
-ggsave("weights_all_journals_published_or_not.png", plot = linear, device = 'png', width = 5, height = 5)
+ggsave("weights_all_journals_published_or_not.png", plot = linear, device = 'png', width = 10, height = 5)
 
 
 
