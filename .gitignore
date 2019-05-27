@@ -3,3 +3,4 @@ data/
 code/learning/data/temp/*
 .Rproj.user
 results/
+*.html

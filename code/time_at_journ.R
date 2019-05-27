@@ -4,7 +4,7 @@ acc_data <- data %>% filter(published == "yes") %>%
   mutate(gender = fct_explicit_na(gender, na_level = "none")) %>% 
   filter(role == "author" & author.corres == "TRUE") %>% 
   select(version, grouped.random, random.manu.num, gender, 
-         EJP.decision, days.to.decision, journal, days.pending,
+         EJP.decision, contains("days"), journal,
          num.versions) %>% distinct()
 
 manus <- acc_data %>% pull(grouped.random) %>% unique()
@@ -87,7 +87,9 @@ ggsave("results/numvers_journ_box.jpg")
 #days from initial submission to ready for production date
 manu_pending <- map_df(manus, function(x){
   acc_data %>% filter(version == 0 & grouped.random == x) %>% 
-    select(-random.manu.num, -days.to.decision) %>% distinct() %>% 
+    select(-random.manu.num, -days.to.decision, -days.final, 
+           -days.to.production, -days.to.review) %>% 
+    distinct() %>% 
     arrange(desc(days.pending)) %>% head(n = 1)
 })
 
@@ -123,7 +125,8 @@ ggsave("results/dayspend_journ_box.jpg")
 manu_final <- map_df(manus, function(x){
   acc_data %>% filter(version == 0 & grouped.random == x) %>% 
     select(-random.manu.num, -days.to.decision, -days.pending,
-           -days.to.production) %>% distinct() %>% 
+           -days.to.production, -days.to.review) %>% 
+    distinct() %>% 
     arrange(desc(days.final)) %>% head(n = 1)
 })
 

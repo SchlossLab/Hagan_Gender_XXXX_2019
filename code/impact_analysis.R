@@ -19,4 +19,5 @@ impact_data <- data %>% filter(author.corres == TRUE) %>%
   left_join(., c_u_data, by = c("doi" = "Article DOI (article_metadata)")) %>% 
   distinct() %>% 
   filter(!is.na(`Article Date of Publication (article_metadata)`))
+
   
