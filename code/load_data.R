@@ -21,7 +21,6 @@ data <- left_join(manu_data, gender_reviews,
                   by = c("random.manu.num", "grouped.random")) %>% 
   left_join(., people_data, by = c("grouped.random", "random.manu.num")) %>% 
   distinct() %>% 
-  filter(gender != "none") %>% 
   filter(year(submitted.date) >= "2011") #drop anything submitted in 2011
 
 #carnegie classifications (R1, R2 research etc)----
@@ -192,3 +191,8 @@ data <- data %>%
   left_join(., binned_inst, by = "institution") %>% distinct() %>% 
   mutate(gender = fct_explicit_na(gender, na_level = "none"),
          reviewer.gender = fct_explicit_na(reviewer.gender, na_level = "none"))
+
+bias_data <- data %>% 
+  filter(author.corres == TRUE) %>% 
+  filter(gender != "none") %>% 
+  distinct()
