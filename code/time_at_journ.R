@@ -1,8 +1,6 @@
 #Do papers authored by women take longer to get accepted than those authored by men?
 
-acc_data <- data %>% filter(published == "yes") %>% 
-  mutate(gender = fct_explicit_na(gender, na_level = "none")) %>% 
-  filter(role == "author" & author.corres == "TRUE") %>% 
+acc_data <- bias_data %>% filter(published == "yes") %>% 
   select(version, grouped.random, random.manu.num, gender, 
          EJP.decision, contains("days"), journal,
          num.versions) %>% distinct()
@@ -16,7 +14,6 @@ manu_summary <- map_df(manus, function(x){
 })
 
 manu_summary %>% 
-  filter(gender != "none") %>% 
   filter(total.decision >= 0 & total.decision <= 200) %>% 
   ggplot()+
   geom_density(aes(x = total.decision, fill = gender), alpha = 0.5)+
@@ -46,7 +43,6 @@ manu_summary %>%
 ggsave("results/total_decision_box.jpg")
 
 manu_summary %>% 
-  filter(gender != "none") %>% 
   ggplot()+
   geom_density(aes(x = as.numeric(num.versions), fill = gender), 
                alpha = 0.5)+
@@ -56,7 +52,6 @@ manu_summary %>%
 ggsave("results/numversion_density.jpg")
 
 manu_summary %>% 
-  filter(gender != "none") %>% 
   ggplot()+
   geom_density(aes(x = as.numeric(num.versions), fill = gender), 
                alpha = 0.5)+
@@ -94,7 +89,6 @@ manu_pending <- map_df(manus, function(x){
 })
 
 manu_pending %>% 
-  filter(gender != "none") %>% 
   filter(days.pending <= 300) %>% 
   ggplot()+
   geom_density(aes(x = days.pending, fill = gender))+
@@ -121,6 +115,52 @@ manu_pending %>%
 
 ggsave("results/dayspend_journ_box.jpg")
 
+#withdrawn papers
+manu_pending %>% 
+  filter(EJP.decision == "Withdrawn") %>% 
+  filter(days.pending <= 300) %>% 
+  ggplot()+
+  geom_density(aes(x = days.pending, fill = gender), 
+               alpha = 0.5)+
+  scale_fill_manual(values = gen_colors)
+
+ggsave("results/dayspend_withd_density.jpg")
+
+manu_pending %>% 
+  filter(EJP.decision == "Withdrawn") %>% 
+  ggplot()+
+  geom_boxplot(aes(x = gender, y = days.pending, fill = gender))+
+  scale_fill_manual(values = gen_colors)
+
+ggsave("results/dayspend_withd_box.jpg")
+
+manu_pending %>% 
+  filter(EJP.decision == "Withdrawn") %>% 
+  ggplot()+
+  geom_boxplot(aes(x = gender, y = days.pending, fill = gender))+
+  facet_wrap(~journal)+
+  #coord_cartesian(ylim = c(0,200))+
+  scale_fill_manual(values = gen_colors)
+
+ggsave("results/dayspend_withd_journ_box.jpg")
+
+jb_withdrawn <- manu_pending %>% 
+  filter(EJP.decision == "Withdrawn") %>% 
+  filter(journal == "JB") %>% distinct()
+
+medians <- jb_withdrawn %>% group_by(gender) %>% 
+  summarise(med = median(days.pending))
+
+jb_withdrawn %>% 
+  ggplot(aes(x = gender, y = days.pending, 
+                            fill = gender))+
+  geom_dotplot(binaxis = "y", stackdir = "center",
+               method = "histodot", binwidth = 1,
+               dotsize = 15)+
+  scale_fill_manual(values = gen_colors)+
+  facet_wrap(~gender)
+  #geom_hline(aes(yintercept = medians[]))#add line for medians
+
 #days from submission to final decision
 manu_final <- map_df(manus, function(x){
   acc_data %>% filter(version == 0 & grouped.random == x) %>% 
@@ -131,7 +171,6 @@ manu_final <- map_df(manus, function(x){
 })
 
 manu_final %>% 
-  filter(gender != "none") %>% 
   filter(days.final >= 0 & days.final <=300) %>% 
   ggplot()+
   facet_wrap(~EJP.decision)+
