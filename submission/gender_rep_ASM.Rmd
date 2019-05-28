@@ -10,15 +10,13 @@ bibliography: references.bib
 ---
 
 ```{r setup, include=FALSE}
-#library(knitr)
-#library(kableExtra)
-#library(markdown)
-#library(rmarkdown)
-#library(formattable)
+library(knitr)
+library(kableExtra)
+library(markdown)
+library(rmarkdown)
+library(formattable)
 
-source("code/analysis_functions.R")
 source("code/load_data.R")
-source("code/get_plot_options.R")
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -50,6 +48,18 @@ knitr::opts_chunk$set(echo = TRUE)
       + Use submissions and compare to membership to see where disparity exists (if at all)
 
 #Results
+```{r, plot_rej_rates} 
+source("code/reject_by_gender.R")
+
+auth_type_A #cross ASM rejection rates (all genders)
+auth_type_B #rejection rates by journ (m/w) -- need to highlight instances with diff > 5%
+auth_type_C #breakdown of submitted manuscripts (% by gender) according to EJP.decision
+auth_type_D #breakdown of C by journal -- need to highlight instances with diff > 5%
+auth_type_E #breakdown of small value decisions
+```
+  + higher rejection rates for women than men, esp corresponding authors
+  + move forward examining corresponding authors only b/c greatest effect
+      
       + are female-authored papers handled differently from male-authored (number of revisions/decisions)
       + M/F reviewer/editor recommendations differ by gender of author/editor/reviewer
       + publication frequency & authorship prestige of M vs F 
