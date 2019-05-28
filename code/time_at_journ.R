@@ -152,13 +152,14 @@ medians <- jb_withdrawn %>% group_by(gender) %>%
   summarise(med = median(days.pending))
 
 jb_withdrawn %>% 
-  ggplot(aes(x = gender, y = days.pending, 
-                            fill = gender))+
-  geom_dotplot(binaxis = "y", stackdir = "center",
+  ggplot(aes(x = gender, y = days.pending))+
+  geom_boxplot()+
+  geom_dotplot(aes(fill = gender), binaxis = "y", 
+               stackdir = "center",
                method = "histodot", binwidth = 1,
                dotsize = 15)+
   scale_fill_manual(values = gen_colors)+
-  facet_wrap(~gender)
+  my_theme_horiz
   #geom_hline(aes(yintercept = medians[]))#add line for medians
 
 #days from submission to final decision
@@ -171,6 +172,7 @@ manu_final <- map_df(manus, function(x){
 })
 
 manu_final %>% 
+  filter(EJP.decision != "NA") %>% 
   filter(days.final >= 0 & days.final <=300) %>% 
   ggplot()+
   facet_wrap(~EJP.decision)+
@@ -180,7 +182,8 @@ manu_final %>%
 ggsave("results/daysfinal_density.jpg")
 
 manu_final %>% 
-  ggplot()+
+  filter(EJP.decision != "NA") %>% 
+    ggplot()+
   geom_boxplot(aes(x = gender, y = days.final, fill = gender))+
   facet_wrap(~EJP.decision)+
   coord_cartesian(ylim = c(0,200))+
@@ -188,7 +191,8 @@ manu_final %>%
 
 ggsave("results/daysfinal_box.jpg")
 
-manu_final %>% 
+manu_final %>%
+  filter(EJP.decision != "NA") %>% 
   ggplot()+
   geom_boxplot(aes(x = gender, y = days.final, fill = gender))+
   facet_wrap(~journal)+
@@ -196,3 +200,34 @@ manu_final %>%
   scale_fill_manual(values = gen_colors)
 
 ggsave("results/daysfinal_journ_box.jpg")
+
+manu_final %>% 
+  filter(EJP.decision == "Withdrawn") %>% 
+  ggplot()+
+  geom_boxplot(aes(x = gender, y = days.final, fill = gender))+
+  scale_fill_manual(values = gen_colors)
+
+manu_final %>% 
+  filter(EJP.decision == "Withdrawn") %>% 
+  ggplot()+
+  geom_boxplot(aes(x = gender, y = days.final, fill = gender))+
+  facet_wrap(~journal)+
+  #coord_cartesian(ylim = c(0,200))+
+  scale_fill_manual(values = gen_colors)
+
+jb_withdrawn_final <- manu_final %>% 
+  filter(EJP.decision == "Withdrawn") %>% 
+  filter(journal == "JB") %>% distinct()
+
+medians <- jb_withdrawn_final %>% group_by(gender) %>% 
+  summarise(med = median(days.final))
+
+jb_withdrawn_final %>% 
+  ggplot(aes(x = gender, y = days.final))+
+  geom_boxplot()+
+  geom_dotplot(aes(fill = gender), binaxis = "y", 
+               stackdir = "center",
+               method = "histodot", binwidth = 1,
+               dotsize = 15)+
+  scale_fill_manual(values = gen_colors)+
+  my_theme_horiz
