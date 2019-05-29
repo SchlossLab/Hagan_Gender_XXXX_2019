@@ -195,4 +195,6 @@ data <- data %>%
 bias_data <- data %>% 
   filter(author.corres == TRUE) %>% 
   filter(gender != "none") %>% 
+  filter(!is.na(gender)) %>% 
+  filter(!is.na(journal)) %>% 
   distinct()
