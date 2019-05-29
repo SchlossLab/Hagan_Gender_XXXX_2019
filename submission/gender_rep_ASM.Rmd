@@ -59,12 +59,20 @@ auth_type_E #breakdown of small value decisions
 ```
   + higher rejection rates for women than men, esp corresponding authors
   + move forward examining corresponding authors only b/c greatest effect
-      
-      + are female-authored papers handled differently from male-authored (number of revisions/decisions)
-      + M/F reviewer/editor recommendations differ by gender of author/editor/reviewer
-      + publication frequency & authorship prestige of M vs F 
-      + reviewer score
-      + % accepted by gender of first author/last/corres/editor/reviewer
+
+
+  + Results:
+      + Women recieve more editorial rejections than men, proportionally (editorial_rejections.R)
+      + Papers published by women take slightly longer (from submission to ready for publication) than men at some journals (mSphere, mBio, mSystems, CVI, JB, JCM, AEM) (time_to_publication.R)
+      +, or a greater number of revisions, to be accepted than men
+      + Papers rejected following review that were submitted by women do not take longer (in days) to be rejected or have more revisions (do they move on more quickly?) -- Why the F are people submitting 5+ versions before being rejected?? (time_to_final_rejection.R)
+      + Decisions are returned to men & women similarly (time_at_journ.R)
+      + 
+
+  + Notes for plots:
+      + highlight instances of >5% difference between genders
+      + standardize gender terms to m/w
+      + make faceting headers prettier
 
 #Discussion
 
