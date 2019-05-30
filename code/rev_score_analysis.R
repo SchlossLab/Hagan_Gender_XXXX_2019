@@ -10,9 +10,10 @@ usage <- read_csv("data/usage.csv") %>%
 
 no_score_journ <- c("AEM", "JVI", "IAI", "MCB", "JB")
 
-rev_score_data <- data %>% filter(author.corres == TRUE) %>% 
+rev_score_data <- bias_data %>% 
   select(gender, journal, published, review.score, reviewer.gender, 
-         reviewer.random.id, random.manu.num, version.reviewed, EJP.decision, doi) %>% distinct() %>% 
+         reviewer.random.id, random.manu.num, version.reviewed, 
+         EJP.decision, doi, US.inst, US.inst.type) %>% distinct() %>% 
   filter(!is.na(review.score)) %>% 
   mutate(doi = str_to_lower(doi)) %>% 
   left_join(., cites, by = c("doi" = "Article DOI")) %>% 
@@ -20,30 +21,17 @@ rev_score_data <- data %>% filter(author.corres == TRUE) %>%
 
 #graphs of review scores by journal & gender----
 rev_score_data %>% 
-  filter(!is.na(review.score)) %>% 
-  mutate(EJP.decision = fct_collapse(EJP.decision,
-                                     Accept = c("Accept, no revision",
-                                                "Revise only",
-                                                "Revise and re-review"))) %>% 
-  group_by(journal, EJP.decision, review.score) %>% 
-  summarise(n = n()) %>% 
-  ggplot()+
-  geom_col(aes(x = EJP.decision, y = n, fill = review.score), 
-           position = "dodge")+
-  facet_wrap(~journal, scales = "free_y")+
-  my_theme_leg
-
-rev_score_data %>% 
-  filter(!is.na(review.score)) %>% 
-  ggplot()+
-  geom_violin(aes(x = gender, y = review.score), scale = "area")+
+  select(random.manu.num, journal, gender, review.score) %>%
+  distinct() %>% 
+  ggplot(aes(x = review.score, fill = gender))+
+  geom_histogram(aes(y=0.5*..density..), 
+                    alpha=0.5, position='identity', binwidth=0.5)+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
   facet_wrap(~journal)+
+  labs(x = "Review Score", y = "Proportion")+
   my_theme_horiz
 
-ggsave("results/rev_score_violin.jpg")
-
 rev_score_data %>% 
-  filter(!is.na(review.score)) %>% 
   ggplot()+
   geom_boxplot(aes(x = gender, y = review.score))+
   facet_wrap(~journal)+
@@ -51,85 +39,83 @@ rev_score_data %>%
 
 ggsave("results/rev_score_boxplot.jpg")
 
-rev_score_data %>% 
+#us institutions by review score & gender
+rev_score_us <- bias_data %>% 
   filter(!is.na(review.score)) %>% 
-  filter(gender != "none") %>% 
-  ggplot()+
-  geom_density(aes(x = review.score, fill = gender), alpha = 0.25)+
-  scale_fill_manual(values = gen_ed_colors)+
-  facet_wrap(~journal, scales = "free_y")+
+  filter(!is.na(US.inst)) %>% 
+  select(random.manu.num, journal, US.inst, gender, review.score) %>% 
+  distinct()
+
+rev_score_us %>%
+  ggplot(aes(x = review.score, fill = gender))+
+  geom_histogram(aes(y=0.5*..density..), 
+                 alpha=0.5, position='identity', binwidth=0.5)+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  facet_wrap(journal~US.inst)+
+  labs(x = "Review Score", y = "Proportion")+
   my_theme_horiz
 
-ggsave("results/rev_score_density.jpg")
+rev_score_inst <- bias_data %>% 
+  filter(!is.na(review.score)) %>% 
+  filter(US.inst == "yes") %>% 
+  filter(!is.na(US.inst.type)) 
 
-
-#graphs of reviews scores & cites----
-rev_score_data %>% 
-  filter(!is.na(`Published Months`)) %>% 
-  filter(between(`Published Months`, 24, 48)) %>% 
-  mutate(cites.per.month = total.cites/`Published Months`) %>% 
-  ggplot()+
-  geom_boxplot(aes(x = review.score, y = cites.per.month, group = review.score))+
-  facet_wrap(~journal)+
+rev_score_inst %>%
+  filter(journal == "AAC") %>% 
+  ggplot(aes(x = review.score, fill = gender))+
+  geom_histogram(aes(y=0.5*..density..), 
+                 alpha=0.5, position='identity', binwidth=0.5)+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  facet_wrap(~US.inst.type)+
+  labs(x = "Review Score", y = "Proportion")+
   my_theme_horiz
 
-ggsave("results/rev_score_citespermon_box.jpg")
-
-rev_score_data %>% 
-  filter(!is.na(`Published Months`)) %>% 
-  filter(between(`Published Months`, 24, 48)) %>% 
-  mutate(cites.per.month = total.cites/`Published Months`) %>% 
-  ggplot()+
-  geom_jitter(aes(x = as.numeric(review.score), y = cites.per.month, group = review.score))+
-  facet_wrap(~journal, scales = "free_y")+
+rev_score_inst %>%
+  filter(journal == "CVI") %>% 
+  ggplot(aes(x = review.score, fill = gender))+
+  geom_histogram(aes(y=0.5*..density..), 
+                 alpha=0.5, position='identity', binwidth=0.5)+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  facet_wrap(~US.inst.type)+
+  labs(x = "Review Score", y = "Proportion")+
   my_theme_horiz
 
-ggsave("results/rev_score_citespermon_point.jpg")
-
-rev_score_data %>% 
-  filter(!is.na(`Published Months`)) %>% 
-  filter(between(`Published Months`, 1, 12)) %>% 
-  mutate(abs.views.per.month = `Total Abstract`/`Published Months`) %>% 
-  ggplot()+
-  geom_boxplot(aes(x = review.score, y = abs.views.per.month, group = review.score))+
-  facet_wrap(~journal)+
+rev_score_inst %>%
+  filter(journal == "JCM") %>% 
+  ggplot(aes(x = review.score, fill = gender))+
+  geom_histogram(aes(y=0.5*..density..), 
+                 alpha=0.5, position='identity', binwidth=0.5)+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  facet_wrap(~US.inst.type)+
+  labs(x = "Review Score", y = "Proportion")+
   my_theme_horiz
 
-ggsave("results/rev_score_absviewspermon_box.jpg")
-
-rev_score_data %>% 
-  filter(!is.na(`Published Months`)) %>% 
-  filter(between(`Published Months`, 1, 12)) %>% 
-  mutate(abs.views.per.month = `Total Abstract`/`Published Months`) %>% 
-  ggplot()+
-  geom_jitter(aes(x = as.numeric(review.score), y = abs.views.per.month, group = review.score))+
-  facet_wrap(~journal)+
+rev_score_inst %>%
+  filter(journal == "mBio") %>% 
+  ggplot(aes(x = review.score, fill = gender))+
+  geom_histogram(aes(y=0.5*..density..), 
+                 alpha=0.5, position='identity', binwidth=0.5)+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  facet_wrap(~US.inst.type)+
+  labs(x = "Review Score", y = "Proportion")+
   my_theme_horiz
 
-ggsave("results/rev_score_absviewspermon_jitter.jpg")
-
-rev_score_data %>% 
-  filter(!is.na(`Published Months`)) %>% 
-  filter(between(`Published Months`, 1, 12)) %>% 
-  mutate(html.views.per.month = `Total HTML`/`Published Months`) %>% 
-  mutate(pdf.views.per.month = `Total PDF`/`Published Months`) %>% 
-  mutate(full.views.per.month = html.views.per.month + pdf.views.per.month) %>% 
-  ggplot()+
-  geom_boxplot(aes(x = review.score, y = full.views.per.month, group = review.score))+
-  facet_wrap(~journal, scales = "free_y")+
+rev_score_inst %>%
+  filter(journal == "mSphere") %>% 
+  ggplot(aes(x = review.score, fill = gender))+
+  geom_histogram(aes(y=0.5*..density..), 
+                 alpha=0.5, position='identity', binwidth=0.5)+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  facet_wrap(~US.inst.type)+
+  labs(x = "Review Score", y = "Proportion")+
   my_theme_horiz
 
-ggsave("results/rev_score_fullviewspermon_box.jpg")
-
-rev_score_data %>% 
-  filter(!is.na(`Published Months`)) %>% 
-  filter(between(`Published Months`, 1, 12)) %>% 
-mutate(html.views.per.month = `Total HTML`/`Published Months`) %>% 
-  mutate(pdf.views.per.month = `Total PDF`/`Published Months`) %>% 
-  mutate(full.views.per.month = html.views.per.month + pdf.views.per.month) %>% 
-  ggplot()+
-  geom_jitter(aes(x = as.numeric(review.score), y = full.views.per.month, group = review.score))+
-  facet_wrap(~journal, scales = "free_y")+
+rev_score_inst %>%
+  filter(journal == "mSystems") %>% 
+  ggplot(aes(x = review.score, fill = gender))+
+  geom_histogram(aes(y=0.5*..density..), 
+                 alpha=0.5, position='identity', binwidth=0.5)+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  facet_wrap(~US.inst.type)+
+  labs(x = "Review Score", y = "Proportion")+
   my_theme_horiz
-
-ggsave("results/rev_score_fullviewspermon_jitter.jpg")
