@@ -43,7 +43,7 @@ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
 # The palette with black:
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7") #black
 
-#settings
+#settings----
 gen_levels <- c("female", "male", "none")
 
 gen_breaks <- c("female", "male", "NA")
@@ -55,3 +55,33 @@ gen_ed_labels <- c("Women", "Men")
 gen_colors <- c("#D55E00", "#0072B2", "#999999")
 
 gen_ed_colors <- c("#D55E00", "#0072B2")
+
+#plotting functions----
+
+plot_impact_data <- function(measure, coord_max){
+  
+  data <- impact_data %>% 
+    filter(measure.name == measure)
+  
+  data <- if(measure == "avg.JIF"){data %>% 
+      select(gender, random.manu.num, measure.value) %>% 
+      distinct()}else(data)
+  
+  plot <- if(coord_max == "NULL"){
+    ggplot(data, aes(x = measure.value, fill = gender))+
+      labs(x = "Average JIF")
+  }else(
+    ggplot(data, aes(x = value.per.month, fill = gender))+
+      coord_cartesian(xlim = c(0, coord_max)) +
+      labs(x = measure)
+  )
+  
+  plot <- plot + 
+    geom_histogram(aes(y=0.5*..density..), 
+                   alpha=0.5, position='identity', binwidth=0.5)+
+    scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+    labs(y = "Proportion of Published", fill = "Gender")+
+    my_theme_leg_horiz
+  
+  return(plot)
+}  
