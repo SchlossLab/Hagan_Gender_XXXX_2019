@@ -1,11 +1,12 @@
+#Does the institution of the corresponding author matter?
 
+#cross ASM editorial rejection rate by insitution----
 ed_rejs <- bias_data %>% 
   filter(published == "no") %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
   select(-days.to.review, -contains("version")) %>% 
   distinct() 
 
-#cross ASM editorial rejection rate by insitution----
 ASM_subs <- bias_data %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
@@ -32,7 +33,7 @@ left_join(ASM_subs, ed_rej_subs,
   scale_fill_gradient2(low = "#D55E00", mid='snow3', 
                        high = "#0072B2", space = "Lab")+
   labs(x = "Institution Type", y = "Editorial Rejection Disparity",
-       fill = "Over-represented Gender")+
+       fill = "Over-represented\nGender")+
   my_theme_leg_horiz
 
 #editorial rejections by journal
@@ -64,7 +65,7 @@ left_join(ASM_subs_j, ed_rej_subs_j,
   scale_fill_gradient2(low = "#D55E00", mid='snow3', 
                        high = "#0072B2", space = "Lab")+
   labs(x = "Institution Type", y = "Editorial Rejection Disparity",
-       fill = "Over-represented Gender")+
+       fill = "Over-represented\nGender")+
   my_theme_leg_horiz
 
 #accepted----
@@ -92,7 +93,7 @@ left_join(ASM_subs, acc_subs,
   scale_fill_gradient2(low = "#D55E00", mid='snow3', 
                        high = "#0072B2", space = "Lab")+
   labs(x = "Institution Type", y = "Acceptance Rate Disparity",
-       fill = "Overperforming Gender")+
+       fill = "Overperforming\nGender")+
   my_theme_leg_horiz
   
 acc_subs_j <- acc %>% 
@@ -115,5 +116,5 @@ left_join(ASM_subs_j, acc_subs_j,
   scale_fill_gradient2(low = "#D55E00", mid='snow3', 
                        high = "#0072B2", space = "Lab")+
   labs(x = "Journal", y = "Acceptance Rate Disparity",
-       fill = "Overperforming Gender")+
+       fill = "Overperforming\n Gender")+
   my_theme_leg_horiz
