@@ -1,10 +1,5 @@
-acc_data <- data %>% filter(published == "yes") %>% 
-  filter(EJP.decision != "NA") %>% 
-  mutate(gender = fct_explicit_na(gender, na_level = "none")) %>% 
-  filter(role == "author" & author.corres == "TRUE") %>% 
-  select(version, grouped.random, random.manu.num, gender, 
-         EJP.decision, journal, contains("days"),
-         num.versions) %>% distinct()
+acc_data <- bias_data %>% 
+  select(grouped.random, gender, journal) %>% distinct()
 
 hist_jif <- read_csv("data/jif_2010_17.csv") %>% 
   separate("Journal;Impact Factor;Year", 
@@ -26,12 +21,10 @@ jif_acc_data <- left_join(acc_data, max_jif,
                           by = c("journal" = "Journal"))
 
 jif_acc_data %>% 
-  filter(gender != "none") %>% 
-  ggplot()+
-  geom_density(aes(x = percieved.JIF, fill = gender), 
-               alpha = 0.5)+
-  facet_wrap(~EJP.decision)+
-  scale_fill_manual(values = gen_colors)+
+  filter(journal %in% c("mBio", "mSphere")) %>% 
+  ggplot(aes(x = avg.JIF, fill = gender))+
+  geom_histogram(aes(y=0.5*..density..), 
+               alpha=0.5, position='identity', binwidth=0.5)+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  labs(x = "Average JIF", y = "Proportion of Submitted", fill = "Gender")+
   my_theme_leg_horiz
-
-ggsave("percieved_jif_density.png")
