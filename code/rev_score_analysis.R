@@ -1,121 +1,109 @@
 #Are papers authored by women ranked differently by reviewers?
 #Does ranking correlate to impact (via citations)?
-
-cites <- read_csv("data/cites.csv") %>% 
-  select(`Published Months`, `Article DOI`, Cites, `Citation Date`) %>%
-  group_by(`Published Months`, `Article DOI`) %>% summarise(total.cites = sum(Cites))
-
-usage <- read_csv("data/usage.csv") %>% 
-  select(`Article DOI (article_metadata)`, contains("Total"))
-
-no_score_journ <- c("AEM", "JVI", "IAI", "MCB", "JB")
-
-rev_score_data <- bias_data %>% 
-  select(gender, journal, published, review.score, reviewer.gender, 
+rev_rec_data <- bias_data %>% 
+  select(gender, journal, published, review.recommendation, 
+         reviewer.gender, 
          reviewer.random.id, random.manu.num, version.reviewed, 
          EJP.decision, doi, US.inst, US.inst.type) %>% distinct() %>% 
-  filter(!is.na(review.score)) %>% 
-  mutate(doi = str_to_lower(doi)) %>% 
-  left_join(., cites, by = c("doi" = "Article DOI")) %>% 
-  left_join(., usage, by = c("doi" = "Article DOI (article_metadata)"))
+  filter(version.reviewed == 0) %>% 
+  filter(reviewer.gender != "none") %>% 
+  filter(review.recommendation %in% c("Revise only", "Reject", "Accept, no revision")) %>% distinct()
+
+gender_totals <- rev_rec_data %>% 
+  select(random.manu.num, gender, review.recommendation) %>%
+  distinct() %>% 
+  group_by(gender) %>% 
+  summarise(n = n())
 
 #graphs of review scores by journal & gender----
-rev_score_data %>% 
-  select(random.manu.num, journal, gender, review.score) %>%
+rev_rec_data %>% 
+  select(random.manu.num, gender, review.recommendation) %>%
   distinct() %>% 
-  ggplot(aes(x = review.score, fill = gender))+
-  geom_histogram(aes(y=0.5*..density..), 
-                    alpha=0.5, position='identity', binwidth=0.5)+
-  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(~journal)+
-  labs(x = "Review Score", y = "Proportion")+
+  group_by(review.recommendation, gender) %>% 
+  summarise(n = n()) %>% as_tibble() %>% 
+  spread(key = review.recommendation, value = n) %>% 
+  mutate_if(is.numeric, 
+            funs(get_percent(., gender_totals$n))) %>%
+  gather(`Accept, no revision`:`Revise only`,
+         key = review.recommendation, value = percent) %>% 
+  spread(key = gender, value = percent) %>%
+  mutate(overperformance = male - female) %>% 
+  ggplot(aes(x = review.recommendation, 
+             y = overperformance, fill = overperformance))+
+  geom_col(position = "dodge")+
+  scale_fill_gradient2(low = "#D55E00", mid='snow3', 
+                       high = "#0072B2", space = "Lab")+
+  coord_flip()+
+  labs(x = "Review recommendation", y = "Percent disparity")+
   my_theme_horiz
 
-rev_score_data %>% 
-  ggplot()+
-  geom_boxplot(aes(x = gender, y = review.score))+
-  facet_wrap(~journal)+
-  my_theme_horiz
 
-ggsave("results/rev_score_boxplot.jpg")
-
-#us institutions by review score & gender
-rev_score_us <- bias_data %>% 
-  filter(!is.na(review.score)) %>% 
+#us vs not inst by review recommendation & gender----
+rev_rec_us <- bias_data %>% 
+  filter(!is.na(review.recommendation)) %>% 
   filter(!is.na(US.inst)) %>% 
-  select(random.manu.num, journal, US.inst, gender, review.score) %>% 
+  select(random.manu.num, US.inst, gender, 
+         review.recommendation) %>% 
+  filter(review.recommendation 
+         %in% c("Revise only", "Reject", 
+                "Accept, no revision")) %>% 
   distinct()
 
-rev_score_us %>%
-  ggplot(aes(x = review.score, fill = gender))+
-  geom_histogram(aes(y=0.5*..density..), 
-                 alpha=0.5, position='identity', binwidth=0.5)+
-  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(journal~US.inst)+
-  labs(x = "Review Score", y = "Proportion")+
+US_totals <- rev_rec_us %>% 
+  group_by(US.inst, gender) %>% 
+  summarise(n = n())
+
+rev_rec_us %>%
+  group_by(US.inst, review.recommendation, gender) %>% 
+  summarise(n = n()) %>% as_tibble() %>% 
+  spread(key = review.recommendation, value = n) %>% 
+  mutate_if(is.numeric, 
+            funs(get_percent(., US_totals$n))) %>% 
+  gather(`Accept, no revision`:`Revise only`,
+         key = review.recommendation, value = percent) %>% 
+  spread(key = gender, value = percent) %>% 
+  mutate(overperformance = male - female) %>%
+  ggplot(aes(x = US.inst, 
+             y = overperformance, fill = overperformance))+
+  geom_col(position = "dodge")+
+    facet_wrap(~review.recommendation)+
+  scale_fill_gradient2(low = "#D55E00", mid='snow3', 
+                       high = "#0072B2", space = "Lab")+
+  coord_flip()+
+  labs(x = "Review recommendation", y = "Percent disparity")+
   my_theme_horiz
 
-rev_score_inst <- bias_data %>% 
-  filter(!is.na(review.score)) %>% 
+#inst type in US----  
+rev_rec_inst <- bias_data %>% 
+  filter(!is.na(review.recommendation)) %>% 
   filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) 
+  filter(!is.na(US.inst.type)) %>% 
+  select(grouped.random, gender, 
+         US.inst.type, review.recommendation) %>% 
+  filter(review.recommendation %in% c("Revise only", "Reject", 
+                "Accept, no revision")) %>% 
+  distinct()
 
-rev_score_inst %>%
-  filter(journal == "AAC") %>% 
-  ggplot(aes(x = review.score, fill = gender))+
-  geom_histogram(aes(y=0.5*..density..), 
-                 alpha=0.5, position='identity', binwidth=0.5)+
-  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(~US.inst.type)+
-  labs(x = "Review Score", y = "Proportion")+
-  my_theme_horiz
+US_inst_totals <- rev_rec_inst %>% 
+  group_by(US.inst.type, gender) %>% 
+  summarise(n = n())
 
-rev_score_inst %>%
-  filter(journal == "CVI") %>% 
-  ggplot(aes(x = review.score, fill = gender))+
-  geom_histogram(aes(y=0.5*..density..), 
-                 alpha=0.5, position='identity', binwidth=0.5)+
-  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(~US.inst.type)+
-  labs(x = "Review Score", y = "Proportion")+
-  my_theme_horiz
-
-rev_score_inst %>%
-  filter(journal == "JCM") %>% 
-  ggplot(aes(x = review.score, fill = gender))+
-  geom_histogram(aes(y=0.5*..density..), 
-                 alpha=0.5, position='identity', binwidth=0.5)+
-  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(~US.inst.type)+
-  labs(x = "Review Score", y = "Proportion")+
-  my_theme_horiz
-
-rev_score_inst %>%
-  filter(journal == "mBio") %>% 
-  ggplot(aes(x = review.score, fill = gender))+
-  geom_histogram(aes(y=0.5*..density..), 
-                 alpha=0.5, position='identity', binwidth=0.5)+
-  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(~US.inst.type)+
-  labs(x = "Review Score", y = "Proportion")+
-  my_theme_horiz
-
-rev_score_inst %>%
-  filter(journal == "mSphere") %>% 
-  ggplot(aes(x = review.score, fill = gender))+
-  geom_histogram(aes(y=0.5*..density..), 
-                 alpha=0.5, position='identity', binwidth=0.5)+
-  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(~US.inst.type)+
-  labs(x = "Review Score", y = "Proportion")+
-  my_theme_horiz
-
-rev_score_inst %>%
-  filter(journal == "mSystems") %>% 
-  ggplot(aes(x = review.score, fill = gender))+
-  geom_histogram(aes(y=0.5*..density..), 
-                 alpha=0.5, position='identity', binwidth=0.5)+
-  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(~US.inst.type)+
-  labs(x = "Review Score", y = "Proportion")+
+rev_rec_inst %>%   
+  group_by(US.inst.type, review.recommendation, gender) %>% 
+  summarise(n = n()) %>% as_tibble() %>% 
+  spread(key = review.recommendation, value = n) %>% 
+  mutate_if(is.numeric, 
+            funs(get_percent(., US_inst_totals$n))) %>% 
+  gather(`Accept, no revision`:`Revise only`,
+         key = review.recommendation, value = percent) %>% 
+  spread(key = gender, value = percent) %>% 
+  mutate(overperformance = male - female) %>%
+  ggplot(aes(x = US.inst.type, 
+             y = overperformance, fill = overperformance))+
+  geom_col(position = "dodge")+
+  facet_wrap(~review.recommendation)+
+  scale_fill_gradient2(low = "#D55E00", mid='snow3', 
+                       high = "#0072B2", space = "Lab")+
+  coord_flip()+
+  labs(x = "Review recommendation", y = "Percent disparity")+
   my_theme_horiz
