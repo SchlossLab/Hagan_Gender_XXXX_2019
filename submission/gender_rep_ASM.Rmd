@@ -78,7 +78,21 @@ auth_type_E #breakdown of small value decisions
       + trend holds for most journals and is >20% diff at JCM (R2s), mBio (Federal), MCB (low research), AEM (industry research)
       + men from institutes/medical schools outperform women >7% for acceptance
       + >20% in favor of men at: EC (fed researh), mSphere & JVI (Low research), AEM & MCB (industry research), JCM/JB/JCM (R2 institution)
-      
+    + rev_score_analysis.R
+      + reviewers are more likely to suggest rejections for women as compared to men. No difference in revise decisions
+      + rejection suggestions are greater for women not from the US than those at US institutions
+      + men at R1, low research, medical schools & fed research are favored by reviewers over women
+    + reviewer_gender_analysis.R
+      + both female & male reviewers are more likely to recommend rejection for women. 
+      + Male reviewers are more likely to accept papers from men
+      + women reviewers are more likely to recommend acceptance for women from low research & federal institutions 
+      + women reviewers are more likely to recommend acceptance for men from R1 & industry instutitions
+      + men are more likely to recommend acceptance for women from R2 institutions & favor men from R1 & medical institutes
+    + editor_gender_analysis.R
+      + both men & women editors are more likely to reject women
+      + men editors are more likely to make revise only & accept decisions for men
+      + women editors highly favor men from medical schools, slightly favor men from R2 & industry
+      + men editors favor men from R1, R2 and medical schools, slightly favor women from low & industry research
 
   + Notes for plots:
       + highlight instances of >5% difference between genders
