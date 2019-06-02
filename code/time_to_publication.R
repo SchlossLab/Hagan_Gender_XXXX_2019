@@ -11,19 +11,15 @@ accepted_data <- published %>%
   distinct()
 
 #days from submission to production
-accepted_data %>% 
-  ggplot(aes(x = gender, y = days.pending))+
-  geom_boxplot()+
-  scale_fill_manual(values = gen_colors)+
-  my_theme_horiz
-
-accepted_data %>% 
+factors_A <- accepted_data %>% 
   ggplot(aes(x = days.pending, fill = gender))+
   geom_density(alpha = 0.5)+
   coord_cartesian(xlim = c(0, 200))+
   scale_fill_manual(values = gen_colors)+
   facet_wrap(~journal)+
-  my_theme_horiz
+  labs(x = "\nDays from 'Submission' to 'Ready for Publication' Dates",
+       y = "Density\n", fill = "Author Gender")+
+  my_theme_leg
 
 
 #number of revisions

@@ -55,16 +55,15 @@ men_ed <- ed_dec_data %>%
 
 summary_gen_ed <- rbind(fem_ed, men_ed)
 
-summary_gen_ed %>% 
+ed_rejections_B <- summary_gen_ed %>% 
   ggplot(aes(x = EJP.decision, 
              y = overperformance, fill = overperformance))+
   geom_col(position = "dodge")+
-  scale_fill_gradient2(low = "#D55E00", mid='snow3', 
-                       high = "#0072B2", space = "Lab")+
+  gen_gradient+
   coord_flip()+
-  facet_wrap(~editor.gender)+
-  labs(x = "Review Recommendation", 
-       y = "Disparity in Percent of Decisions")+
+  facet_wrap(~editor.gender, ncol = 1)+
+  labs(x = "Decision", 
+       y = "\nDifference by Author Gender\n(% Men - % Women)")+
   my_theme_horiz
 
 #editor recommendations by institution----
@@ -96,15 +95,14 @@ summ_inst <- ed_dec_data %>%
   spread(key = gender, value = percent) %>% 
   mutate(overperform = male - female)
 
-summ_inst %>% 
+ed_rejections_D <- summ_inst %>% 
   filter(EJP.decision == "Accept, no revision") %>% 
   ggplot(aes(x = US.inst.type, fill = overperform,
              y = overperform))+
   geom_col(position = "dodge")+
-  scale_fill_gradient2(low = "#D55E00", mid='snow3', 
-                       high = "#0072B2", space = "Lab")+
+  gen_gradient+
   coord_flip()+
-  facet_wrap(~editor.gender)+
+  facet_wrap(~editor.gender, ncol = 1)+
   labs(x = "US Institution Type", 
-       y = "Acceptance Disparity by editor Gender")+
+       y = "\nDifference by Author Gender\n(% Men - % Women)")+
   my_theme_horiz

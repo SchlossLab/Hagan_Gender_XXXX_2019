@@ -43,5 +43,5 @@ ed_rejections_A <- ed_rejs %>%
   coord_flip()+
   gen_gradient+
   labs(x = "Journal", 
-       y = "\nDifference in Percent Editorial Rejections\n(Men - Women)")+
+       y = "\nDifference in Editorial Rejections\nby Author Gender (% Men - % Women)")+
   my_theme_horiz
