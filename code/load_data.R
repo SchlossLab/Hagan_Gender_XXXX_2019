@@ -2,15 +2,15 @@
 library(tidyverse)
 library(lubridate)
 
-source("code/analysis_functions.R") #functions used during analysis
-source("code/get_plot_options.R") #plotting preferences & variables
+source("../code/analysis_functions.R") #functions used during analysis
+source("../code/get_plot_options.R") #plotting preferences & variables
 
-manu_data <- read_csv("data/2018_manu_ready.csv")
+manu_data <- read_csv("../data/2018_manu_ready.csv")
 
-people_data <- read_csv("data/2018_people_ready.csv") %>% 
+people_data <- read_csv("../data/2018_people_ready.csv") %>% 
   select(-number_authors)
 
-reviews_data <- read_csv("data/2018_reviews_ready.csv")
+reviews_data <- read_csv("../data/2018_reviews_ready.csv")
 
 gender_reviews <- people_data %>% 
   select(-role, -contains("auth"), -random.manu.num, -grouped.random, -title) %>% 
@@ -24,14 +24,14 @@ data <- left_join(manu_data, gender_reviews,
   filter(year(submitted.date) >= "2011") #drop anything submitted in 2011
 
 #carnegie classifications (R1, R2 research etc)----
-carnegie_class <- read_csv("data/carnegie_class.csv") %>% 
+carnegie_class <- read_csv("../data/carnegie_class.csv") %>% 
   select(name, city, state, Basic)
 
-us_industries <- read_csv("data/us_industries.csv") %>% 
+us_industries <- read_csv("../data/us_industries.csv") %>% 
   pull(institution.name) %>% 
   str_to_lower(.) %>% unique()
 
-fed_labs <- read_csv("data/fed_state_labs.csv") %>% 
+fed_labs <- read_csv("../data/fed_state_labs.csv") %>% 
   pull(institution.name) %>% 
   str_to_lower(.) %>% unique()
 
