@@ -43,6 +43,10 @@ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
 # The palette with black:
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7") #black
 
+#gradient for comparing "performance"
+gen_gradient <- scale_fill_gradient2(low = "#D55E00", mid='snow3', 
+                                       high = "#0072B2", space = "Lab")
+
 #settings----
 gen_levels <- c("female", "male", "none")
 
