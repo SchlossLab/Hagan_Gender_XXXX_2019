@@ -1,5 +1,5 @@
 ---
-title: "Gender bias at ASM journals"
+title: "Gender bias during peer review at ASM journals is mediated by author institution and gatekeeper gender"
 author: "Ada Hagan"
 date: "July 17, 2018"
 output:
@@ -16,7 +16,7 @@ library(markdown)
 library(rmarkdown)
 library(formattable)
 
-source("code/load_data.R")
+source("../code/load_data.R")
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -37,62 +37,95 @@ knitr::opts_chunk$set(echo = TRUE)
       + Reviewer practice by gender - Grod, 2008
       + recognition for group work - Sarsons, 2017
   
-  + Few look at submissions to understand source of disparity
+  + Few look at submissions level data to understand source of disparity
       + AGU
       + JAMA (Gilbert & Williams)
       + (Buckley, 2014)
-      + elife preprint
+      + eLife
   
   + This study
-      + Cumulative data since 2012 to see where ASM stands
-      + Use submissions and compare to membership to see where disparity exists (if at all)
+      + Cummulative data since 2012 to see where ASM stands
+      + Build off of previous paper on ASM representation where there indicated a disparity in performance between men & women
 
 #Results
+
+##Papers submitted by women are rejected more frequently than those submitted by men
 ```{r, plot_rej_rates} 
-source("code/reject_by_gender.R")
+source("../code/reject_by_gender.R")
 
 auth_type_A #cross ASM rejection rates (all genders)
 auth_type_B #rejection rates by journ (m/w) -- need to highlight instances with diff > 5%
 auth_type_C #breakdown of submitted manuscripts (% by gender) according to EJP.decision
 auth_type_D #breakdown of C by journal -- need to highlight instances with diff > 5%
-auth_type_E #breakdown of small value decisions
 ```
-  + higher rejection rates for women than men, esp corresponding authors
-  + move forward examining corresponding authors only b/c greatest effect
+  + NOTE: to correct for the large discrepency in the participation of women at ASM journals during this time period, all comparisions are made relative to the gender and population in question.
+  + direct comparision of the proportion of woman-authored papers that are rejected compared to men, at each author stage
+      + middle/first author rejected at similar rates
+      + woman-authored (corres/last) rejected more frequently than men
+      + there are several journals where the overall trend is repeated and/or amplified (e.g., AAC, IAI, JB, mBio, MCB)
+      + greatest effect seen for corresponding authors, use this sub-population to further examine
+  + directly compare decisions made on submitted manuscripts by author gender
+      + men recieve favorable decisions (accept, revise)
+      + most decisions are Accept, Reject, Revise -- look more closely at journal level
+      + in most cases (except msphere, msystems, CVI), rejections are more frequently rendered to women than men
 
+##Both men and women editors are more likely to reject papers authored by women than those authored by men
+```{r, plot_ed_rej}
+source("../code/editorial_rejections.R")
+source("../code/editor_gender_analysis.R")
+source("../code/rej_by_inst_type.R")
 
-  + Results:
-      + Women recieve more editorial rejections than men, proportionally (editorial_rejections.R)
-    + time_to_publication.R:
+```
+
+  + There are two main gatekeeping roles for manuscript decisions: editors & reviewers
+  + This section evaluates disparities made by editors during editorial rejections, and decisions following peer review. 
+  + Women recieve more editorial rejections than men, proportionally (editorial_rejections.R)
+  + slight disparity in editorial rejection rates according to institution type (rej_by_inst_type.R)
+      + greatest difference (4%) occurs for institute/medical schools (Supplementary)
+      + trend holds for most journals and is >20% diff at JCM (R2s), mBio (Federal), MCB (low research), AEM (industry research) (supplementary)
+      + men from institutes/medical schools outperform women >7% for acceptance
+      + >20% in favor of men at: EC (fed researh), mSphere & JVI (Low research), AEM & MCB (industry research), JCM/JB/JCM (R2 institution)
+  + both men & women editors are more likely to reject women (editor_gender_analysis.R)
+      + men editors are more likely to make revise only & accept decisions for men
+      + women editors highly favor men from medical schools, slightly favor men from R2 & industry
+      + men editors favor men from R1, R2 and medical schools, slightly favor women from low & industry research
+
+##Both men and women reviewers more frequently suggest rejection for papers authored by women
+```{r, reviewer_rec}
+source("../code/rev_score_analysis.R")
+source("../code/reviewer_gender_analysis.R")
+
+```
+  + rev_score_analysis.R
+    + reviewers are more likely to suggest rejections for women as compared to men. No difference in revise decisions
+    + rejection suggestions are greater for women not from the US than those at US institutions
+    + men at R1, low research, medical schools & fed research are favored by reviewers over women
+  + reviewer_gender_analysis.R
+    + both female & male reviewers are more likely to recommend rejection for women. 
+    + Male reviewers are more likely to accept papers from men
+    + women reviewers are more likely to recommend acceptance for women from low research & federal institutions 
+    + women reviewers are more likely to recommend acceptance for men from R1 & industry instutitions
+    + men are more likely to recommend acceptance for women from R2 institutions & favor men from R1 & medical institutes  
+  
+##Factors affecting competency  
+```{r, other_factors}
+source("../code/time_to_publication.R")
+source("../code/time_to_final_rejection.R")
+source("../code/time_at_journ.R")
+source("../code/bias_by_jif.R")
+source("../code/impact_analysis.R")
+```
+  + time_to_publication.R:
       + Papers published by women take slightly longer (from submission to ready for publication) than men at some journals (mSphere, mBio, mSystems, CVI, JB, JCM, AEM)
       + but do not require a greater number of revisions to be accepted than men
       + Papers rejected following review that were submitted by women do not take longer (in days) to be rejected or have more revisions (do they move on more quickly?) -- Why the F are people submitting 5+ versions before being rejected?? (time_to_final_rejection.R)
       + Decisions are returned to men & women similarly (time_at_journ.R)
       + Slight disparity in gendered sumissions to high (mBio) vs lower (mSphere) journals (bias_by_jif.R)
-    + impact_analysis.R:
+  + impact_analysis.R:
       + Women tend to receive lower cites per month published than men 
       + HTML/PDF/Abstract views are equivalent 
       + women are more likely to be published in lower JIF journals
-    + rej_by_inst_type.R:
-      + slight disparity in editorial rejection rates according to institution type, greatest difference (4%) occurs for institute/medical schools
-      + trend holds for most journals and is >20% diff at JCM (R2s), mBio (Federal), MCB (low research), AEM (industry research)
-      + men from institutes/medical schools outperform women >7% for acceptance
-      + >20% in favor of men at: EC (fed researh), mSphere & JVI (Low research), AEM & MCB (industry research), JCM/JB/JCM (R2 institution)
-    + rev_score_analysis.R
-      + reviewers are more likely to suggest rejections for women as compared to men. No difference in revise decisions
-      + rejection suggestions are greater for women not from the US than those at US institutions
-      + men at R1, low research, medical schools & fed research are favored by reviewers over women
-    + reviewer_gender_analysis.R
-      + both female & male reviewers are more likely to recommend rejection for women. 
-      + Male reviewers are more likely to accept papers from men
-      + women reviewers are more likely to recommend acceptance for women from low research & federal institutions 
-      + women reviewers are more likely to recommend acceptance for men from R1 & industry instutitions
-      + men are more likely to recommend acceptance for women from R2 institutions & favor men from R1 & medical institutes
-    + editor_gender_analysis.R
-      + both men & women editors are more likely to reject women
-      + men editors are more likely to make revise only & accept decisions for men
-      + women editors highly favor men from medical schools, slightly favor men from R2 & industry
-      + men editors favor men from R1, R2 and medical schools, slightly favor women from low & industry research
+
 
   + Notes for plots:
       + highlight instances of >5% difference between genders
@@ -101,8 +134,24 @@ auth_type_E #breakdown of small value decisions
 
 #Discussion
 
+  + summarize findings
+  + fit into context of field -- 
+      + few papers have found disparties between rejection rates of men & women
+      + first paper (to our knowledge) to collectly examine this issue on 10+ journals using submissions data
+      + literature to connect institution type findings
+          + 
+  + study limitations
+      + doesn't include reviewer comments
+      + limited journal dataset, difficult to know how other microbiology-publishing journals affect submissions to ASM journals
+      + many ASM journals have a narrow focus, & broad scope journals are relatively new -- limits conclusions b/c of journal selection
   + future directions
-      + 
+      + implicit bias training is insufficient
+      + consider double-blinded peer review 
+          + common practice in social sciences
+          + can then be unblinded following decision
+      + increase diversity of gatekeepers 
+          + increase inclusivity & goodwill/author buy-in
+          + women/urm at "fringes" of fields, less likely to be viewed as "competent"
 
 #Data and Methods
 
