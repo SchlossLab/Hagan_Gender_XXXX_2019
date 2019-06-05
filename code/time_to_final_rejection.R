@@ -17,30 +17,20 @@ rejected_versions <- map_dfr(rejected_manus, function(x){
 })
 
 #days from submission to rejection decision  
-rejected_versions %>% 
-  ggplot(aes(x = gender, y = days.final, fill = gender))+
-  geom_boxplot()+
-  scale_fill_manual(values = gen_colors)+
-  my_theme_horiz
-
-rejected_versions %>% 
+Supplementary_D <- rejected_versions %>% 
   ggplot(aes(x = gender, y = days.final, fill = gender))+
   geom_boxplot()+
   coord_cartesian(ylim = c(0, 50))+
   scale_fill_manual(values = gen_colors)+
   facet_wrap(~journal)+
+  labs(x = "\nGender", y = "Days to Rejection\n")+
   my_theme_horiz
 
 #number of revisions
-rejected_versions %>% 
-  ggplot(aes(x = gender, y = num.versions, fill = gender))+
-  geom_boxplot()+
-  scale_fill_manual(values = gen_colors)+
-  my_theme_horiz
-
-rejected_versions %>% 
+Supplementary_E <- rejected_versions %>% 
   ggplot(aes(x = gender, y = num.versions, fill = gender))+
   geom_boxplot()+
   facet_wrap(~journal)+
   scale_fill_manual(values = gen_colors)+
+  labs(x = "\nGender", y = "Number of Versions Prior to Rejection\n")+
   my_theme_horiz

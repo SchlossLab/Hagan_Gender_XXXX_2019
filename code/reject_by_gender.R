@@ -26,7 +26,7 @@ ASM_rej_rate <- acc_rej_data %>%
   spread(key = EJP.decision, value = n) %>%
   mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) 
 
-
+theme_set(theme_cowplot(font_size=12))
 auth_type_A <- rej_by_auth %>% 
   ggplot() + 
   geom_col(aes(x = gender, y = prop_rej, fill = gender)) +
@@ -73,8 +73,9 @@ auth_type_B <- rej_by_journ %>%
   facet_wrap(~journal)+
   scale_fill_manual(values = gen_colors)+
   geom_hline(data = journ_rej_rates, aes(yintercept = prop_rej))+
-  labs(x = "Author Type", y = "Percent of Manuscripts Rejected")+
-  my_theme_horiz
+  labs(x = "Author Type", y = "Percent of Manuscripts Rejected",
+       caption = "Horizontal line denotes journal rejection rate")+
+  my_theme
 
 #ggsave("results/asm_rej_by_journal.jpg")
 

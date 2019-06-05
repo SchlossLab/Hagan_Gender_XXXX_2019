@@ -31,8 +31,4 @@ factors_B <- acc_data %>%
   my_theme_leg
 
 #days from initial submission to ready for production date
-final_decision <- map_df(manus, function(x){
-  acc_data %>% filter(grouped.random == x) %>% 
-    distinct() %>% 
-    arrange(desc(num.versions)) %>% head(n = 1)
-})
+

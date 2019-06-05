@@ -95,7 +95,7 @@ reviewer_D <- summ_inst %>%
   coord_flip()+
   facet_wrap(~reviewer.gender, ncol = 1)+
   labs(x = "US Institution Type", 
-       y = "\nDifference by Author Gender\n(% Men - % Women)")+
+       y = "\nDifference in Acceptance by Author Gender\n(% Men - % Women)")+
   my_theme_horiz
 
 

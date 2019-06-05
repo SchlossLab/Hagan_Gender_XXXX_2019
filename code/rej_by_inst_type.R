@@ -89,7 +89,7 @@ ed_rejections_C <- left_join(ASM_subs, acc_subs,
   coord_flip()+
   gen_gradient+
   labs(x = "Institution Type\n", 
-       y = "\nDifference in Acceptance by Author Gender\n(% Men - % Women)",
+       y = "\nDifference by Author Gender\n(% Men - % Women)",
        fill = "Author\nGender")+
   my_theme_leg_horiz
 

@@ -1,24 +1,24 @@
 #setup----
-cites <- read_csv("data/cites.csv") %>% 
+cites <- read_csv("../data/cites.csv") %>% 
   select(`Article DOI (article_metadata)`, `Published Months`, 
          `Article Date of Publication (article_metadata)`, `Citation Date`, Cites, `Mendeley Saves`) %>% 
   group_by(`Article DOI (article_metadata)`,`Published Months`, 
            `Article Date of Publication (article_metadata)`, `Mendeley Saves`) %>% 
   summarise(Cites = sum(Cites))
 
-usage <- read_csv("data/usage.csv") %>% 
+usage <- read_csv("../data/usage.csv") %>% 
   select(`Article DOI (article_metadata)`, `Total Abstract`, `Total HTML`, `Total PDF`)
 
 c_u_data <- full_join(cites, usage, by = "Article DOI (article_metadata)") %>% distinct()
 
-hist_jif <- read_csv("data/jif_2010_17.csv") %>% 
+hist_jif <- read_csv("../data/jif_2010_17.csv") %>% 
   separate("Journal;Impact Factor;Year", 
            into = c("Journal", "JIF", "year"), sep = ";") %>% 
   filter(JIF != "n/a") %>% 
   group_by(Journal) %>% 
   summarise(n = n(), sum.JIF = sum(as.numeric(JIF)))
 
-max_jif <- read_csv("data/max_jif.csv") %>% 
+max_jif <- read_csv("../data/max_jif.csv") %>% 
   separate("Journal;max.JIF;year.founded", 
            into = c("Journal", "max.JIF", "year.founded"), sep = ";") %>%   left_join(., hist_jif, by = "Journal") %>% 
   mutate(years.old = 2019 - as.numeric(year.founded),
@@ -37,22 +37,22 @@ impact_data <- bias_data %>%
   distinct() %>% 
   filter(!is.na(`Article Date of Publication (article_metadata)`)) %>% 
   left_join(., max_jif, by = c("journal" = "Journal")) %>% 
-  mutate(`Total Reads` = `Total HTML` + `Total PDF`) %>% View()
+  mutate(`Total Reads` = `Total HTML` + `Total PDF`) %>% 
   gather(`Mendeley Saves`:`Total Reads`, 
          key = measure.name, value = measure.value) %>% 
   mutate(value.per.month = measure.value/`Published Months`)
 
 #plots----
-plot_impact_data("Cites", 5)
+factors_C <- plot_impact_data("Cites", 5)
 
-plot_impact_data("Total PDF", 200)
+#plot_impact_data("Total PDF", 200)
 
-plot_impact_data("Total HTML", 200)
+#plot_impact_data("Total HTML", 200)
 
-plot_impact_data("Total Abstract", 200)
+#plot_impact_data("Total Abstract", 200)
 
-plot_impact_data("Mendeley Saves", 5)
+#plot_impact_data("Mendeley Saves", 5)
 
-plot_impact_data("Total Reads", 300)
+factors_D <- plot_impact_data("Total Reads", 300)
 
-plot_impact_data("avg.JIF", "NULL")
+#plot_impact_data("avg.JIF", "NULL")

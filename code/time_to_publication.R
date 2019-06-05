@@ -1,11 +1,13 @@
-published <- bias_data %>% 
-  filter(published == "yes") %>% 
-  select(version, grouped.random, random.manu.num, gender, 
+acc_data <- bias_data %>% 
+  select(published, version, grouped.random, random.manu.num, gender, 
          EJP.decision, contains("days"), journal,
          num.versions, -days.to.review) %>% 
   distinct()
 
-accepted_data <- published %>% 
+manus <- acc_data %>% pull(grouped.random) %>% unique()
+
+accepted_data <- acc_data %>% 
+  filter(published == "yes") %>% 
   filter(version == "0") %>% 
   select(-num.versions) %>% 
   distinct()
@@ -23,6 +25,11 @@ factors_A <- accepted_data %>%
 
 
 #number of revisions
+final_decision <- map_df(manus, function(x){
+  acc_data %>% filter(grouped.random == x) %>% 
+    distinct() %>% 
+    arrange(desc(num.versions)) %>% head(n = 1)
+})
 
 vers_data <- final_decision %>% 
   select(grouped.random, num.versions) %>% 
@@ -31,15 +38,10 @@ vers_data <- final_decision %>%
   select(gender, num.versions, grouped.random, journal) %>% 
   distinct()
 
-vers_data %>% 
-  ggplot(aes(x = gender, y = num.versions))+
-  geom_boxplot()+
-  scale_fill_manual(values = gen_colors)+
-  my_theme_horiz
-
-vers_data %>% 
-  ggplot(aes(x = gender, y = num.versions))+
+Supplementary_C <- vers_data %>% 
+  ggplot(aes(x = gender, y = num.versions, fill = gender))+
   geom_boxplot()+
   facet_wrap(~journal)+
   scale_fill_manual(values = gen_colors)+
+  labs(x = "\nGender", y = "Total Number of Versions\n")+
   my_theme_horiz
