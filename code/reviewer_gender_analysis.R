@@ -50,9 +50,9 @@ reviewer_C <- summary_gen_rev %>%
   geom_col(position = "dodge")+
   gen_gradient+
   coord_flip()+
-  facet_wrap(~reviewer.gender, ncol = 1)+
+  facet_wrap(~gen_ed_facet(reviewer.gender), ncol = 1)+
   labs(x = "Review Recommendation", 
-       y = "\nDifference by Author Gender\n(% Men - % Women)")+
+       y = "\nDifference by Reviewer Gender")+
   my_theme_horiz
 
 #reviewer recommendations by institution----
@@ -93,9 +93,9 @@ reviewer_D <- summ_inst %>%
   scale_fill_gradient2(low = "#D55E00", mid='snow3', 
                        high = "#0072B2", space = "Lab")+
   coord_flip()+
-  facet_wrap(~reviewer.gender, ncol = 1)+
+  facet_wrap(~gen_ed_facet(reviewer.gender), ncol = 1)+
   labs(x = "US Institution Type", 
-       y = "\nDifference in Acceptance by Author Gender\n(% Men - % Women)")+
+       y = "\nDifference in Acceptance Recomendation\nby Reviewer Gender")+
   my_theme_horiz
 
 
