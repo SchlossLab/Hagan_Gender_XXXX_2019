@@ -1,4 +1,9 @@
 #Do women recieve proportionally more editorial rejections than men?
+ed_genders <- data %>% 
+  filter(role == "editor") %>% 
+  select(random.manu.num, gender) %>% 
+  distinct() %>% 
+  rename("editor.gender" = "gender")
 
 ed_rejs <- bias_data %>% 
   filter(published == "no") %>% 
