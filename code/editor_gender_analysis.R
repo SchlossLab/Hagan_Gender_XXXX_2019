@@ -61,9 +61,9 @@ ed_rejections_B <- summary_gen_ed %>%
   geom_col(position = "dodge")+
   gen_gradient+
   coord_flip()+
-  facet_wrap(~editor.gender, ncol = 1)+
+  facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
   labs(x = "Decision", 
-       y = "\nDifference by Author Gender\n(% Men - % Women)")+
+       y = "\nDifference Following Review by Editor Gender")+
   my_theme_horiz
 
 #editor recommendations by institution----
@@ -102,7 +102,8 @@ ed_rejections_D <- summ_inst %>%
   geom_col(position = "dodge")+
   gen_gradient+
   coord_flip()+
-  facet_wrap(~editor.gender, ncol = 1)+
+  facet_wrap(~gen_ed_facet(editor.gender), 
+             ncol = 1)+
   labs(x = "US Institution Type", 
-       y = "\nDifference in Acceptance by Author Gender\n(% Men - % Women)")+
+       y = "\nDifference in Acceptance by Editor Gender")+
   my_theme_horiz
