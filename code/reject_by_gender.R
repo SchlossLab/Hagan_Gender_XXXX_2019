@@ -42,14 +42,19 @@ auth_type_A <- rej_by_auth %>%
 #rejection rates by gender and journal----
 rej_by_journ <- map_df(auth_types, function(x){
   
-  get_auth_type(x, acc_rej_data) %>% 
+  journ_prop <- get_auth_type(x, acc_rej_data) %>% 
     filter(role == "author") %>% 
     filter(gender != "none") %>% 
-    select(journal, gender, EJP.decision, grouped.random) %>% distinct() %>% 
-    group_by(journal, gender, EJP.decision) %>% summarise(n = n()) %>% 
+    select(journal, gender, EJP.decision, grouped.random) %>% 
+    distinct() %>% 
+    group_by(journal, gender, EJP.decision) %>% 
+    summarise(n = n()) %>% 
     spread(key = EJP.decision, value = n) %>% 
     mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) %>% 
-    mutate(., auth_type = x)
+    select(-Reject, -`Accept, no revision`) %>% 
+    spread(key = gender, value = prop_rej) %>% 
+    mutate(difference = male - female) %>% 
+    mutate(., auth.type = x)
 })
 
 journals <- acc_rej_data %>% pull(journal) %>% unique()
@@ -68,14 +73,12 @@ journ_rej_rates <- map_df(journals, function(x){
 
 auth_type_B <- rej_by_journ %>% 
   ggplot() + 
-  geom_col(aes(x = auth_type, y = prop_rej, fill = gender), 
-           position = "dodge") +
-  facet_wrap(~journal)+
-  scale_fill_manual(values = gen_colors)+
-  geom_hline(data = journ_rej_rates, aes(yintercept = prop_rej))+
-  labs(x = "Author Type", y = "Percent of Manuscripts Rejected",
-       caption = "Horizontal line denotes journal rejection rate")+
-  my_theme
+  geom_col(aes(x = journal, y = difference, fill = difference)) +
+  coord_flip()+
+  facet_wrap(~auth.type)+
+  gen_gradient+
+  labs(x = "Journal", y = "Difference in Percent Rejection")+
+  my_theme_leg_horiz
 
 #ggsave("results/asm_rej_by_journal.jpg")
 
@@ -95,12 +98,12 @@ auth_type_C <- bias_data %>%
   mutate(men = get_percent(male, corres_total[2,2]),
          women = get_percent(female, corres_total[1,2])) %>% 
   select(-male, -female) %>% 
-  gather(men:women, key = gender, value = n) %>% 
+  mutate(performance = men - women) %>% 
   ggplot()+
-  geom_col(aes(x = gender, y = n, fill = gender))+
-  facet_wrap(~EJP.decision, scales = "free_y")+
-  scale_fill_manual(values = gen_colors)+
-  labs(x = "Gender", y = "Percent of Submitted Manuscripts")+
+  geom_col(aes(x = EJP.decision, y = performance, fill = performance))+
+  coord_flip()+
+  gen_gradient +
+  labs(x = "Decision", y = "Difference in Submitted Manuscripts")+
   my_theme_horiz
 
 #by journal
@@ -124,7 +127,7 @@ corres_rej_by_journ <- map_df(journals, function(x){
     mutate(men = get_percent(male, corres_total[2,3]),
            women = get_percent(female, corres_total[1,3])) %>% 
     select(-female, -male) %>% 
-    gather(men:women, key = gender, value = n) %>% 
+    mutate(performance = men - women) %>% 
     mutate(., journal = x) 
   
   return(journ_data)
@@ -134,23 +137,21 @@ auth_type_D <- corres_rej_by_journ %>%
   filter(EJP.decision != "Withdrawn") %>% 
   filter(EJP.decision != "Revise and re-review") %>% 
   ggplot()+
-  geom_col(aes(x = EJP.decision, y = n, fill = gender),
-           position = "dodge")+
+  geom_col(aes(x = EJP.decision, y = performance, fill = performance))+
   facet_wrap(~journal)+
   coord_flip()+
-  scale_fill_manual(values = gen_colors)+
-  labs(x = "Gender", y = "Percent of Submitted Manuscripts")+
-  my_theme_leg_horiz
+  gen_gradient+
+  labs(x = "Decision", y = "Difference in Submitted Manuscripts")+
+  my_theme_horiz
 
 sm_val <- c("Withdrawn", "Revise and re-review")
 
-auth_type_E <- corres_rej_by_journ %>% 
+auth_type_E <- corres_rej_by_journ %>%
   filter(EJP.decision %in% c("Withdrawn", "Revise and re-review")) %>% 
   ggplot()+
-  geom_col(aes(x = EJP.decision, y = n, fill = gender),
-           position = "dodge")+
+  geom_col(aes(x = EJP.decision, y = performance, fill = performance))+
   facet_wrap(~journal)+
   coord_flip()+
-  scale_fill_manual(values = gen_colors)+
-  labs(x = "Gender", y = "Percent of Submitted Manuscripts")+
+  gen_gradient+
+  labs(x = "Gender", y = "Submitted Manuscripts")+
   my_theme_leg
