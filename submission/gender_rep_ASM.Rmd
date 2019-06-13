@@ -80,6 +80,7 @@ source("../code/editor_gender_analysis.R")
 source("../code/rej_by_inst_type.R")
 
 ed_rejections_A #comparing editorial rejection rates by journal
+ed_rejections_E #editorial rejections by editor gender
 ed_rejections_B #comparing decisions by editor gender
 ed_rejections_C #comparing rejection/acceptance rates by instution type
 ed_rejections_D #comparing acceptance rates by editor gender, author gender & author institution
@@ -122,7 +123,7 @@ reviewer_D #difference in acceptance recommendations by reviewer gender & instit
     + men are more likely to recommend acceptance for women from R2 institutions & favor men from R1 & medical institutes (D)
   
 ##Factors affecting competency  
-```{r, other_factors, include=FALSE, echo=FALSE, message=FALSE}
+```{r, other_factors, echo=FALSE, message=FALSE}
 source("../code/time_to_publication.R")
 factors_A #days pending at each journal
 
