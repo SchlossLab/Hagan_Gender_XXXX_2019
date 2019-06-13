@@ -57,9 +57,8 @@ Supplementary_A <- left_join(ASM_subs_j, ed_rej_subs_j,
   facet_wrap(~journal)+
   gen_gradient+
   labs(x = "Institution Type\n", 
-       y = "\nDifference in Editorial Rejection\nby Author Gender (% Men - % Women)",
-       fill = "Author\nGender")+
-  my_theme_leg_horiz
+       y = "\nDifference in Editorial Rejection")+
+  my_theme_horiz
 
 #accepted----
 acc <- bias_data %>% 
@@ -89,9 +88,8 @@ ed_rejections_C <- left_join(ASM_subs, acc_subs,
   coord_flip()+
   gen_gradient+
   labs(x = "Institution Type\n", 
-       y = "\nDifference by Author Gender\n(% Men - % Women)",
-       fill = "Author\nGender")+
-  my_theme_leg_horiz
+       y = "\nDifference")+
+  my_theme_horiz
 
 #----  
 acc_subs_j <- acc %>% 
@@ -113,6 +111,5 @@ Supplementary_B <- left_join(ASM_subs_j, acc_subs_j,
   coord_flip()+
   gen_gradient+
   labs(x = "Journal", 
-       y = "\nDifference by Author Gender\n(% Men - % Women)",
-       fill = "Author\n Gender")+
-  my_theme_leg_horiz
+       y = "\nDifference")+
+  my_theme_horiz
