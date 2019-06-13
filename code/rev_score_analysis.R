@@ -33,7 +33,7 @@ reviewer_A <- rev_rec_data %>%
   gen_gradient+
   coord_flip()+
   labs(x = "Review Recommendation", 
-       y = "\nDifference by Author Gender\n(% Men - % Women)")+
+       y = "\nDifference in Review Recommendation")+
   my_theme_horiz
 
 
@@ -104,5 +104,5 @@ reviewer_B <- rev_rec_inst %>%
   gen_gradient+
   coord_flip()+
   labs(x = "Institution Type\n", 
-       y = "\nDifference by Author Gender\n(% Men - % Women)")+
+       y = "\nDifference in Review Recommendation")+
   my_theme_horiz
