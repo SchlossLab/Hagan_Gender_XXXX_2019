@@ -184,13 +184,19 @@ binned_inst <- data %>% #deal w. multiple inst?
       institution %in% low_research | str_detect(institution, low) ~ "Low Research  Institution",
       institution %in% fed_labs | str_detect(institution, govt) ~ "Federal Research"))
 
+
+
+decisions <- c("Withdrawn", "Reject", "Revise and re-review",
+               "Revise only", "Accept, no revision")
+
 #merge final dataset ----
 data <- data %>% 
   mutate(institution = str_to_lower(institution),
     US.inst = if_else(country == "United States", "yes", "no")) %>% 
   left_join(., binned_inst, by = "institution") %>% distinct() %>% 
   mutate(gender = fct_explicit_na(gender, na_level = "none"),
-         reviewer.gender = fct_explicit_na(reviewer.gender, na_level = "none"))
+         reviewer.gender = fct_explicit_na(reviewer.gender, na_level = "none"),
+         EJP.decision = factor(EJP.decision, levels = decisions))
 
 bias_data <- data %>% 
   filter(author.corres == TRUE) %>% 
