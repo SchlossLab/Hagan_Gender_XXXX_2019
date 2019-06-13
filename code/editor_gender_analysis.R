@@ -1,9 +1,3 @@
-ed_genders <- data %>% 
-  filter(role == "editor") %>% 
-  select(random.manu.num, gender) %>% 
-  distinct() %>% 
-  rename("editor.gender" = "gender")
-
 ed_dec_data <- bias_data %>% 
   select(gender, journal, random.manu.num, version.reviewed, 
          US.inst, US.inst.type, EJP.decision) %>% 
