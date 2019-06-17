@@ -54,10 +54,8 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
 ```{r, plot_rej_rates} 
 source("../code/reject_by_gender.R")
 
-plot_grid(auth_type_A, auth_type_B, 
-          labels = c('A', 'B'))
-#A #cross ASM rejection rates (all genders)
-#B #rejection rates by journ (m/w) -- need to highlight instances with diff > 5%
+auth_type_A #A #cross ASM rejection rates (all genders)
+auth_type_B #B #rejection rates by journ (m/w) -- need to highlight instances with diff > 5%
 auth_type_C #breakdown of submitted manuscripts (% by gender) according to EJP.decision
 auth_type_D #breakdown of C by journal -- need to highlight instances with diff > 5%
 ```
@@ -75,12 +73,13 @@ auth_type_D #breakdown of C by journal -- need to highlight instances with diff 
 
 ##Both men and women editors are more likely to reject papers authored by women than those authored by men
 ```{r, plot_ed_rej}
-source("../code/editorial_rejections.R")
+source("../code/editorial_rejections.R")#A
+source("../code/editorial_rejections_by_journal.R") #E
 source("../code/editor_gender_analysis.R")
 source("../code/rej_by_inst_type.R")
 
 ed_rejections_A #comparing editorial rejection rates by journal
-ed_rejections_E #editorial rejections by editor gender
+ed_rejections_E #comparing first decisions by journal
 ed_rejections_B #comparing decisions by editor gender
 ed_rejections_C #comparing rejection/acceptance rates by instution type
 ed_rejections_D #comparing acceptance rates by editor gender, author gender & author institution
