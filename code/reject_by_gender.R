@@ -26,15 +26,18 @@ ASM_rej_rate <- acc_rej_data %>%
   spread(key = EJP.decision, value = n) %>%
   mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) 
 
-theme_set(theme_cowplot(font_size=12))
+#theme_set(theme_cowplot(font_size=12))
 auth_type_A <- rej_by_auth %>% 
   ggplot() + 
   geom_col(aes(x = gender, y = prop_rej, fill = gender)) +
   facet_wrap(~auth_type)+
   scale_fill_manual(values = gen_colors)+
-  annotate(geom = "text", x = 1, y = (ASM_rej_rate[[3]]+3), label = "ASM rejection rate")+
+  scale_x_discrete(breaks = gen_levels,
+                    labels = gen_labels)+
+  annotate(geom = "text", x = 2, 
+           y = (ASM_rej_rate[[3]]+3), label = "ASM rejection rate")+
   geom_hline(data = ASM_rej_rate, aes(yintercept = prop_rej))+
-  labs(x = "Predicted Gender", y = "Percent of Manuscripts Rejected")+
+  labs(x = "\nPredicted Gender", y = "Percent of Manuscripts Rejected\n")+
   my_theme_horiz
 
 #ggsave("results/asm_rej_by_gender.jpg")
@@ -77,7 +80,8 @@ auth_type_B <- rej_by_journ %>%
   coord_flip()+
   facet_wrap(~auth.type)+
   gen_gradient+
-  labs(x = "Journal", y = "Difference in Percent Rejection")+
+  labs(x = "Journal", y = "Difference in Percent Rejection",
+       fill = "% Points\nDifference")+
   my_theme_leg_horiz
 
 #ggsave("results/asm_rej_by_journal.jpg")

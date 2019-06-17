@@ -1,8 +1,9 @@
 rev_rec_data <- bias_data %>% 
+  filter(version.reviewed == 0) %>% 
+  filter(version == 0) %>% 
   select(gender, journal, published, review.recommendation, 
          reviewer.gender, reviewer.random.id, random.manu.num, version.reviewed, 
          US.inst, US.inst.type) %>% distinct() %>% 
-  filter(version.reviewed == 0) %>% 
   filter(review.recommendation %in% c("Revise only", "Reject", "Accept, no revision")) %>%
   distinct()
 

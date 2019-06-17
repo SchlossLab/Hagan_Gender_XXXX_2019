@@ -1,22 +1,29 @@
+ed_genders <- data %>% 
+  filter(role == "editor") %>% 
+  select(grouped.random, gender) %>% 
+  distinct() %>% 
+  rename("editor.gender" = "gender")
+
 ed_dec_data <- bias_data %>% 
-  select(gender, journal, random.manu.num, version.reviewed, 
-         US.inst, US.inst.type, EJP.decision) %>% 
   filter(version.reviewed == 0) %>% 
+  filter(version == 0) %>% 
+  select(gender, journal, grouped.random, 
+         US.inst, US.inst.type, EJP.decision) %>% 
   filter(EJP.decision %in% c("Accept, no revision",
                              "Reject", "Revise only")) %>% 
-  left_join(., ed_genders, by = "random.manu.num") %>% 
+  left_join(., ed_genders, by = "grouped.random") %>% 
   filter(editor.gender %in% c("female", "male")) %>% 
   distinct()
 
 ed_gen <- ed_dec_data %>% 
-  select(random.manu.num, editor.gender, 
+  select(grouped.random, editor.gender, 
          EJP.decision) %>%
   distinct() %>% 
   group_by(editor.gender) %>% 
   summarise(n = n())
 
 sub_gen <- ed_dec_data %>% 
-  select(random.manu.num, gender, EJP.decision) %>%
+  select(grouped.random, gender, EJP.decision) %>%
   distinct() %>% 
   group_by(gender) %>% 
   summarise(n = n())
@@ -24,7 +31,7 @@ sub_gen <- ed_dec_data %>%
 
 #editor recommendations by gender----
 fem_ed <- ed_dec_data %>% 
-  select(random.manu.num, gender, EJP.decision, 
+  select(grouped.random, gender, EJP.decision, 
          editor.gender) %>%
   distinct() %>% 
   group_by(editor.gender, EJP.decision, gender) %>% 
@@ -36,7 +43,7 @@ fem_ed <- ed_dec_data %>%
   mutate(overperformance = male - female) 
 
 men_ed <- ed_dec_data %>% 
-  select(random.manu.num, gender, EJP.decision, 
+  select(grouped.random, gender, EJP.decision, 
          editor.gender) %>%
   distinct() %>% 
   group_by(editor.gender, EJP.decision, gender) %>% 
@@ -66,7 +73,7 @@ sub_inst_gen <- ed_dec_data %>%
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
   filter(EJP.decision != "Revise only") %>% 
-  select(random.manu.num, US.inst.type, editor.gender,
+  select(grouped.random, US.inst.type, editor.gender,
          EJP.decision, gender) %>% 
   distinct() %>% 
   group_by(editor.gender, US.inst.type, gender) %>% 
@@ -76,7 +83,8 @@ summ_inst <- ed_dec_data %>%
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
   filter(EJP.decision != "Revise only") %>% 
-  select(random.manu.num, editor.gender, US.inst.type, EJP.decision, gender) %>% 
+  select(grouped.random, editor.gender, US.inst.type, 
+         EJP.decision, gender) %>% 
   distinct() %>% 
   group_by(editor.gender, US.inst.type, gender, 
            EJP.decision) %>% 
