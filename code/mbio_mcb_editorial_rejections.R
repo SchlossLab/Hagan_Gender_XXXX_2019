@@ -1,7 +1,7 @@
 ed_rejs <- bias_data %>% 
   filter(published == "no") %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
-  select(grouped.random, random.manu.num, gender, 
+  select(grouped.random, gender, 
          journal, decision.date) %>% 
   mutate(decision.date = year(decision.date)) %>% 
   distinct()
