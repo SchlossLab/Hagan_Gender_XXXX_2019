@@ -1,5 +1,8 @@
 #break decisions after review down by journal
 j_ed_dec_data <- bias_data %>% 
+#  filter(!(country %in% c("Japan", "Taiwan, Province of China", 
+#                          "China", "Singapore", "Hong Kong", 
+#                          "Korea, Republic of"))) %>% 
   filter(version.reviewed == 0) %>% 
   filter(version == 0) %>% 
   select(gender, journal, grouped.random, EJP.decision, version) %>% 

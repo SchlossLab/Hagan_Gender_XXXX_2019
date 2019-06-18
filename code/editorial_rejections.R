@@ -1,5 +1,8 @@
 #Do women recieve proportionally more editorial rejections than men?
 ed_rejs <- bias_data %>% 
+#  filter(!(country %in% c("Japan", "Taiwan, Province of China", 
+#                          "China", "Singapore", "Hong Kong", 
+#                          "Korea, Republic of"))) %>% 
   filter(published == "no") %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
   select(grouped.random, gender, 
@@ -45,5 +48,7 @@ ed_rejections_A <- ed_rejs %>%
   labs(x = "Journal", 
        y = "\nDifference in Editorial Rejections")+
   my_theme_horiz
+
+ggsave("results/j_ed_rej_no_china.png", ed_rejections_A)
 
 #editor recommendations by gender---- Doesn't work bc editors aren't assigned in all cases
