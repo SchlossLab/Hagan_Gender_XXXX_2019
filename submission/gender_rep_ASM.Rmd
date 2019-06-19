@@ -9,7 +9,7 @@ csl: asm.csl
 bibliography: references.bib
 ---
 
-```{r setup, include=FALSE, echo=FALSE, message=FALSE}
+```{r setup, echo=FALSE, message=FALSE}
 library(knitr)
 library(kableExtra)
 library(markdown)
@@ -60,7 +60,7 @@ auth_type_C #breakdown of submitted manuscripts (% by gender) according to EJP.d
 auth_type_D #breakdown of C by journal -- need to highlight instances with diff > 5%
 ```
 
-  + NOTE: to correct for the large discrepency in the participation of women at ASM journals during this time period, all comparisions are made relative to the gender and population in question.
+  + NOTE: to correct for the large discrepency in the participation of women at ASM journals during the is time period, all comparisions are made relative to the gender and population in question.
   + direct comparision of the proportion of woman-authored papers that are rejected compared to men, at each author stage
       + middle/first author rejected at similar rates
       + woman-authored (corres/last) rejected more frequently than men
