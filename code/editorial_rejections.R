@@ -49,6 +49,6 @@ ed_rejections_A <- ed_rejs %>%
        y = "\nDifference in Editorial Rejections")+
   my_theme_horiz
 
-ggsave("results/j_ed_rej_no_china.png", ed_rejections_A)
+#ggsave("results/j_ed_rej_no_china.png", ed_rejections_A)
 
 #editor recommendations by gender---- Doesn't work bc editors aren't assigned in all cases
