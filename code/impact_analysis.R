@@ -1,12 +1,12 @@
 #setup----
-cites <- read_csv("../data/cites_1.csv") %>% 
+cites <- read_csv("../data/cites.csv") %>% 
   select(`Article DOI (article_metadata)`, `Published Months`, 
          `Article Date of Publication (article_metadata)`, `Citation Date`, Cites, `Mendeley Saves`) %>% 
   group_by(`Article DOI (article_metadata)`,`Published Months`, 
            `Article Date of Publication (article_metadata)`, `Mendeley Saves`) %>% 
   summarise(Cites = sum(Cites))
 
-usage <- read_csv("../data/usage_1.csv") %>% 
+usage <- read_csv("../data/usage.csv") %>% 
   select(`Article DOI (article_metadata)`, `Total Abstract`, `Total HTML`, `Total PDF`)
 
 c_u_data <- full_join(cites, usage, by = "Article DOI (article_metadata)") %>% distinct()
