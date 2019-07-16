@@ -55,3 +55,15 @@ source("../code/genderize/ASM_country_na.R")
 
 plot_ASM_country_impact
 ```
+
+Supplemental Figure 5 
+```{r, Supplementary_1}
+source("../code/rej_by_inst_type.R")
+
+Supplementary_A
+Supplementary_B
+
+Supplementary_C #number of versions by gender nd journal
+Supplementary_D #days from submission to rejection by journal & gender
+Supplementary_E #number of versions to rejection by gender & journal
+```
