@@ -39,7 +39,7 @@ years <- reviewer_data %>% pull(year) %>% unique()
 
 journal_list <- data %>% pull(journal) %>% unique()
 
-eic data ----
+#eic data ----
 eic_data <- eic_data %>% 
   select(-EiC) %>% 
   filter(journal %in% journal_list) %>% 
