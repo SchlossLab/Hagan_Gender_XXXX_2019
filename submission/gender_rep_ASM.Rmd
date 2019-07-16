@@ -6,7 +6,6 @@ output:
   html_document:
     df_print: paged
 csl: asm.csl
-bibliography: references.bib
 ---
 
 ```{r setup, echo=FALSE, message=FALSE}
@@ -75,7 +74,7 @@ This study uses the data from manuscripts submitted to ASM journals that had a f
        + Is it proportional to the author representation? -- in some cases, but also difficult to compare b/c of the high "unclear" proportion of authors
        + Does it change by EiC? -- doesn't seem to. Can I add gender of EIC to the graph somehow?
 ```{r editor_gender, fig.asp = .9}
-source("../code/gender/editor_fig.R")
+source("../code/representation/editor_fig.R")
 editor_A
 editor_B
 ```       
@@ -92,7 +91,7 @@ editor_B
        + How does representation compare from potential to actual reviewer? -- seems equivalent
        + Is it proportional to the author representation? -- yes       
 ```{r reviewer_gender}
-source("../code/gender/reviewer_fig.R")
+source("../code/representation/reviewer_fig.R")
 par(mfrow = c(1,3))
 reviewer_A
 reviewer_B
@@ -119,7 +118,7 @@ reviewer_C
        + How often are each gender on multiple submitted or published manuscripts?
 
 ```{r author_gender}
-source("../code/gender/auth_fig.R")
+source("../code/representation/auth_fig.R")
 author_A
 author_B
 author_C
@@ -137,16 +136,16 @@ author_C
       + large proportion of potential reviewers are not senior authors (both genders)
 
 ```{r gender_summary_figs}
-source("../code/gender/summary_fig.R")
+source("../code/representation/summary_fig.R")
 par(mfrow = c(1,3))
 summary_A
 summary_B
-summary_C
+#include_graphics("results/representation/gender_summary_figs-3.png")
 ```
 
 ##Papers submitted by women are rejected more frequently than those submitted by men
 ```{r, plot_rej_rates} 
-source("../code/reject_by_gender.R")
+source("../code/bias/reject_by_gender.R")
 
 auth_type_A #A #cross ASM rejection rates (all genders)
 auth_type_B #B #rejection rates by journ (m/w) -- need to highlight instances with diff > 5%
@@ -167,10 +166,10 @@ auth_type_D #breakdown of C by journal -- need to highlight instances with diff 
 
 ##Both men and women editors are more likely to reject papers authored by women than those authored by men
 ```{r, plot_ed_rej}
-source("../code/editorial_rejections.R")#A
-source("../code/editorial_rejections_by_journal.R") #E
-source("../code/editor_gender_analysis.R")
-source("../code/rej_by_inst_type.R")
+source("../code/bias/editorial_rejections.R")#A
+source("../code/bias/editorial_rejections_by_journal.R") #E
+source("../code/bias/editor_gender_analysis.R")
+source("../code/bias/rej_by_inst_type.R")
 
 ed_rejections_A #comparing editorial rejection rates by journal
 ed_rejections_E #comparing first decisions by journal
@@ -195,11 +194,11 @@ ed_rejections_D #comparing acceptance rates by editor gender, author gender & au
 
 ##Both men and women reviewers more frequently suggest rejection for papers authored by women
 ```{r, reviewer_rec}
-source("../code/rev_score_analysis.R")
+source("../code/bias/rev_score_analysis.R")
 reviewer_A
 reviewer_B
 
-source("../code/reviewer_gender_analysis.R")
+source("../code/bias/reviewer_gender_analysis.R")
 reviewer_C #difference in recommendations by reviewer gender
 reviewer_D #difference in acceptance recommendations by reviewer gender & institution type
 
@@ -217,19 +216,19 @@ reviewer_D #difference in acceptance recommendations by reviewer gender & instit
   
 ##Factors affecting competency  
 ```{r, other_factors, echo=FALSE, message=FALSE}
-source("../code/time_to_publication.R")
+source("../code/bias/time_to_publication.R")
 factors_A #days pending at each journal
 
-source("../code/time_at_journ.R")
+source("../code/bias/time_at_journ.R")
 factors_B #days in peer review system
 
-source("../code/time_to_final_rejection.R") #supplementary D & E
+source("../code/bias/time_to_final_rejection.R") #supplementary D & E
 
-source("../code/impact_analysis.R")
+source("../code/bias/impact_analysis.R")
 factors_C #cites per month
 factors_D #total manuscript reads (HTML+PDF)
 
-source("../code/bias_by_jif.R")
+source("../code/bias/bias_by_jif.R")
 factors_E #no difference in submitted to mbio vs msphere
 ```
   

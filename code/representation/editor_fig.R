@@ -75,6 +75,7 @@ ed_manu_prop_j <- map_df(years, function(x){
 ed_prop_j <- full_join(j_ed_prop, ed_manu_prop_j, 
                        by = c("year", "gender", "journal")) %>%
   distinct() %>% 
+  filter(gender != "NA") %>% 
   gather(proportion, weighted_proportion, key = type, value = proportion)
 
 editor_B <- ggplot(ed_prop_j) + 

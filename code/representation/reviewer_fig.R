@@ -36,7 +36,7 @@ reviewer_B <- data %>% filter(role == "reviewer") %>%
   labs(x = "Reviewer Gender", y = "Number of Papers Reviewed")+
   my_theme_horiz  #figure out how to add n of individuals
 
-source("../code/gender/percent_cons.R")
+source("../code/representation/percent_cons.R")
 
 reviewer_C <- ggplot(summary)+
   geom_col(aes(x = reviewer.gender, y = percent, fill = reviewer.gender))+

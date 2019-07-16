@@ -9,17 +9,16 @@ summary_data <- data %>%
   filter(EJP.decision %in% comp_EJP) %>% 
   mutate(role = case_when(
     role == "author" & 
-      author.corres == "false" & author.last == "false" &
+      author.corres == "FALSE" & author.last == "FALSE" &
       author.seq != 1 ~ "Middle",
     role == "author" & 
-      (author.corres == "true") ~ "Corresponding",
+      (author.corres == "TRUE") ~ "Corresponding",
     role == "author" &
-      author.last == "true" ~ "Last",
+      author.last == "TRUE" ~ "Last",
     role == "author" &
       author.seq == 1 ~ "First",
     TRUE ~ role
-  )) %>% mutate(year = year(submitted.date),
-                gender = fct_explicit_na(gender, na_level = "none")) %>% 
+  )) %>% mutate(year = year(submitted.date)) %>% 
   select(random.person.id, gender, role, journal, grouped.random, published, EJP.decision) %>% 
   filter(role %in% auth_types) %>% 
   mutate(EJP.decision = fct_recode(EJP.decision, Accept = "Accept, no revision")) %>% 
@@ -71,6 +70,6 @@ summary_B <- summary_data %>%
   
 
 #C. Retention of authors to leadership by gender----
-source("../code/gender/retention_alluvial.R")
+#source("../code/gender/retention_alluvial.R")
 
-summary_C <- retention_plot
+#summary_C <- retention_plot

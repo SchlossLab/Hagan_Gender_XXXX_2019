@@ -34,8 +34,11 @@ ASM_percent_unpredicted <- get_percent(ASM_num_na_obs, ASM_num_obs)
 #how many names from each country had genders predicted?----
 ASM_predictions_by_country <- table(ASM_country_impact_data$country, #count prediction values for each country
                                     ASM_country_impact_data$predicted) %>% 
-  as_tibble(., .name_repair = "universal") %>% #convert to tibble
-  rename(country = Var1, prediction = Var2) %>% #rename columns
+  as_tibble(., .name_repair = "universal") #convert to tibble
+
+colnames(ASM_predictions_by_country)[1:2] <- c("country", "prediction")
+
+ASM_predictions_by_country <- ASM_predictions_by_country %>% 
   spread(., key = prediction, value = n) %>% #transform table for country column
   mutate(total = yes + no) %>% #calculate total names per country
   mutate(percent = get_percent(no, total)) %>% #calculate per country % na-gendered
