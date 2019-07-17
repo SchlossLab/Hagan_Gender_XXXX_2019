@@ -42,7 +42,7 @@ editor_A <- ggplot(ed_prop_ASM) +
   annotate(geom = "text", x = 2018, y = ed_prop_text[1,2]+1.5, label = "Women")+
   annotate(geom = "text", x = 2018, y = ed_prop_text[2,2]+6, label = "Men")+
   labs(x = "Year", y = "Proportion of Editors", linetype = "Type")+
-  my_theme_leg_horiz
+  my_theme_horiz
 
 #B. Proportion of editors at each journal over time by gender---- 
 
@@ -82,7 +82,13 @@ editor_B <- ggplot(ed_prop_j) +
   geom_line(aes(x = year, y = proportion, linetype = type, color = gender))+
   facet_wrap(~journal)+
   coord_cartesian(ylim = c(0, 100))+
-  scale_color_manual(breaks = gen_levels, labels = NULL, values = gen_colors)+
+  scale_color_manual(breaks = gen_levels, labels = gen_labels, values = gen_colors)+
   scale_linetype_manual(breaks = c("proportion", "weighted_proportion"), labels = c("Individuals", "Manuscripts Handled"), values = c("solid", "dashed"))+
-  labs(x = "Year", y = "Proportion of Editors/Senior Editors", linetype = "Type")+
+  labs(x = "Year", y = "Proportion of Editors/Senior Editors", 
+       linetype = "Type", color = "Gender")+
   my_theme_leg
+
+plot_grid(editor_A, editor_B, labels = c('A', 'B'), label_size = 18)
+
+ggsave("Figure_1.png", device = 'png', 
+       path = 'submission/', width = 12, height = 6)

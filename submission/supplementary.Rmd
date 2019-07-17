@@ -11,21 +11,39 @@ library(kableExtra)
 library(markdown)
 library(rmarkdown)
 library(formattable)
+library(png)
 
-source("../code/analysis_functions.R")
-source("../code/get_plot_options.R")
-source("../code/load_data.R")
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
 ```
 
+#Gender bias
+Supplemental Figure 5 
+```{r, Supplementary_1}
+#source("../code/rej_by_inst_type.R")
+
+#Supplementary_A
+#Supplementary_B
+
+#Supplementary_C #number of versions by gender nd journal
+#Supplementary_D #days from submission to rejection by journal & gender
+#Supplementary_E #number of versions to rejection by gender & journal
+```
+
+
 ##Gender prediction and assignment
-Supplemental Figure 1 - schematic of gender prediction & assignment
+**Supplemental Figure 1. Schematic of gender prediction & assignment**
+```{r}
+include_graphics("supp_figures/genderize_method.png")
+```
+
 
 ##Validating gender analysis
 ```{r genderize_setup, include=FALSE}
 source("../code/genderize/b_c_comparison.R")
 ```
-Supplemental Table 1 - sensitivity/specificity/accuracy of genderize thresholds
+
+
+**Supplemental Table 1. sensitivity/specificity/accuracy of genderize thresholds**
 ```{r genderize_stats, results='asis'}  
 stats_summary %>% 
   mutate(b_c_data_ascii_pmod85 = ifelse(b_c_data_ascii_pmod85 == "0.9714", 
@@ -40,30 +58,22 @@ knitr::kable(., format = "html", table.attr = "style = \"color: black;\"", digit
   add_header_above(c(" " = 1, "First Names" = 3, "Plus Country Data" = 3)) %>% 
   footnote(general = "Bolded text denotes the accuracy of the threshold used in all further analyses")
 ```
-Supplemental Figure 2 - Equation for calculating negative bias by genderize
 
-Supplemental Figure 3 - Validation dataset, country impact
-```{r country_impact, message=FALSE}
-source("../code/genderize/b_c_country_na.R")
 
-plot_country_impact
+**Supplemental Figure 2. Equation for calculating negative bias by genderize**
+```{r}
+include_graphics("supp_figures/impact_equation.png")
 ```
 
-Supplemental Figure 4 - country impact for full ASM dataset
-```{r ASM_genderize, message=FALSE}
-source("../code/genderize/ASM_country_na.R")
 
-plot_ASM_country_impact
+**Supplemental Figure 3. Validation dataset, country impact**
+```{r}
+include_graphics("supp_figures/Supp_genderize_3.png")
 ```
 
-Supplemental Figure 5 
-```{r, Supplementary_1}
-source("../code/rej_by_inst_type.R")
 
-Supplementary_A
-Supplementary_B
-
-Supplementary_C #number of versions by gender nd journal
-Supplementary_D #days from submission to rejection by journal & gender
-Supplementary_E #number of versions to rejection by gender & journal
+**Supplemental Figure 4. country impact for full ASM dataset**
+```{r}
+include_graphics("supp_figures/Supp_genderize_4.png")
 ```
+

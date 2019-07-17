@@ -1,6 +1,5 @@
 senior_authors <- people_data %>% 
-  filter(role == "author") %>% 
-  filter(author.corres == "true" | author.last == "true") %>% 
+  filter(author.corres == "TRUE" | author.last == "TRUE") %>% 
   select(gender, random.person.id) %>% distinct() %>% 
   rename("author.gender" = "gender")
 
@@ -21,10 +20,3 @@ male <- joined %>% filter(author.gender == "male") %>%
 
 summary <- rbind(female, male) %>% 
   filter(!is.na(reviewer.gender))
-
-reviewer_C <- ggplot(summary)+
-  geom_col(aes(x = reviewer.gender, y = percent, fill = reviewer.gender))+
-  scale_fill_manual(values = gen_ed_colors)+
-  scale_x_discrete(breaks = gen_breaks, labels = gen_labels)+
-  labs(x = "Gender", y = "Percent Considered as Reviewers")+
-  my_theme_horiz

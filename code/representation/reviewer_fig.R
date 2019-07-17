@@ -36,10 +36,8 @@ reviewer_B <- data %>% filter(role == "reviewer") %>%
   labs(x = "Reviewer Gender", y = "Number of Papers Reviewed")+
   my_theme_horiz  #figure out how to add n of individuals
 
-source("../code/representation/percent_cons.R")
 
-reviewer_C <- ggplot(summary)+
-  geom_col(aes(x = reviewer.gender, y = percent, fill = reviewer.gender))+
-  scale_fill_manual(values = gen_ed_colors)+
-  labs(x = "Gender", y = "Percent Considered to Review")+
-  my_theme_horiz
+plot_grid(reviewer_A, reviewer_B, labels = c('A', 'B'), label_size = 18)
+
+ggsave("Figure_2.png", device = 'png', 
+       path = 'submission/', width = 12, height = 6)

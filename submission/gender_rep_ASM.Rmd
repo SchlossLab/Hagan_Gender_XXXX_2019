@@ -6,9 +6,11 @@ output:
   html_document:
     df_print: paged
 csl: asm.csl
+fontsize: 11pt
+geometry: margin=1.0in
 ---
 
-```{r setup, echo=FALSE, message=FALSE}
+```{r setup, eval=TRUE, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
 library(knitr)
 library(kableExtra)
 library(markdown)
@@ -74,9 +76,7 @@ This study uses the data from manuscripts submitted to ASM journals that had a f
        + Is it proportional to the author representation? -- in some cases, but also difficult to compare b/c of the high "unclear" proportion of authors
        + Does it change by EiC? -- doesn't seem to. Can I add gender of EIC to the graph somehow?
 ```{r editor_gender, fig.asp = .9}
-source("../code/representation/editor_fig.R")
-editor_A
-editor_B
+include_graphics("Figure_1.png")
 ```       
   + Reviewer Notes:
       + Median number of paper reviews are equivalent across genders, though men seem slightly more likely to review more papers - trends representative of journals, except for MCB where "unclear" reviewers are a greater proportion than women
@@ -91,11 +91,8 @@ editor_B
        + How does representation compare from potential to actual reviewer? -- seems equivalent
        + Is it proportional to the author representation? -- yes       
 ```{r reviewer_gender}
-source("../code/representation/reviewer_fig.R")
-par(mfrow = c(1,3))
-reviewer_A
-reviewer_B
-reviewer_C
+include_graphics("Figure_2.png")
+source("../code/representation/percent_cons.R")
 ```
 
 ###Gender in Authorship
@@ -118,10 +115,7 @@ reviewer_C
        + How often are each gender on multiple submitted or published manuscripts?
 
 ```{r author_gender}
-source("../code/representation/auth_fig.R")
-author_A
-author_B
-author_C
+include_graphics("Figure_3.png")
 ```     
 
 ###Gender Summary
@@ -137,7 +131,7 @@ author_C
 
 ```{r gender_summary_figs}
 source("../code/representation/summary_fig.R")
-par(mfrow = c(1,3))
+
 summary_A
 summary_B
 #include_graphics("results/representation/gender_summary_figs-3.png")

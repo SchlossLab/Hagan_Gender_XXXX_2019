@@ -12,7 +12,8 @@ max_value <- get_ymax(all_authors_w_prop)
 #line plot of all journals combined by year
 author_A <- gender_line_plot(all_authors_w_prop, max_value, 
                  text_values[1,2], text_values[2,2], text_values[3,2]) + 
-  labs(x = "Year", y = "Proportion of Unique Authors",
+  labs(x = "Year", y = "Proportion of 
+       Unique Authors",
     caption = "Proportion of unique authors on manuscripts each year. 
     Each person is counted once per year")
 
@@ -39,7 +40,7 @@ author_B <- f_authors_w_prop %>%
     coord_cartesian(ylim = c(0, max_value))+
     scale_color_manual(values = gen_ed_colors, 
                        breaks = gen_ed_labels)+
-    my_theme_leg_horiz + 
+    my_theme_horiz + 
     labs(x = "Year",
          y = "Proportion of First Authors",
          linetype = "Manuscript Status",
@@ -77,9 +78,17 @@ author_C <- c_authors_w_prop %>%
     breaks = gen_ed_labels)+
   annotate(geom = "text", x = 2017, y = m_text_values[2,5]+1.5, label = "Men")+
   annotate(geom = "text", x = 2017, y = f_text_values[2,5]+1.5, label = "Women")+
-  my_theme_leg_horiz + 
+  my_theme_horiz + 
   labs(x = "Year",
-       y = "Proportion of Corresponding Authors",
+       y = "Proportion of 
+       Corresponding Authors",
        linetype = "Manuscript Status",
        caption = "Proportion of corresponding authors on manuscripts each year. 
        Counted by unique manuscripts each year.")
+
+
+plot_grid(author_A, author_B, author_C, 
+          labels = c('A', 'B', 'C'), label_size = 18, nrow = 3)
+
+ggsave("Figure_3.png", device = 'png', 
+       path = 'submission/', width = 9, height = 12)
