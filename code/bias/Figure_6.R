@@ -134,7 +134,7 @@ ed_rejections_A <- ed_rejections %>% select(-n, -total) %>%
   gen_gradient+
   geom_hline(data = ASM_ed_rej, aes(yintercept = performance))+
   annotate(geom = "text", x = 12, y = -2.5, label = "All Journals")+
-  geom_text(aes(x = journal, y = 0.75, label = n))+
+  #geom_text(aes(x = journal, y = 0.75, label = n))+
   labs(x = "Journal", 
        y = "Difference in Editorial Rejections")+
   my_theme_horiz
@@ -189,7 +189,7 @@ ed_rejections_E <- j_ed_dec_data %>%
   coord_flip()+
   gen_gradient+
   geom_hline(data = ASM_dec, aes(yintercept = performance))+
-  geom_text(aes(x = journal, y = 1.5, label = n))+
+  #geom_text(aes(x = journal, y = 1.5, label = n))+
   labs(x = "Journal", 
        y = "Difference in Decision after First Review")+
   my_theme_horiz
