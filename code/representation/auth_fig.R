@@ -12,10 +12,7 @@ max_value <- get_ymax(all_authors_w_prop)
 #line plot of all journals combined by year
 author_A <- gender_line_plot(all_authors_w_prop, max_value, 
                  text_values[1,2], text_values[2,2], text_values[3,2]) + 
-  labs(x = "Year", y = "Proportion of 
-       Unique Authors",
-    caption = "Proportion of unique authors on manuscripts each year. 
-    Each person is counted once per year")
+  labs(x = "Year", y = "Proportion of\nUnique Authors")
 
 
 #B. Proportion of men/women first authors over time: submitted & published----
@@ -42,10 +39,9 @@ author_B <- f_authors_w_prop %>%
                        breaks = gen_ed_labels)+
     my_theme_horiz + 
     labs(x = "Year",
-         y = "Proportion of First Authors",
+         y = "Proportion of\nFirst Authors",
          linetype = "Manuscript Status",
-         color = "Gender", #not showing for some reason...
-         caption = "Proportion of first authors on manuscripts each year.")
+         color = "Gender")
 
 #C. Proportion of men/women corresponding authors over time: submitted & published----
 sub_c_authors_w_prop <- map_dfr(years, function(x){
@@ -80,11 +76,8 @@ author_C <- c_authors_w_prop %>%
   annotate(geom = "text", x = 2017, y = f_text_values[2,5]+1.5, label = "Women")+
   my_theme_horiz + 
   labs(x = "Year",
-       y = "Proportion of 
-       Corresponding Authors",
-       linetype = "Manuscript Status",
-       caption = "Proportion of corresponding authors on manuscripts each year. 
-       Counted by unique manuscripts each year.")
+       y = "Proportion of\nCorresponding Authors",
+       linetype = "Manuscript Status")
 
 
 plot_grid(author_A, author_B, author_C, 

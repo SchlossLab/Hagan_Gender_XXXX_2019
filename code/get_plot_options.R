@@ -115,8 +115,8 @@ plot_impact_data <- function(measure, coord_max){
     geom_histogram(aes(y=0.5*..density..), 
                    alpha=0.5, position='identity', binwidth=0.5)+
     scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-    labs(y = "Proportion of Published\n", fill = "Gender",
-         x = paste0("\n", measure, " per Month Published"))+
+    labs(y = "\nProportion of Published", fill = "Gender",
+         x = paste0(measure, " per Month Published"))+
     my_theme_leg_horiz
   
   return(plot)

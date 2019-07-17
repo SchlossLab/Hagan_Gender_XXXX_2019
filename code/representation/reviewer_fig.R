@@ -12,10 +12,7 @@ max_value <- get_ymax(pot_rev_w_prop)
 #line plot of all journals combined by year
 reviewer_A <- gender_line_plot(pot_rev_w_prop, max_value, 
                  text_values[1,2], text_values[2,2], text_values[3,2]) + 
-  labs(x = "Year", y = paste("Proportion of Potential Reviewers"),
-       caption = "Proportion of potential reviewers for 
-                       submitted manuscripts each year. 
-                       Each person is counted once per year")
+  labs(x = "Year", y = "Proportion of Potential Reviewers")
 
 #B. Number of papers reviewed by Gender----
 reviewer_B <- data %>% filter(role == "reviewer") %>% 
@@ -33,7 +30,7 @@ reviewer_B <- data %>% filter(role == "reviewer") %>%
   coord_flip()+
   scale_x_discrete(labels = gen_labels)+
   scale_fill_manual(values = gen_colors)+
-  labs(x = "Reviewer Gender", y = "Number of Papers Reviewed")+
+  labs(x = "\nReviewer Gender", y = "Number of Papers Reviewed")+
   my_theme_horiz  #figure out how to add n of individuals
 
 

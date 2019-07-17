@@ -84,7 +84,7 @@ editor_B <- ggplot(ed_prop_j) +
   coord_cartesian(ylim = c(0, 100))+
   scale_color_manual(breaks = gen_levels, labels = gen_labels, values = gen_colors)+
   scale_linetype_manual(breaks = c("proportion", "weighted_proportion"), labels = c("Individuals", "Manuscripts Handled"), values = c("solid", "dashed"))+
-  labs(x = "Year", y = "Proportion of Editors/Senior Editors", 
+  labs(x = "Year", y = "\nProportion of Editors/Senior Editors", 
        linetype = "Type", color = "Gender")+
   my_theme_leg
 
