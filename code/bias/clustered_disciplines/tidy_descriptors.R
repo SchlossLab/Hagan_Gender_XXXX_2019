@@ -7,7 +7,7 @@ data("stop_words")
 clean_title_data <- read_csv("data/2018_title_keyword_data.csv")
 
 descript_test <- clean_title_data %>% 
-  select(-random.manu.num) %>% distinct() %>% head(n=500)
+  select(-random.manu.num) %>% distinct()
 
 tidy_journals <- descript_test %>% 
   select(journal, category, grouped.random) %>% 
