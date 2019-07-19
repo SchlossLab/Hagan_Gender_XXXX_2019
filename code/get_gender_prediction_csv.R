@@ -10,7 +10,9 @@ gender_cols <- c("first.auth", "corres.auth", "last.auth")
 editor_cols <- c("editor", "sen.editor")
 
 #select data----
-reg_data <- data %>% 
+reg_data <- bias_data %>% 
+  filter(published == "no") %>% 
+  filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% #filter editorial rejections
   select(role, published, doi, journal, num.versions, num.authors, contains("days"), 
          author.seq, author.corres, gender, reviewer.gender,  
          reviewer.random.id, grouped.random, random.manu.num, random.person.id, EJP.decision, 
@@ -88,4 +90,4 @@ reg2_data <- full_join(corres_auth, editor,
   select(-random.manu.num, -grouped.random) %>% 
   mutate_all(as.factor)
 
-write_csv(reg2_data, path = "data/gender_log_reg.csv")
+write_csv(reg2_data, path = "data/gender_ed_rej.csv")
