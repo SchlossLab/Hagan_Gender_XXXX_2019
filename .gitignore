@@ -5,3 +5,5 @@ code/learning/data/temp/*
 results/
 *.html
 submission/*.html
+*.jpg
+*.png
