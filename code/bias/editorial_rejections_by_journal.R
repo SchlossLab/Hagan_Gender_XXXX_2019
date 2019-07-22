@@ -5,6 +5,7 @@ j_ed_dec_data <- bias_data %>%
 #                          "Korea, Republic of"))) %>% 
   filter(version.reviewed == 0) %>% 
   filter(version == 0) %>% 
+  #filter(US.inst == "yes") %>% 
   select(gender, journal, grouped.random, EJP.decision, version) %>% 
   filter(EJP.decision %in% c("Accept, no revision",
                              "Reject", "Revise only")) %>% 
