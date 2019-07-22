@@ -1,5 +1,5 @@
 ---
-title: "Who are ASM Journals? A Gender Analysis"
+title: "**Who are ASM Journals? A Gender Analysis**"
 csl: mbio.csl
 fontsize: 11pt
 output:
