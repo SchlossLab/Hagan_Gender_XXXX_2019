@@ -4,7 +4,7 @@ people <- people_data %>% select(-role, -contains("auth"),
   distinct() %>% 
   mutate(gender = fct_explicit_na(gender, na_level = "none"))
 
-editors <- people_data %>% filter(role == "editor") %>% 
+authors <- people_data %>% filter(role == "editor") %>% 
   select(random.manu.num, gender) %>%
   rename("editor.gender" = "gender") %>% distinct() 
 
