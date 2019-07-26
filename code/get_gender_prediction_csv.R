@@ -10,9 +10,7 @@ gender_cols <- c("first.auth", "corres.auth", "last.auth")
 editor_cols <- c("editor", "sen.editor")
 
 #select data----
-reg_data <- bias_data %>% 
-  filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% #filter decisions after first review
+reg_data <- data %>% 
   select(role, published, doi, journal, num.versions, num.authors, contains("days"), 
          author.seq, author.corres, gender, reviewer.gender,  
          reviewer.random.id, grouped.random, random.manu.num, random.person.id, EJP.decision, 
@@ -74,6 +72,18 @@ author_ratio <- map_dfr(uniq.manu, function(x){
   select(random.manu.num, prop.fem.auth, num.authors) %>% distinct()
 })
 
+ed_reject <- data %>% 
+  filter(published == "no") %>% 
+  filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
+  pull(random.manu.num) %>% unique()
+
+rev_1_progress <- data %>% 
+  filter(version.reviewed == 0) %>% 
+  filter(version == 0) %>% 
+  select(random.manu.num, EJP.decision) %>% 
+  distinct() %>% 
+  mutate(pass.first.review = if_else(EJP.decision == "Reject", "no", "yes")) %>% select(-EJP.decision)
+  
 reg2_data <- full_join(corres_auth, editor, 
                        by = c("published", "random.manu.num", "grouped.random")) %>% 
   distinct() %>% 
@@ -83,11 +93,13 @@ reg2_data <- full_join(corres_auth, editor,
   distinct() %>% 
   left_join(., author_ratio, by = "random.manu.num") %>% distinct() %>% 
   left_join(., men_rev_data, by = "random.manu.num") %>% distinct() %>% 
+  left_join(., rev_1_progress, by = "random.manu.num") %>% 
   distinct() %>% 
-  mutate(reviewed = if_else(is.na(prop.men.rev), 0, 1)) %>% 
-  mutate(inst.gender = paste0(US.inst.type, ".", corres.auth)) %>% 
+  mutate(editorial.reject = if_else(random.manu.num %in% ed_reject, 
+                                    "yes", "no"),
+         inst.gender = paste0(US.inst.type, ".", corres.auth)) %>% 
   mutate(inst.gender = str_replace_all(inst.gender, "NA.*male", "")) %>%
   select(-random.manu.num, -grouped.random) %>% 
   mutate_all(as.factor)
 
-write_csv(reg2_data, path = "data/gender_rev_rej.csv")
+write_csv(reg2_data, path = "data/gender_predict.csv")
