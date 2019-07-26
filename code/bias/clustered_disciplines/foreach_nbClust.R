@@ -4,7 +4,7 @@ library(biganalytics)
 
 desc_matrix <- read_csv("data/desc_matrix.csv")
 
-test_matrix <- desc_matrix %>% select(-grouped.random, -journal.val) %>% data.matrix() %>% head(n = 1000)
+test_matrix <- desc_matrix %>% select(-grouped.random) %>% data.matrix()
 
 set.seed(1234)
 
@@ -17,16 +17,10 @@ r <- foreach(i=15, j=100) %dopar% {
   clust_test <- table(nc$Best.n[1,])
 }
 
-nc <- NbClust(test_matrix, min.nc=10, max.nc=99, method="kmeans")
-
 print("NbClust complete")
 
 save.image()
 
-clust_test <- table(nc$Best.n[1,])
-
-save.image()
-
-write_csv(clust_test, "data/clust_test_2019_25_07.csv")
+write_csv(r, "data/clust_test_2019_26_07.csv")
 
 print("clust output saved")
