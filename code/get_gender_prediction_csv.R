@@ -14,7 +14,7 @@ reg_data <- data %>%
   select(role, published, doi, journal, num.versions, num.authors, contains("days"), 
          author.seq, author.corres, gender, reviewer.gender,  
          reviewer.random.id, grouped.random, random.manu.num, random.person.id, EJP.decision, 
-         institution, US.inst, US.inst.type) %>% 
+         institution, US.inst) %>% 
   distinct() %>%
   mutate(corres.auth = if_else(author.corres == "TRUE", paste(gender), paste("NA")),
          editor = if_else(role == "editor", paste(gender), paste("NA")), #all ending up as NAs!!!
@@ -24,7 +24,7 @@ reg_data <- data %>%
   distinct() 
 
 corres_auth <- reg_data %>% 
-  select(published, corres.auth, grouped.random, random.manu.num, US.inst, US.inst.type) %>% 
+  select(published, corres.auth, grouped.random, random.manu.num, US.inst) %>% 
   filter(corres.auth %in% genders) %>% distinct()
   
 editor <- reg_data %>% 
@@ -75,7 +75,8 @@ author_ratio <- map_dfr(uniq.manu, function(x){
 ed_reject <- data %>% 
   filter(published == "no") %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
-  pull(random.manu.num) %>% unique()
+  select(random.manu.num) %>% 
+  mutate(editorial.reject = "yes")
 
 rev_1_progress <- data %>% 
   filter(version.reviewed == 0) %>% 
@@ -83,6 +84,8 @@ rev_1_progress <- data %>%
   select(random.manu.num, EJP.decision) %>% 
   distinct() %>% 
   mutate(pass.first.review = if_else(EJP.decision == "Reject", "no", "yes")) %>% select(-EJP.decision)
+
+na_val <- c("NA.female", "NA.male", "male.NA", "female.NA")
   
 reg2_data <- full_join(corres_auth, editor, 
                        by = c("published", "random.manu.num", "grouped.random")) %>% 
@@ -93,12 +96,11 @@ reg2_data <- full_join(corres_auth, editor,
   distinct() %>% 
   left_join(., author_ratio, by = "random.manu.num") %>% distinct() %>% 
   left_join(., men_rev_data, by = "random.manu.num") %>% distinct() %>% 
+  left_join(., ed_reject, by = "random.manu.num") %>% distinct() %>% 
   left_join(., rev_1_progress, by = "random.manu.num") %>% 
   distinct() %>% 
-  mutate(editorial.reject = if_else(random.manu.num %in% ed_reject, 
-                                    "yes", "no"),
-         inst.gender = paste0(US.inst.type, ".", corres.auth)) %>% 
-  mutate(inst.gender = str_replace_all(inst.gender, "NA.*male", "")) %>%
+  mutate(sen.editor.x.edreject = paste0(sen.editor, ".", editorial.reject),
+         editor.x.revprog = paste0(editor, ".", pass.first.review)) %>% 
   select(-random.manu.num, -grouped.random) %>% 
   mutate_all(as.factor)
 

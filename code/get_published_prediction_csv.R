@@ -26,7 +26,7 @@ reg_data <- bias_data %>%
   distinct() 
 
 corres_auth <- reg_data %>% 
-  select(published, corres.auth, grouped.random, random.manu.num, US.inst, US.inst.type) %>% 
+  select(published, corres.auth, grouped.random, random.manu.num, US.inst, US.inst.type, journal) %>% 
   filter(corres.auth %in% genders) %>% distinct()
   
 editor <- reg_data %>% 
@@ -90,4 +90,4 @@ reg2_data <- full_join(corres_auth, editor,
   select(-random.manu.num, -grouped.random) %>% 
   mutate_all(as.factor)
 
-write_csv(reg2_data, path = "data/gender_rev_rej.csv")
+write_csv(reg2_data, path = "data/published_predict.csv")
