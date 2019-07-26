@@ -10,23 +10,26 @@ gender_cols <- c("first.auth", "corres.auth", "last.auth")
 editor_cols <- c("editor", "sen.editor")
 
 #select data----
-reg_data <- bias_data %>% 
-  filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% #filter decisions after first review
-  select(role, published, doi, journal, num.versions, num.authors, contains("days"), 
-         author.seq, author.corres, gender, reviewer.gender,  
-         reviewer.random.id, grouped.random, random.manu.num, random.person.id, EJP.decision, 
+reg_data <- data %>% 
+  select(role, published, doi, journal, num.versions, num.authors, 
+         contains("days"), author.seq, author.corres, gender, 
+         reviewer.gender, reviewer.random.id, grouped.random, 
+         random.manu.num, random.person.id, EJP.decision, 
          institution, US.inst, US.inst.type) %>% 
   distinct() %>%
-  mutate(corres.auth = if_else(author.corres == "TRUE", paste(gender), paste("NA")),
-         editor = if_else(role == "editor", paste(gender), paste("NA")), #all ending up as NAs!!!
-         sen.editor = if_else(role == "senior.editor", paste(gender), paste("NA"))
+  mutate(corres.auth = if_else(author.corres == "TRUE", 
+                               paste(gender), paste("NA")),
+         editor = if_else(role == "editor", 
+                          paste(gender), paste("NA")), #all ending up as NAs!!!
+         sen.editor = if_else(role == "senior.editor", 
+                              paste(gender), paste("NA"))
          ) %>% 
   select(-author.seq, -author.corres, -days.to.review) %>%
   distinct() 
 
 corres_auth <- reg_data %>% 
-  select(published, corres.auth, grouped.random, random.manu.num, US.inst, US.inst.type, journal) %>% 
+  select(published, corres.auth, grouped.random, random.manu.num, 
+         US.inst, US.inst.type, journal) %>% 
   filter(corres.auth %in% genders) %>% distinct()
   
 editor <- reg_data %>% 
@@ -75,18 +78,17 @@ author_ratio <- map_dfr(uniq.manu, function(x){
 })
 
 reg2_data <- full_join(corres_auth, editor, 
-                       by = c("published", "random.manu.num", "grouped.random")) %>% 
+                       by = c("published", "random.manu.num", 
+                              "grouped.random")) %>% 
   distinct() %>% 
   filter(corres.auth %in% c("male", "female")) %>% 
   full_join(., sen_editor, 
             by = c("published", "random.manu.num", "grouped.random")) %>% 
+  left_join(., author_ratio, by = "random.manu.num") %>% 
+  left_join(., men_rev_data, by = "random.manu.num") %>% 
   distinct() %>% 
-  left_join(., author_ratio, by = "random.manu.num") %>% distinct() %>% 
-  left_join(., men_rev_data, by = "random.manu.num") %>% distinct() %>% 
-  distinct() %>% 
-  mutate(reviewed = if_else(is.na(prop.men.rev), 0, 1)) %>% 
+  mutate(reviewed = if_else(is.na(num.rev), 0, 1)) %>% 
   mutate(inst.gender = paste0(US.inst.type, ".", corres.auth)) %>% 
-  mutate(inst.gender = str_replace_all(inst.gender, "NA.*male", "")) %>%
   select(-random.manu.num, -grouped.random) %>% 
   mutate_all(as.factor)
 
