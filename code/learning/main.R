@@ -38,29 +38,26 @@ for (dep in deps){
 source('code/learning/model_selection.R')
 source('code/learning/model_pipeline.R')
 source('code/learning/generateAUCs.R')
-source('code/learning/model_interpret.R')
-source('code/learning/permutation_importance.R')
 ######################################################################
 
 ######################## DATA PREPARATION #############################
 # Read in the gender data
-data <- read.csv("code/learning/gender_log_reg.csv") %>%
-  select(-avg.rev, -num.authors, -prop.men.rev, -num.rev, -num.versions, -days.to.decision, -days.to.production, -days.pending, -days.final, US.inst.type, -cites.month, -abstract.views.month, -html.views.month, -pdf.views.month, -reviewed, -EJP.decision, US.inst) %>%
-  filter(corres.auth != "none") %>%
-  filter(editor != "none") %>%
-  filter(US.inst == "yes") %>% 
-  select(-US.inst) %>% 
-  #filter(journal %in% c("MCB", "mBio", "mSphere", "mSystems")) %>%
-  #select(-journal) %>%
+data <- read.csv("code/learning/published_predict.csv")
+
+data$num.rev[is.na(data$num.rev)] <- 0
+
+data <- data %>% 
+  select(-prop.men.rev) %>% 
   drop_na() %>%
+  select(-US.inst.type, -reviewed, -num.rev ) %>% 
   droplevels()
 
 ## Converting to factors
-for (i in c("corres.auth","editor", "sen.editor", "US.inst.type", "journal")){
+for (i in c("corres.auth","US.inst", "journal", "editor", "sen.editor", "journal", "inst.gender")){
   data[,i]=as.factor(data[,i])
 }
 # Create dummy variables
-new_data <- dummy.data.frame(data, names=c("editor", "sen.editor", "corres.auth", "US.inst.type", "journal"), sep=".")
+new_data <- dummy.data.frame(data, names=c("corres.auth","US.inst", "journal", "editor", "sen.editor", "journal", "inst.gender"), sep=".")
 # Convert the label to a factor
 new_data$published <- as.factor(new_data$published)
 
