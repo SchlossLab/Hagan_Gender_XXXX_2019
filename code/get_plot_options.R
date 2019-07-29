@@ -63,12 +63,12 @@ gen_colors <- c("#D55E00", "#0072B2", "#999999")
 
 gen_ed_colors <- c("#D55E00", "#0072B2")
 
-gen_x_replace <- scale_x_discrete(breaks=gen_breaks,
+gen_x_replace <- scale_x_discrete(breaks=gen_levels,
                  labels=gen_labels)
 
 gen_ed_facet <- function(x){
   ifelse(x == "female", "Woman", "Man")
-  }
+}
 
 #figure out which year is the last & isolate the proportion values
 get_gen_prop_text <- function(df, n_row, group){

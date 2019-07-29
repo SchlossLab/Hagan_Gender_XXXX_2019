@@ -79,9 +79,17 @@ author_C <- c_authors_w_prop %>%
        y = "Proportion of\nCorresponding Authors",
        linetype = "Manuscript Status")
 
+source("code/representation/prop_women_coauth.R")#author D & E
 
-plot_grid(author_A, author_B, author_C, 
-          labels = c('A', 'B', 'C'), label_size = 18, nrow = 3)
+col_1 <- plot_grid(author_A, author_B, author_C,
+          labels = c('A', 'B', 'C'), 
+          label_size = 18, nrow = 3)
+
+col_2 <- plot_grid(author_D, author_E,
+                   labels = c('D', 'E'), 
+                   label_size = 18, nrow = 1)
+
+plot_grid(col_1, col_2, nrow = 2, rel_heights = c(3, 1))
 
 ggsave("Figure_3.png", device = 'png', 
        path = 'submission/', width = 9, height = 12)
