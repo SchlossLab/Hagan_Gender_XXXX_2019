@@ -49,15 +49,15 @@ data$num.rev[is.na(data$num.rev)] <- 0
 data <- data %>% 
   select(-prop.men.rev) %>% 
   drop_na() %>%
-  select(-US.inst.type, -reviewed, -num.rev ) %>% 
+  select(-US.inst.type, -reviewed, -num.rev, -US.inst) %>% 
   droplevels()
 
 ## Converting to factors
-for (i in c("corres.auth","US.inst", "journal", "editor", "sen.editor", "journal", "inst.gender")){
+for (i in c("editor", "sen.editor", "inst.gender", "journal", "corres.auth")){
   data[,i]=as.factor(data[,i])
 }
 # Create dummy variables
-new_data <- dummy.data.frame(data, names=c("corres.auth","US.inst", "journal", "editor", "sen.editor", "journal", "inst.gender"), sep=".")
+new_data <- dummy.data.frame(data, names=c("editor", "sen.editor", "inst.gender", "journal", "corres.auth"), sep=".")
 # Convert the label to a factor
 new_data$published <- as.factor(new_data$published)
 

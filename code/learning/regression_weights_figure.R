@@ -143,8 +143,8 @@ base_plot <-  function(data, x_axis, y_axis){
 logit <- read.delim("code/learning/data/process/L2_Logistic_Regression_non_cor_importance.tsv", header=T, sep='\t') 
 logit_plot <- base_plot(logit, x=logit$key, y=logit$median_weights) +
   scale_y_continuous(name="L2 logistic regression coefficients",
-                     limits = c(-2, 2),
-                     breaks = seq(-2, 2, 0.5)) +   
+                     limits = c(-3, 3),
+                     breaks = seq(-3, 3, 0.5)) +   
   geom_errorbar(aes(ymin=logit$median_weights-logit$sd_weights, 
                     ymax=logit$median_weights+logit$sd_weights), 
                 width=.01)
