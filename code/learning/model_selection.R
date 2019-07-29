@@ -12,7 +12,7 @@
 # Dependencies and Outputs:
 #    Filenames to put to function:
 #       1. "L2_Logistic_Regression"
-#       2. "L2_Linear_SVM"
+
 
 # Usage:
 # Call as source when using the function. The function is:
@@ -122,22 +122,12 @@ tuning_grid <- function(train_data, model){
 
   # Grid and caret method defined for each classification models
   if(model=="L2_Logistic_Regression") {
-    grid <-  expand.grid(cost = c(0.001, 0.01, 0.1, 1, 10, 100, 1000),
+    grid <-  expand.grid(cost = c(0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000),
                          loss = "L2_primal",
                          # This chooses type=0 for liblinear R package
                          # which is logistic loss, primal solve for L2 regularized logistic regression
                          epsilon = 0.01) #default epsilon recommended from liblinear
     method <- "regLogistic"
-  }
-  else if (model=="L1_Linear_SVM"){ #
-    grid <- expand.grid(cost = c(0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000),
-                        Loss = "L2")
-    method <- "svmLinear5" # I wrote this function in caret
-  }
-  else if (model=="L2_Linear_SVM"){
-    grid <- expand.grid(cost = c(0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000),
-                        Loss = "L2")
-    method <- "svmLinear3" # I changed this function in caret
   }
   else {
     print("Model not available")

@@ -96,13 +96,7 @@ pipeline <- function(dataset, model){
                           family = "binomial")
   }
   else{
-    print(model)
-    trained_model <-  train(published ~ .,
-                            data=training,
-                            method = method,
-                            trControl = cv,
-                            metric = "ROC",
-                            tuneGrid = grid)
+    print("Something is wrong")
   }
 
   # ------------- Output the cvAUC and testAUC for 1 datasplit ---------------------->
