@@ -2,5 +2,11 @@
 data/
 code/learning/data/temp/*
 .Rproj.user
+.RData
+.Rhistory
+*.o*
 results/
 *.html
+submission/*.html
+*.jpg
+*.png
