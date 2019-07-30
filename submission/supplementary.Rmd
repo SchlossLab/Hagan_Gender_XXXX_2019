@@ -25,25 +25,27 @@ Supplemental Figure 5
 #Supplementary_B
 
 #Supplementary_C #number of versions by gender and journal
-#Supplementary_D #days from submission to rejection by journal & gender
-#Supplementary_E #number of versions to rejection by gender & journal
 
 #supplementary_inst -- fig 7 B/C, fig 8 B/D
 ```
+\includegraphics{Supp_inst.png}
 
+**Supplemental Figure . Difference in acceptance and rejections by institution type.**
+
+\includegraphics{Supp_time.png}
+
+**Supplemental Figure . Total days and versions between submission and final rejection at each journal.**
 
 ##Gender prediction and assignment
-**Supplemental Figure 1. Schematic of gender prediction & assignment**
-```{r}
-include_graphics("supp_figures/genderize_method.png")
-```
 
+\includegraphics{genderize_method.png}
+
+**Supplemental Figure . Schematic of gender prediction and assignment.**
 
 ##Validating gender analysis
 ```{r genderize_setup, include=FALSE}
 source("../code/genderize/b_c_comparison.R")
 ```
-
 
 **Supplemental Table 1. sensitivity/specificity/accuracy of genderize thresholds**
 ```{r genderize_stats, results='asis'}  
@@ -61,21 +63,15 @@ knitr::kable(., format = "html", table.attr = "style = \"color: black;\"", digit
   footnote(general = "Bolded text denotes the accuracy of the threshold used in all further analyses")
 ```
 
+\includegraphics{impact_equation.png}
 
-**Supplemental Figure 2. Equation for calculating negative bias by genderize**
-```{r}
-include_graphics("supp_figures/impact_equation.png")
-```
+**Supplemental Figure . Equation for calculating negative bias by genderize.** C indicates an individual country. 
 
+\includegraphics{Supp_genderize_3.png}
 
-**Supplemental Figure 3. Validation dataset, country impact**
-```{r}
-include_graphics("supp_figures/Supp_genderize_3.png")
-```
+**Supplemental Figure . The negative impact of each country on the overall gender prediction of the validation dataset.** Number indicates the total number of names associated with each country.
 
+\includegraphics{Supp_genderize_4.png}
 
-**Supplemental Figure 4. country impact for full ASM dataset**
-```{r}
-include_graphics("supp_figures/Supp_genderize_4.png")
-```
+**Supplemental Figure . The negative impact of each country on the overall gender prediction of the full dataset.** Number indicates the total number of names associated with each country.
 

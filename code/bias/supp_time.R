@@ -23,8 +23,9 @@ Supplementary_D <- rejected_versions %>%
   coord_cartesian(ylim = c(0, 50))+
   scale_fill_manual(values = gen_colors)+
   facet_wrap(~journal)+
-  labs(x = "\nGender", y = "Days to Rejection\n")+
-  my_theme_horiz
+  gen_x_replace +
+  labs(x = "Gender", y = "Days to Rejection")+
+  my_theme
 
 #number of revisions
 Supplementary_E <- rejected_versions %>% 
@@ -32,5 +33,12 @@ Supplementary_E <- rejected_versions %>%
   geom_boxplot()+
   facet_wrap(~journal)+
   scale_fill_manual(values = gen_colors)+
-  labs(x = "\nGender", y = "Number of Versions Prior to Rejection\n")+
-  my_theme_horiz
+  gen_x_replace +
+  labs(x = "Gender", y = "\nNumber of Versions Prior to Rejection")+
+  my_theme
+
+plot_grid(Supplementary_D, Supplementary_E,
+          labels = c('A', 'B'), label_size = 18)
+
+ggsave("supp_time.png", device = 'png', 
+       path = 'submission/', width = 9, height = 8)

@@ -200,11 +200,16 @@ reviewer_B <- rev_rec_inst %>%
        y = "Difference in Review Recommendation")+
   my_theme_horiz
 
+source("code/bias/supp_inst_AB.R")
 
-plot_grid(ed_rejections_C, ed_rejections_D,
+plot_grid(ed_rejections_C, Supplementary_A, 
+          Supplementary_B,
+          ed_rejections_D,
           reviewer_B, reviewer_D,
-          labels = c('A', 'B', 'C', 'D'), label_size = 18)
+          labels = c('A', 'B', 'C', 'D', 'E', 'F'),
+          label_size = 18,
+          nrow = 3)
 
 
 ggsave("Supp_inst.png", device = 'png', 
-       path = 'submission/', width = 15, height = 9)
+       path = 'submission/', width = 15, height = 15)
