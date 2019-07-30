@@ -1,179 +1,113 @@
-#Are papers authored by women ranked differently by reviewers?
-rev_rec_data <- bias_data %>% 
-  filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
-  select(gender, journal, published, review.recommendation, 
-         reviewer.gender, 
-         reviewer.random.id, random.manu.num, version.reviewed, 
-         EJP.decision, doi, US.inst, US.inst.type) %>% distinct() %>% 
-  filter(reviewer.gender != "none") %>% 
-  filter(review.recommendation %in% c("Revise only", "Reject", "Accept, no revision")) %>% distinct()
-
-gender_totals <- rev_rec_data %>% 
-  select(random.manu.num, gender, review.recommendation) %>%
-  distinct() %>% 
-  group_by(gender) %>% 
-  summarise(n = n())
-
-#graphs of review scores by journal & gender----
-reviewer_A <- rev_rec_data %>% 
-  select(random.manu.num, gender, review.recommendation) %>%
-  distinct() %>% 
-  group_by(review.recommendation, gender) %>% 
-  summarise(n = n()) %>% as_tibble() %>% 
-  spread(key = review.recommendation, value = n) %>% 
-  mutate_if(is.numeric, 
-            funs(get_percent(., gender_totals$n))) %>%
-  gather(`Accept, no revision`:`Revise only`,
-         key = review.recommendation, value = percent) %>% 
-  spread(key = gender, value = percent) %>%
-  mutate(overperformance = male - female) %>% 
-  ggplot(aes(x = review.recommendation, 
-             y = overperformance, fill = overperformance))+
-  geom_col(position = "dodge")+
-  gen_gradient+
-  coord_flip()+
-  labs(x = "Review Recommendation", 
-       y = "Difference in Review Recommendation\n")+
-  my_theme_horiz
-
-#inst type in US----  
-rev_rec_inst <- bias_data %>% 
-  filter(!is.na(review.recommendation)) %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>% 
-  select(grouped.random, gender, 
-         US.inst.type, review.recommendation) %>% 
-  filter(review.recommendation %in% c("Revise only", "Reject", 
-                "Accept, no revision")) %>% 
+acc_data <- bias_data %>% 
+  select(published, version, grouped.random, random.manu.num, gender, 
+         EJP.decision, contains("days"), journal,
+         num.versions, -days.to.review) %>% 
   distinct()
 
-US_inst_totals <- rev_rec_inst %>% 
-  group_by(US.inst.type, gender) %>% 
-  summarise(n = n())
+manus <- acc_data %>% pull(grouped.random) %>% unique()
 
-reviewer_B <- rev_rec_inst %>%   
-  group_by(US.inst.type, review.recommendation, gender) %>% 
-  summarise(n = n()) %>% as_tibble() %>% 
-  spread(key = review.recommendation, value = n) %>% 
-  mutate_if(is.numeric, 
-            funs(get_percent(., US_inst_totals$n))) %>% 
-  gather(`Accept, no revision`:`Revise only`,
-         key = review.recommendation, value = percent) %>% 
-  spread(key = gender, value = percent) %>% 
-  mutate(overperformance = male - female) %>%
-  ggplot(aes(x = US.inst.type, 
-             y = overperformance, fill = overperformance))+
-  geom_col(position = "dodge")+
-  facet_wrap(~review.recommendation, ncol = 1)+
-  gen_gradient+
-  coord_flip()+
-  labs(x = "\nInstitution Type", 
-       y = "Difference in Review Recommendation\n")+
-  my_theme_horiz
-
-rev_rec_data <- bias_data %>% 
-  filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
-  select(gender, journal, published, review.recommendation, 
-         reviewer.gender, reviewer.random.id, random.manu.num, version.reviewed, 
-         US.inst, US.inst.type) %>% distinct() %>% 
-  filter(review.recommendation %in% c("Revise only", "Reject", "Accept, no revision")) %>%
+accepted_data <- acc_data %>% 
+  filter(published == "yes") %>% 
+  filter(version == "0") %>% 
+  select(-num.versions) %>% 
   distinct()
 
-rev_gen <- rev_rec_data %>% 
-  select(random.manu.num, reviewer.gender, review.recommendation) %>%
+#days from submission to production
+factors_A <- accepted_data %>% 
+  ggplot(aes(x = days.pending, fill = gender))+
+  geom_density(alpha = 0.5)+
+  coord_cartesian(xlim = c(0, 200))+
+  scale_fill_manual(values = gen_colors)+
+  facet_wrap(~journal)+
+  labs(x = "Days from 'Submission' to\n'Ready for Publication' Dates\n",
+       y = "\nDensity")+
+  my_theme
+
+
+#Do papers authored by women take longer to get accepted than those authored by men?
+acc_data <- bias_data %>% 
+  select(version, grouped.random, random.manu.num, gender, 
+         EJP.decision, contains("days"), journal,
+         num.versions) %>% 
+  distinct()
+
+manus <- acc_data %>% pull(grouped.random) %>% unique()
+
+manu_summary <- map_df(manus, function(x){
+  acc_data %>% filter(grouped.random == x) %>% 
+    select(version, random.manu.num, days.to.decision) %>% 
+    distinct() %>% 
+    group_by(random.manu.num) %>% 
+    summarise(total.decision = sum(days.to.decision)) %>% 
+    mutate(grouped.random = x)
+})
+
+acc_data <- acc_data %>% 
+  left_join(., manu_summary, by = c("grouped.random", "random.manu.num"))
+
+factors_B <- acc_data %>% 
+  select(gender, grouped.random, total.decision, journal) %>% distinct() %>% 
+  filter(total.decision >= 0 & total.decision <= 200) %>% 
+  ggplot()+
+  geom_density(aes(x = total.decision, fill = gender), alpha = 0.5)+
+  facet_wrap(~journal)+
+  scale_fill_manual(values = gen_colors)+
+  labs(x = "Days in Peer Review System\n", 
+       y = "\nDensity")+
+  my_theme
+
+#setup----
+cites <- read_csv("data/cites.csv") %>% 
+  select(`Article DOI (article_metadata)`, `Published Months`, 
+         `Article Date of Publication (article_metadata)`, `Citation Date`, Cites, `Mendeley Saves`) %>% 
+  group_by(`Article DOI (article_metadata)`,`Published Months`, 
+           `Article Date of Publication (article_metadata)`, `Mendeley Saves`) %>% 
+  summarise(Cites = sum(Cites))
+
+usage <- read_csv("data/usage.csv") %>% 
+  select(`Article DOI (article_metadata)`, `Total Abstract`, `Total HTML`, `Total PDF`)
+
+c_u_data <- full_join(cites, usage, by = "Article DOI (article_metadata)") %>% distinct()
+
+hist_jif <- read_csv("data/jif_2010_17.csv") %>% 
+  separate("Journal;Impact Factor;Year", 
+           into = c("Journal", "JIF", "year"), sep = ";") %>% 
+  filter(JIF != "n/a") %>% 
+  group_by(Journal) %>% 
+  summarise(n = n(), sum.JIF = sum(as.numeric(JIF)))
+
+max_jif <- read_csv("../data/max_jif.csv") %>% 
+  separate("Journal;max.JIF;year.founded", 
+           into = c("Journal", "max.JIF", "year.founded"), sep = ";") %>%   left_join(., hist_jif, by = "Journal") %>% 
+  mutate(years.old = 2019 - as.numeric(year.founded),
+         avg.JIF = (sum.JIF/n),
+         percieved.JIF = avg.JIF + as.numeric(max.JIF) + years.old) %>% 
+  select(Journal, avg.JIF, percieved.JIF)
+
+#dataset----
+impact_data <- bias_data %>%  
+  filter(!is.na(doi)) %>% 
+  select(gender, journal, random.manu.num, doi) %>% 
   distinct() %>% 
-  group_by(reviewer.gender) %>% 
-  summarise(n = n())
-
-sub_gen <- rev_rec_data %>% 
-  select(random.manu.num, gender, review.recommendation) %>%
+  mutate(doi = str_to_lower(doi)) %>% 
+  left_join(., c_u_data, 
+            by = c("doi" = "Article DOI (article_metadata)")) %>% 
   distinct() %>% 
-  group_by(gender) %>% 
-  summarise(n = n())
+  filter(!is.na(`Article Date of Publication (article_metadata)`)) %>% 
+  left_join(., max_jif, by = c("journal" = "Journal")) %>%
+  mutate(`Total Reads` = `Total HTML` + `Total PDF`,
+         log.avg.JIF = log10(avg.JIF),
+         `Cites/log.JIF` = Cites-log.avg.JIF) %>% 
+  gather(`Mendeley Saves`:`Cites/log.JIF`, 
+         key = measure.name, value = measure.value) %>% 
+  mutate(value.per.month = measure.value/`Published Months`)
 
+#plots----
+factors_C <- plot_impact_data("Cites", 3)
 
-#reviewer recommendations by gender----
-fem_rev <- rev_rec_data %>% 
-  select(random.manu.num, gender, review.recommendation, reviewer.gender) %>%
-  distinct() %>% 
-  group_by(reviewer.gender, review.recommendation, gender) %>% 
-  summarise(n = n()) %>% as_tibble() %>% 
-  spread(key = gender, value = n) %>%
-  filter(reviewer.gender == "female") %>% 
-  mutate(female = get_percent(female, sub_gen[1,2]),
-         male = get_percent(male, sub_gen[2,2])) %>% 
-  mutate(overperformance = male - female) 
+factors_D <- plot_impact_data("Total Reads", 300)
 
-men_rev <- rev_rec_data %>% 
-  select(random.manu.num, gender, review.recommendation, reviewer.gender) %>%
-  distinct() %>% 
-  group_by(reviewer.gender, review.recommendation, gender) %>% 
-  summarise(n = n()) %>% as_tibble() %>% 
-  spread(key = gender, value = n) %>%
-  filter(reviewer.gender == "male") %>% 
-  mutate(female = get_percent(female, sub_gen[1,2]),
-         male = get_percent(male, sub_gen[2,2])) %>% 
-  mutate(overperformance = male - female) 
+plot_grid(factors_A, factors_B, factors_C, factors_D, labels = c('A', 'B', 'C', 'D'), label_size = 18)
 
-summary_gen_rev <- rbind(fem_rev, men_rev)
-
-reviewer_C <- summary_gen_rev %>% 
-  ggplot(aes(x = review.recommendation, 
-             y = overperformance, fill = overperformance))+
-  geom_col(position = "dodge")+
-  gen_gradient+
-  coord_flip()+
-  facet_wrap(~gen_ed_facet(reviewer.gender), ncol = 1)+
-  labs(x = "Review Recommendation", 
-       y = "Difference by Reviewer Gender")+
-  my_theme_horiz
-
-#reviewer recommendations by institution----
-
-sub_inst_gen <- rev_rec_data %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>% 
-  filter(review.recommendation != "Revise only") %>% 
-  select(random.manu.num, US.inst.type, reviewer.gender,
-         review.recommendation, gender) %>% 
-  distinct() %>% 
-  group_by(reviewer.gender, US.inst.type, gender) %>% 
-  summarise(total = n())
-
-summ_inst <- rev_rec_data %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>% 
-  filter(review.recommendation != "Revise only") %>% 
-  filter(reviewer.gender %in% c("female", "male")) %>% 
-  select(random.manu.num, reviewer.gender, US.inst.type, review.recommendation, gender) %>% 
-  distinct() %>% 
-  group_by(reviewer.gender, US.inst.type, gender, 
-           review.recommendation) %>% 
-  summarise(n = n()) %>% as_tibble() %>% 
-  left_join(., sub_inst_gen, by = c("reviewer.gender",
-                                    "US.inst.type", 
-                                    "gender")) %>% 
-  mutate(percent = get_percent(n, total)) %>% 
-  select(-n, -total) %>% 
-  spread(key = gender, value = percent) %>% 
-  mutate(overperform = male - female)
-
-reviewer_D <- summ_inst %>% 
-  filter(review.recommendation == "Accept, no revision") %>% 
-  ggplot(aes(x = US.inst.type, fill = overperform,
-             y = overperform))+
-  geom_col(position = "dodge")+
-  scale_fill_gradient2(low = "#D55E00", mid='snow3', 
-                       high = "#0072B2", space = "Lab")+
-  coord_flip()+
-  facet_wrap(~gen_ed_facet(reviewer.gender), ncol = 1)+
-  labs(x = "\nUS Institution Type", 
-       y = "Difference in Acceptance Recomendation\nby Reviewer Gender")+
-  my_theme_horiz
-
-plot_grid(reviewer_A, reviewer_B, reviewer_C, reviewer_D, labels = c('A', 'B', 'C', 'D'), label_size = 18)
-
-ggsave("Figure_8.png", device = 'png', 
-       path = 'submission/', width = 15, height = 12)
+ggsave("Figure_9.png", device = 'png', 
+       path = 'submission/', width = 12, height = 9)
