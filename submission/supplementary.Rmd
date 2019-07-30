@@ -24,9 +24,11 @@ Supplemental Figure 5
 #Supplementary_A
 #Supplementary_B
 
-#Supplementary_C #number of versions by gender nd journal
+#Supplementary_C #number of versions by gender and journal
 #Supplementary_D #days from submission to rejection by journal & gender
 #Supplementary_E #number of versions to rejection by gender & journal
+
+#supplementary_inst -- fig 7 B/C, fig 8 B/D
 ```
 
 
