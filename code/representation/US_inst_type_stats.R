@@ -2,12 +2,14 @@
 
 inst_stats_data <- data %>% 
   filter(!is.na(US.inst.type)) %>% 
-  select(random.person.id, role, gender,
-         US.inst.type) %>% 
   filter(gender != "none") %>% 
   mutate(role = fct_collapse(role,
                              "reviewer" = c("reviewer", "potential.reviewer"),
-                             "editor" = c("editor", "senior.editor"))) %>% distinct() 
+                             "editor" = c("editor", "senior.editor"))) %>% 
+  filter(author.corres == "TRUE" | author.last == "TRUE" |
+           role == "reviewer" | role == "editor") %>% 
+  select(random.person.id, role, gender,
+         US.inst.type) %>% distinct() 
 
 gender_n <- inst_stats_data %>% 
   group_by(role, gender) %>% 
@@ -38,3 +40,6 @@ summ_stats %>%
   scale_fill_manual(values = gen_ed_colors)+
   labs(x = "Role", y = "Percent of Gender")+
   my_theme_horiz
+
+ggsave("supp_inst_stats.png", device = 'png', 
+       path = 'submission/', width = 9, height = 6)

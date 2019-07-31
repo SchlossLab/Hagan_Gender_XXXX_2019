@@ -210,6 +210,5 @@ plot_grid(ed_rejections_C, Supplementary_A,
           label_size = 18,
           nrow = 3)
 
-
 ggsave("Supp_inst.png", device = 'png', 
        path = 'submission/', width = 15, height = 15)
