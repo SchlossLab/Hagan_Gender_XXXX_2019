@@ -51,31 +51,13 @@ $\dagger$ To whom correspondence should be addressed: pschloss@umich.edu
 
 ##Introduction
 
-
   Scientific societies play an integral role in the formation and maintanence of scientific communities. They host conferences that provide a forum for knowledge exchange and networking, as well as opportunities for increased visibility as a researcher. Scientific societies also frequently publish the most reputable journals in their field, facilitating the peer review process to vet new research submissions. As such, societies have great power to set both professional and scientfic norms in their community by choosing what behaviors are rewarded and what types of research are accepted for publication. Authorship is a coveted measure of success in academic research as it is a key criterium for hiring and promotion processes. Accordingly, editors and reviewers of research journals have a substantial influence over the futures of hopeful authors. While the membership of scientific societies is likely to reflective of all those who participate in the field, regardless of career track, the gatekeepers for peer review (reviewers and editors) are more reflective of the academy than the society as a whole.
 
   Evidence has accumulated over the decades that academic research has a representation problem. While at least 50% of biology Ph.D. graduates are women, the number of women in postdoctoral positions and tenure-track positions are less than 40 and 30%, respectively @article{sheltzer_elite_2014}. Studies examining other metrics such as race and ethnicity find that less than 10% of all science and engineering doctorates were awarded to underrepresented minorities, while less than 25% of science and engineering doctorates in early career academia identify as non-white (NSF ADVANCE, 2014). Predictabily, the disparities increase alongside academic rank, a phenomenon known as hierarchical segregation @article{potvin_diversity_2018}. There have been many proposed reasons for these disparities (particularly against women) that include biases in training and hiring, the impact of children on career trajectories, a lack of support for primary caregivers, and a lack of recognition, which culminate in reduced productivity as measured by research publications**Add citations**. 
 
-  Recently, scientific societies and publishers have begun examining their own data to evaluate representation of, and bias agains, women and minorities in their peer review processes. The American Geological Union found that while the acceptance rate of women-authored publications was greater than that for publications authored by men, women submitted fewer manuscripts than men and were used as reviewers only 20% of the time (Lerback, 2017). Fox et al., have found that for the journal _Functional Ecology_, the proportion of women invited to review depended on the gender of the editor (Fox, 2016). Despite the disproportional representation of lead women authors, several studies have concluded that there is no significant bias aginst papers authored by women (C&W, 2011; Fox, 2016; Handly, 2015; Edwards, 2018). Conversely, a study of the peer review process at eLife found statistically significant bias against women, particularly from review groups composed of all men (Murray, 2018). 
-
-  + Studies evaluating gender in publications **Update cites & stats**
-      + Nature
-      + JAMA
-      + Glam journals
-      + Science?
-      + Ecology (Cho, 2014; Pettorelli, 2013; Buckley, 2014)
-      + Medical (Amrein, 2011; del Carmen, 2003)
-      + Authorship analyis of 8 million papers - West, 2013
-      + Reviewer practice by gender - Grod, 2008
-      + recognition for group work - Sarsons, 2017
+  Recently, scientific societies and publishers have begun examining their own data to evaluate representation of, and bias against, women and minorities in their peer review processes. The American Geological Union found that while the acceptance rate of women-authored publications was greater than that for publications authored by men, women submitted fewer manuscripts than men and were used as reviewers only 20% of the time (Lerback, 2017). Fox et al., have found that for the journal _Functional Ecology_, the proportion of women invited to review depended on the gender of the editor (Fox, 2016). Despite the disproportional representation of lead women authors, several studies have concluded that there is no significant bias aginst papers authored by women (C&W, 2011; Fox, 2016; Handly, 2015; Edwards, 2018). Conversely, two recent studies---one of the peer review process at eLife and the other of outcomes at six ecology and evolution journals---found that women-authored papers are less likely to have positive reviews and outcomes (Murray, 2018; Fox and Paine, 2019). 
   
-  + Few look at submissions level data to understand source of disparity
-      + AGU
-      + JAMA (Gilbert & Williams)
-      + (Buckley, 2014)
-      + eLife
-  
-  However, representation and attitudes differ by scientific field and no studies to-date seem to have investigated academic publishing in the field of microbiology (Elseiver report). [Stats on ASM size/membership that make it a good study system]. In its mission statement, the American Society for Microbiology (ASM) notes that it is "an inclusive organization, engaging with and responding to the needs of its diverse constituencies." The ASM also pledges to "address all members' needs through development and assessment of programs and services" while the ASM Journals Department boasts of "quality peer review and editorial leadership." {Therefore}**need better transition to connect the issue in the introduction with the membership, possibly by linking micro as a field to ASM as a study model (e.g., membership stats, age of society)**, in an effort to be transparent with ASM journal patrons and ASM members, the purpose of this study is to perform a gender-based analysis of ASM journals using submissions data aquired since 2012. In other words, what is the representation of authors, reviewers and editors during peer review at ASM journals? Does that representation reflect the field of microbiology and ASM members? And is there bias during the peer review process at ASM journals?
+  However, representation and attitudes differ by scientific field and no studies to-date seem to have investigated academic publishing in the field of microbiology. The American Society for Microbiology (ASM) is one of the largest life science societies, with an average membership of 41,000 since 1990. In its mission statement, the ASM notes that it is "an inclusive organization, engaging with and responding to the needs of its diverse constituencies" and pledges to "address all members' needs through development and assessment of programs and services." One of these services is the publication of microbiology research through a suite of 13 journals. Led by the ASM Journals Department, these journals boast of "quality peer review and editorial leadership." As bastions of the microbiology field, these journals are historically responsible for the success of microbiologists. The goal of this research study is two-fold: first, to understand the representation of authors, reviewers, and editors; second, to examine the possibility of gender bias in peer review at ASM journals. 
   
 ##Results
 ```{r setup_gender_plots}
@@ -264,19 +246,12 @@ _Factors affecting competency_
     + Compare to global and ASM membership stats
       + Globally - microbiology researchers are 60:40, M:F - Elsevier
       + ASM membership - 
-      
-  + fit into context of field -- 
-      + few papers have found disparties between rejection rates of men & women
-      + first paper (to our knowledge) to collectly examine this issue on 10+ journals using submissions data
+
       + literature to connect institution type findings
           + compentency? 
           + access to resources
           + "family friendly"/less committed institutions
           + other sterotypes
-  + study limitations
-      + doesn't include reviewer comments
-      + limited journal dataset, difficult to know how other microbiology-publishing journals affect submissions to ASM journals
-      + many ASM journals have a narrow focus, & broad scope journals are relatively new -- limits conclusions b/c of journal selection
 
   + Discuss the impact of under representation in publication
       + “It [reviewing] provides positive feedback that a scholar is respected and participating in their field and fosters self-confidence, all of which lead to increased retention of women in geoscience” Lerback & Hanson, 2017
@@ -284,11 +259,10 @@ _Factors affecting competency_
       + Thus authors conclude it is an issue of female "visibility" versus "availability". Suggestion that being selected as a reviewer increases visibility, which has a direct & significant impact on salary. , under-rep of W in Sci b/c of positions w. fewer resources. "Participating in the peer-review process is an important way that early-career researchers can feel more involved with, and contribute to, the scientific community" - Buckley et al, 2014
       + Must be balanced w. the increased burden for department service
   + Discuss literature on diversity and innovation - incentive to increase representation - well-documented that orgs w. more diverse & equitable representation are both more inclusive & supportive as well as more productive & innovative - Potvin, 2018
-  + Suggestions to improve representation
-      + Apply the additional suggestions from the Scientific Society health checklist to society journals:
-          1. Include a visible mission/vision statement or other commitment to equality & diversity that includes a non-discrimination clause regarding editors & EiCs
-          1. Collect additional data (e.g., race/ethnicity, sexual/gender minorities) & present numbers publicly to maintain accountability
-          1. Have a specific protocol for the reporting of & responding to discrimination & harassment
+      
+   What follows are suggestions to address both the issues of gender representation and bias.
+
+  A recent paper from X et al, found that across biological scientific societies certain attributes were correlated with increased gender representation at leadership levels and created a scientific society "health checklist". Many of their suggestions can also apply to society journals, the easiest of which is a visible mission, vision, or other commitment to equity and inclusion that includes a non-discrimination clause regarding decisions made by editors and editors-in-chief. This non-discrimination clause would be backed by a specific protocol for the reporting of, and responding to, instances of discrimination and harassment. In the long term, society journals should begin collecting additional data about authors and gatekeepers (e.g., race, ethnicity, sexual orientation, gender identity, and disabilities). Such author data should not be readily available to journal gatekeepers, but instead kept in a disagreggated manner that allows the public presentation to track success of inclusive measures and maintain accountability. 
           1. Be explicit about support for women (& other minority groups). 
                     + Formally (e.g., providing waivers, reduced copyediting services, reword to gender/location-neutral) 
                     + Informally (e.g., rewarding inclusive behavior by candidates, encouraging women to take up leadership positions, have gender-neutral, non-exclusive, family-friendly social activities)
@@ -306,10 +280,6 @@ _Factors affecting competency_
           + access to resources
           + "family friendly"/less committed institutions
           + other sterotypes
-  + study limitations
-      + doesn't include reviewer comments
-      + limited journal dataset, difficult to know how other microbiology-publishing journals affect submissions to ASM journals
-      + many ASM journals have a narrow focus, & broad scope journals are relatively new -- limits conclusions b/c of journal selection
   + addressing bias
       + implicit bias training is insufficient
       + double-blinded peer review also imperfect
@@ -320,7 +290,8 @@ _Factors affecting competency_
           + increase inclusivity & goodwill/author buy-in
           + use "Diversify" resources
           + women/urm at "fringes" of fields, less likely to be viewed as "competent"
-
+  
+  Few papers have found disparties between rejection rates of men and women and to our knowledge, this is the first paper to collectly examine this issue with either submissions data from 10+ journals or on the field of microbiology. Some limitations of our study include a limited journal dataset, an absence of reviewer comments for sentiment analysis, and that many ASM journals have a narrow focus while the broad scope journals are relatively new, all of which prevents us from generalizing our results accross microbiology as a field. However, this study is highly relevant for the ASM as a society and offers opportunities to address both gendered representation in microbiology and systemic barriers to peer review at our journals.
 
 ##Data and Methods
 
