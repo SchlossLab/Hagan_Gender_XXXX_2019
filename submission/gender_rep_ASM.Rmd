@@ -247,32 +247,7 @@ _Factors affecting competency_
       + Globally - microbiology researchers are 60:40, M:F - Elsevier
       + ASM membership - 
 
-      + literature to connect institution type findings
-          + compentency? 
-          + access to resources
-          + "family friendly"/less committed institutions
-          + other sterotypes
-
-  + Discuss the impact of under representation in publication
-      + “It [reviewing] provides positive feedback that a scholar is respected and participating in their field and fosters self-confidence, all of which lead to increased retention of women in geoscience” Lerback & Hanson, 2017
-      + Less diversity may reduce the diversity of perspectives & approaches valued & represented. - Fox et al, 2016
-      + Thus authors conclude it is an issue of female "visibility" versus "availability". Suggestion that being selected as a reviewer increases visibility, which has a direct & significant impact on salary. , under-rep of W in Sci b/c of positions w. fewer resources. "Participating in the peer-review process is an important way that early-career researchers can feel more involved with, and contribute to, the scientific community" - Buckley et al, 2014
-      + Must be balanced w. the increased burden for department service
-  + Discuss literature on diversity and innovation - incentive to increase representation - well-documented that orgs w. more diverse & equitable representation are both more inclusive & supportive as well as more productive & innovative - Potvin, 2018
-      
-   What follows are suggestions to address both the issues of gender representation and bias.
-
-  A recent paper from X et al, found that across biological scientific societies certain attributes were correlated with increased gender representation at leadership levels and created a scientific society "health checklist". Many of their suggestions can also apply to society journals, the easiest of which is a visible mission, vision, or other commitment to equity and inclusion that includes a non-discrimination clause regarding decisions made by editors and editors-in-chief. This non-discrimination clause would be backed by a specific protocol for the reporting of, and responding to, instances of discrimination and harassment. In the long term, society journals should begin collecting additional data about authors and gatekeepers (e.g., race, ethnicity, sexual orientation, gender identity, and disabilities). Such author data should not be readily available to journal gatekeepers, but instead kept in a disagreggated manner that allows the public presentation to track success of inclusive measures and maintain accountability. 
-          1. Be explicit about support for women (& other minority groups). 
-                    + Formally (e.g., providing waivers, reduced copyediting services, reword to gender/location-neutral) 
-                    + Informally (e.g., rewarding inclusive behavior by candidates, encouraging women to take up leadership positions, have gender-neutral, non-exclusive, family-friendly social activities)
-      + Representational vs aspirational?
-          + Largest & less visible workload (reviewing) should be representational
-                  + When choosing reviewers it may be better for editors to rely more on manuscript reference lists & data base searches than on personal knowledge - Fox et al, 2016
-                  + Suggest more women as reviewers
-                  + Improve backend/interactivity of peer review selection
-          + Higher visibility workload (editor, EiC) should be aspirational, recruit more women 
-  + fit into context of field -- 
++ fit into context of field -- 
       + few papers have found disparties between rejection rates of men & women
       + first paper (to our knowledge) to collectly examine this issue on 10+ journals using submissions data
       + literature to connect institution type findings
@@ -280,18 +255,24 @@ _Factors affecting competency_
           + access to resources
           + "family friendly"/less committed institutions
           + other sterotypes
-  + addressing bias
-      + implicit bias training is insufficient
-      + double-blinded peer review also imperfect
-          + common practice in social sciences
-          + can then be unblinded following decision
-      + focus on the system & structure rather than the individual - e.g., journal scope, funding
-      + increase diversity of gatekeepers 
-          + increase inclusivity & goodwill/author buy-in
-          + use "Diversify" resources
-          + women/urm at "fringes" of fields, less likely to be viewed as "competent"
+    + Discuss the impact of under representation in publication
+      + “It [reviewing] provides positive feedback that a scholar is respected and participating in their field and fosters self-confidence, all of which lead to increased retention of women in geoscience” Lerback & Hanson, 2017
+      + Less diversity may reduce the diversity of perspectives & approaches valued & represented. - Fox et al, 2016
+      + Thus authors conclude it is an issue of female "visibility" versus "availability". Suggestion that being selected as a reviewer increases visibility, which has a direct & significant impact on salary. , under-rep of W in Sci b/c of positions w. fewer resources. "Participating in the peer-review process is an important way that early-career researchers can feel more involved with, and contribute to, the scientific community" - Buckley et al, 2014
+      + Must be balanced w. the increased burden for department service
+  + Discuss literature on diversity and innovation - incentive to increase representation - well-documented that orgs w. more diverse & equitable representation are both more inclusive & supportive as well as more productive & innovative - Potvin, 2018
+      
+   
+  Few papers have found disparties between rejection rates of men and women and to our knowledge, this is the first paper to collectly examine this issue with either submissions data from 10+ journals or on the field of microbiology. Critics might argue that the effect size is too small to really matter or that there are too many unaccounted for factors to draw conclusions. We acknowledge that these are limitations of our study along with a limited journal dataset, an absence of reviewer comments for sentiment analysis, and that many ASM journals have a narrow focus while the broad scope journals are relatively new. All of these factors prevent us from generalizing our results accross microbiology as a field. However, the consistency of the trends to benefit men corresponding authors over women, accross all journals included and literature to-date confirms that this study is highly relevant for the ASM as a society and offers opportunities to address both gendered representation in microbiology and systemic barriers to peer review at our journals.
+
+  Certain attributes of biological scientific societies correlate with increased gender representation at leadership levels (Potvin?). Using the scientific society "health checklist" developed from these observations, we propose the following suggestions to improve representation at society journals. First, the development of a visible mission, vision, or other commitment to equity and inclusion that includes a non-discrimination clause regarding decisions made by editors and editors-in-chief. This non-discrimination clause would be backed by a specific protocol for the reporting of, and responding to, instances of discrimination and harassment. In the long term, society journals should begin collecting additional data about authors and gatekeepers (e.g., race, ethnicity, sexual orientation, gender identity, and disabilities). Such author data should not be readily available to journal gatekeepers, but instead kept in a disagreggated manner that allows the public presentation to track success of inclusive measures and maintain accountability. Society journals can also impliment mechanisms to explicity provide support for women and other minority groups, e.g, by providing APC waivers, reduced copyediting services, reward inclusive behavior by gatekeepers, encourage women to take up leadership positions and provide gender-neutral, non-exclusive social activities.
   
-  Few papers have found disparties between rejection rates of men and women and to our knowledge, this is the first paper to collectly examine this issue with either submissions data from 10+ journals or on the field of microbiology. Some limitations of our study include a limited journal dataset, an absence of reviewer comments for sentiment analysis, and that many ASM journals have a narrow focus while the broad scope journals are relatively new, all of which prevents us from generalizing our results accross microbiology as a field. However, this study is highly relevant for the ASM as a society and offers opportunities to address both gendered representation in microbiology and systemic barriers to peer review at our journals.
+  A common debate when filling leadership positions is whether they should be representational of the field or aspirational. For instance, since X% of corresponding authors to ASM journals are women, X% of gatekeepers of a representational leadership would be women. Conversely, 50% of gatekeepers would be women if the goal were an aspirational leadership. We argue that whether a goal should be representational or aspirational depends on the workload and visibility of the position(s). Since high visibility positions (e.g., editor, EIC) are filled by a smaller number of individuals that are responsible for recruiting more individuals into leadership, filling these positions should be done aspirationally. This allows expansion of the potential reviewer network and thus recruitment into those positions. These lower visibility positions (e.g., reviewers) require a greater number of individuals and should thus be representational of the field to avoid overburdening the minority population. Outside of leadership appointment, all parties, journals, gatekeepers, and authors, can help advance women (and other minority groups) within the peer review system. For instance, authors can suggest more women as reviewers using "Diversify" resources (e.g., DiversifyMicrobiology), while reviewers can agree to review for women editors more often. Editors can rely more on manuscript reference lists and data base searches than personal knowledge (Fox et al, 2016), and journals can improve the interactivty and functionality of the peer review selection software.
+  
+  Addressing bias during peer review process is a more difficult challenge, since it is partially the result of accumulated disadvangates and microaggressions (the resulting actions of implict biases). Implict bias training for gatekeepers is a start, as might be double-blinded peer review, a common practice in social sciences. To support efforts of making peer review more transparent, the review process could be unblinded following the editor's final decision on a manuscript. However, these solutions are only bandaids on a deeply infected wound since both focus on the superficial issue of individuals instead of the underlying structure of the system that has selected for the bias at hand. 
+  
+  Reconsidering journal scope and the overall attitude toward replicatitive and negative results might help address structural barriers to representation of women in peer review. Significant funds and staff are required to be competitive in highly active fields (e.g., _Clostridium difficile_, HIV), but women are often at a disadvantage for these resources. As a result, corresponding authors that are women (or other minority groups) may be spending their resources at the lesser competitive fringes of research fields. This has the disadvange of making them seem "less competent" to those at the more established center of the field, thus making it more difficult for them to get funding and publish in more traditional journals. Expanding journal scope could provide a home for these innovative research fields and improve the ability of these researchers to demonstrate their compentency. 
+  
 
 ##Data and Methods
 
