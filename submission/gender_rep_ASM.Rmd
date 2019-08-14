@@ -60,17 +60,6 @@ $\dagger$ To whom correspondence should be addressed: pschloss@umich.edu
   However, representation and attitudes differ by scientific field and no studies to-date seem to have investigated academic publishing in the field of microbiology. The American Society for Microbiology (ASM) is one of the largest life science societies, with an average membership of 41,000 since 1990. In its mission statement, the ASM notes that it is "an inclusive organization, engaging with and responding to the needs of its diverse constituencies" and pledges to "address all members' needs through development and assessment of programs and services." One of these services is the publication of microbiology research through a suite of 13 journals. Led by the ASM Journals Department, these journals boast of "quality peer review and editorial leadership." As bastions of the microbiology field, these journals are historically responsible for the success of microbiologists. The goal of this research study is two-fold: first, to understand the gendered representation of authors, reviewers, and editors; second, to examine the possibility of gender bias in peer review at ASM journals. 
   
 ##Results
-```{r setup_gender_plots}
-
-```
-
-_Men dominate as gatekeepers and senior authors_
-The term gatekeepers collectively referres to those that facilitate the peer review process, such as editors-in-chief (EIC), editors, and reviewers. Between January 2012 and August 2018, ASM published 15 different journals (), each of which has one editor-in-chief at a time. Two journals, _Eukaryotic Cell_ (EC) and _Clinical Vaccine Immunology_ (CVI) were retired during the period under study. In total, there were X EICs, X% of which were women. In 201X, the leadership of CVI transferred from a man EIC, to a woman. The _Journal of Virology_ (JVI) has had the same woman as EIC since 201X, while X review journal has been led by a woman EIC since 201X. This study only examines original research manuscripts, which eliminates three journals from the remaining analyses (2 review journals and Genome Announcements). 
-
-In the remaining 12 journals studied, the total number of editors (senior editors and editors pooled), was X and X% were women. Over time there has been a slow trend toward gender parity of editors (Figure 1A, solid lines), which is representative of senior editor trends. The trends for each journal studied vary considerably, though most have slow trends toward parity (Figure 1B, solid lines). CVI and _mSphere_ are the only ASM journals to have accomplished equal representation of both genders, with CVI having a greater proportion of women editors than men before it was retired. EC is the only journal with an increasing parity gap.
-
-To understand if men and women editors had proportion workloads, we calculated the percent of manuscripts handled by men and women editors, not including editorial rejections. Across all journals, men handle a slightly greater proportion of manuscripts (blue dashed) and women a slightly smaller proportion (orange dashed), relative to their respective editorial representations (Figure 1A). This trend continues accross most journals with varying degrees of difference between workload and representation (Figure 1B). Exceptions include mBio and mSphere, where workload and proportions are identical, as well as CVI and JVI. At these two journals, the workload for women editors is much higher than their representation, while the workload of men is considerably less than their representation would suggest. In the years preceding its retirement, the representation of women at CVI increased, which decreased the gap between it and workload. However, representations and relative workloads for men and women editors at JVI have held steady.
-
 ```{r editor_gender}
 #code/representation/editor_fig.R -- Figure_1
 ```
@@ -78,8 +67,12 @@ To understand if men and women editors had proportion workloads, we calculated t
 
 **Figure 1. Gendered representation among editors.** Proportion of editors (solid line) and their workload (dashed lines) from 2012 to 2018. Data for men are blue, and women orange. (A) All journals combined. (B) Breakdown by individual journals. Editors and senior editors are pooled together, editorial rejections are excluded. Each individual was counted once per calendar year.
 
-Given the relatively small number of editors at ASM journals (X), their presenting genders where identified by hand while the genders of reviewers and authors were predicted from their first names. Assigning gender by first name resulted in 3 possible outcomes: men, women, and unclear (when gender could not be assigned with confidence, see Methods for validation). Over the time period studied, the proportions of these gendered outcomes have held steady among reviewers at ASM journals (Figure 2A) and is representative of both reviewer proportions at each journal, and the potential reviewers at all journals combined (SupplementaryX AB). The median number of papers reviewed by individuals in each gender group is equivalent (Figure 2A). X, X, and X% of men, women, and unclear reviewers have reviewed only one manuscript. Editors of both genders contact reviewers from all three gender groups at equivalent proportions, though women editors contact more reviewers than men (Figure 2C). This is likely because reviewers of all genders, accept fewer, and ignore more, requests to review from women than men editors (Figure 2D).
-     
+**Men dominate as gatekeepers and senior authors.** The term gatekeepers collectively referres to those that facilitate the peer review process, such as editors-in-chief (EIC), editors, and reviewers. Between January 2012 and August 2018, ASM published 15 different journals (), each of which has one editor-in-chief at a time. Two journals, _Eukaryotic Cell_ (EC) and _Clinical Vaccine Immunology_ (CVI) were retired during the period under study. In total, there were X EICs, X% of which were women. In 201X, the leadership of CVI transferred from a man EIC, to a woman. The _Journal of Virology_ (JVI) has had the same woman as EIC since 201X, while X review journal has been led by a woman EIC since 201X. This study only examines original research manuscripts, which eliminates three journals from the remaining analyses (2 review journals and Genome Announcements). 
+
+In the remaining 12 journals studied, the total number of editors (senior editors and editors pooled), was X and X% were women. Over time there has been a slow trend toward gender parity of editors (Figure 1A, solid lines), which is representative of senior editor trends. The trends for each journal studied vary considerably, though most have slow trends toward parity (Figure 1B, solid lines). CVI and _mSphere_ are the only ASM journals to have accomplished equal representation of both genders, with CVI having a greater proportion of women editors than men before it was retired. EC is the only journal with an increasing parity gap.
+
+To understand if men and women editors had proportion workloads, we calculated the percent of manuscripts handled by men and women editors, not including editorial rejections. Across all journals, men handle a slightly greater proportion of manuscripts (blue dashed) and women a slightly smaller proportion (orange dashed), relative to their respective editorial representations (Figure 1A). This trend continues accross most journals with varying degrees of difference between workload and representation (Figure 1B). Exceptions include mBio and mSphere, where workload and proportions are identical, as well as CVI and JVI. At these two journals, the workload for women editors is much higher than their representation, while the workload of men is considerably less than their representation would suggest. In the years preceding its retirement, the representation of women at CVI increased, which decreased the gap between it and workload. However, representations and relative workloads for men and women editors at JVI have held steady.
+
 ```{r reviewer_gender}
 #code/representation/reviewer_fig.R -- Figure_2
 source("../code/representation/percent_cons.R")
@@ -88,14 +81,8 @@ source("../code/representation/percent_cons.R")
 
 **Figure 2. Reviewer representation, workload, and response to requests to review.** (A) Proportion of each gender listed as a possible reviewer from 2012 to 2018. (B) Comparison of total papers reviewed by each individual according to gender. (C) Percent of each reviewer gender contacted to review, according to the editor's gender. (D) The percent of reviewers by gender that either accepted the opportunity to review or did not respond to a request to review, split according to the editor's gender. Reviewers were assigned one of three genders: men (blue, dashed), women (orange, solid), or unclear (gray, dotted). Each individual was counted once per calendar year.
 
-The proportions of men (long dash) and women (solid) authors at ASM have decreased over time at equvalent rates, with a ratio of men to women authors of 4:3 since 2012. This decrease corresponds with an increase in the proportion of unclear (dotted) authors (Figure 3A). The proportion of papers submitted with men (blue dashed) and women (orange dashed) first authors have remained constant and equivalent at about 3X% percent (Figure 3B), as have their respective proportions of published manuscripts (solid lines). Conversely, the proportion of submitted papers with men corresponding authors has remained steady at X% and the proportion with women corresponding authors at X%. However, their respective proportions of published manuscripts are dissimilar (Figure 3C). The published manuscript proportion where men are corresponding authors seems to have a much larger gap relative to that of women corresponding authors, which suggests disproportionate success for men relative to women corresponding authors. These trends are similar across individual journals (SupplementaryX).
-
-The dominant group of manuscripts submitted have men as corresponding authors but lack any women authors, and despite men corresponding authors submitting more papers than women corresponding authors, the number of papers with women corresponding authors and greater than half of the authors are women exceeds those with men corresponding authors (Figure 3D). Additionally, the proportion of women authors decreases as the number of authors increases (Figure 3E).
-
-Further analyses will not include unclear authors, though their representation will be taken into account where appropriate. 
-      + proportion of published is higher for both men & women than submitted proportions -- means that proportion of unclear published is lower than submitted
-      + is the increase in published proportions, proportionally equivalent for men & women?
-
+Given the relatively small number of editors at ASM journals (X), their presenting genders where identified by hand while the genders of reviewers and authors were predicted from their first names. Assigning gender by first name resulted in 3 possible outcomes: men, women, and unclear (when gender could not be assigned with confidence, see Methods for validation). Over the time period studied, the proportions of these gendered outcomes have held steady among reviewers at ASM journals (Figure 2A) and is representative of both reviewer proportions at each journal, and the potential reviewers at all journals combined (SupplementaryX AB). The median number of papers reviewed by individuals in each gender group is equivalent (Figure 2A). X, X, and X% of men, women, and unclear reviewers have reviewed only one manuscript. Editors of both genders contact reviewers from all three gender groups at equivalent proportions, though women editors contact more reviewers than men (Figure 2C). This is likely because reviewers of all genders, accept fewer, and ignore more, requests to review from women than men editors (Figure 2D).
+     
 ```{r author_gender}
 #code/representation/auth_fig.R -- Figure_3
 ```     
@@ -103,21 +90,7 @@ Further analyses will not include unclear authors, though their representation w
 
 **Figure 3. Author representation by gender.** The proportion of (A) unique authors, (B) first authors, and (C) corresponding authors from 2012 - 2018. (A, B) Solid lines indicate individuals, dashed indicate proportion of manuscripts submitted. Men indicated by blue and women by orange. All individuals counted once per calendar year. The proportion of women authors on submitted papers according to (D) the gender of the corresponding author or (E) the number of authors. Unique manuscripts submitted from 2012 to 2018.
 
-
-_Women are less likely to be retained through stages of the peer review system at ASM journals_
-  + How does gender representation of manuscripts compare from submitted to published?
-      + proportion of M & W authored publications seems relatively disparate from M & W authored submissions -- unknown if bias
-      + "Publication Rate Disparity" = (M publish rate) - (W publish rate) -- positive == men more likely to publish (i.e., overperform); negative == women more likely to publish
-      + Men overperform in all authorship roles across ASM journals, most clear for corresponding authors
-      + Break it down by journals and there is clear trend to overperformance by men in both corresponding & last authorships, some exceptions
-  + Are women being retained through peer review at the same proportion as men/unclear?
-      + Get actual proportions at each stage
-      + seems as if fewer women progress through each stage than men
-      + large proportion of potential reviewers are not senior authors (both genders)
-  + senior authors that are women are less likely to be considered as reviewers (40 vs 50%)
-      + greater # of women (unique indvidiuals) have been suggested as potential reviewers than # of women senior authors -- only 1/2 have actually been reviewers
-      + similar trend for min, except that the proportions of potential & accepted seem to be higher - calculate & add proportions relative to senior authors
-      + different trend for "unclear" authors where senior > potential > accepted
+The proportions of men (long dash) and women (solid) authors at ASM have decreased over time at equvalent rates, with a ratio of men to women authors of 4:3 since 2012. This decrease corresponds with an increase in the proportion of unclear (dotted) authors (Figure 3A). X manuscripts submitted have men as corresponding authors but lack any women authors. The number of papers submitted by women corresponding authors with women comprising more than half of the authors exceeds those submitted by men corresponding authors (Figure 3X). Additionally, the proportion of women authors decreases as the number of authors increases (Figure 3X). The trend in the data is so great, that the proportion of women authors on a paper can predict the gender of the corresponding author (Figure 3X).
 
 ```{r gender_summary_figs}
 #code/representation/summary_figs.R -- Figure_4
@@ -128,11 +101,10 @@ _Women are less likely to be retained through stages of the peer review system a
 
 **Figure 4. The difference in percentage points of papers accepted** at (A) all journals or (B) for each journal. Unique manuscripts were split according to the gender of the corresponding, first, last, and middle author(s), and the acceptance rate for each group calculated. The difference in acceptance rate was determined by subtracting the acceptance rate of women-authored papers from men-authored papers. The shade (ranging from orange to blue) indicates the outperforming gender. No bar indicates no difference in percentage points.
 
-\includegraphics{Figure_5.png}
+The proportion of papers submitted with men (blue dashed) and women (orange dashed) first authors have remained constant and equivalent at about 3X% percent (Figure 4X), as have their respective proportions of published manuscripts (solid lines). Conversely, the proportion of submitted papers with men corresponding authors has remained steady at X% and the proportion with women corresponding authors at X%. However, their respective proportions of published manuscripts are dissimilar (Figure 4X). The published manuscript proportion where men are corresponding authors seems to have a much larger gap relative to that of women corresponding authors. These trends are similar across individual journals (SupplementaryX).
 
-**Figure 5. The retention of each gender through the publishing roles.** All junior (first or middle) authors were split by gender and tracked through their roles in academic publishing from senior author (last or corresponding), potential reviewer (considered), reviewer (accepted), or editor. Color indicates whether (purple) or not (green) the individual participiated in that role at any point from 2012 to 2018.
+We wanted to know whether the increase in published proportions are proportionally equivalent for men and women corresponding authors or if this was evidence for disproportionate success by men relative to women. To answer this question, we calculated the difference in percentage points between a given outcome for men and women, e.g., the percentage point difference in acceptance rates is the acceptance rate for men minus the acceptance rate for women. A positive value indicates that men receive the outcome more often than women, whereas a negative value indicates that women outperform men in the given metric. To correct for the large disparity in the participation of women relative to men at ASM journals, all percentage point comparisions are made relative to the gender and population in question. First, we calculated the difference in acceptance rate percentage points for men and women at each author type (e.g., corresponding, first, last, and middle). Men outperformed women in all authorship roles across ASM journals combined, with the greatest difference seen for corresponding authors (Figure 4X). When broken down by journals, there is a clear trend to overperformance by men in both corresponding and last authorship categories, with some exceptions (Figure 4X). The primary exception is mSphere, where papers with a woman last author are accepted almost 10% points more than those with a man last author.
 
-_Papers submitted by women are rejected more frequently than those submitted by men_
 ```{r, plot_rej_rates} 
 #code/bias/Figure_6.png
 ```
@@ -140,50 +112,35 @@ _Papers submitted by women are rejected more frequently than those submitted by 
 
 **Figure 6. Difference in rejection rates by author gender.** The percent of manuscripts rejected by author gender and type (e.g., corresponding, first, last, middle) at (A) all journals combined or at (B) each journal, which shows the difference in percent rejection rates. (C) The difference in percent editorial rejection rates at each journal, vertical line indicates the difference for all journals combined. (D) The difference in percentage points between each decision type following the first peer review, vertical lines indicate the difference value for all journals combined. The difference in rejection rates was determined by subtracting the rejection rate of women-authored papers from men-authored papers within each category. The shade (ranging from orange to blue) indicates the outperforming gender. No bar indicates no difference in percentange points.
 
+**Papers submitted by women have more negative outcomes than those submitted by men.** To better understand the percentage point difference in gendered performance (Figure 4), we next compared the rejection rates at each author stage. While middle and first authors rejected at similar rates for men and women, senior woman-authored (e.g., corresponding, last) manuscripts are rejected more frequently than those authored by men (Figure 5X). Breaking it down by individual journals, there are several instances where the overall trend is repeated or even amplified (e.g., AAC, IAI, JB, mBio, MCB) (Figure 5C). The greatest effect was observed when comparing the gender of corresponding authors, so we used this sub-population to further examine the difference in acceptance/rejection rates.
 
-  + try to better understand the % point difference in gender-ed performance
-  + NOTE: to correct for the large discrepency in the participation of women at ASM journals during the is time period, all comparisions are made relative to the gender and population in question.
-  + direct comparision of the proportion of woman-authored papers that are rejected compared to men, at each author stage
-      + middle/first author rejected at similar rates
-      + woman-authored (corres/last) rejected more frequently than men
-      + there are several journals where the overall trend is repeated and/or amplified (e.g., AAC, IAI, JB, mBio, MCB)
-      + greatest effect seen for corresponding authors, use this sub-population to further examine
+We next compared the rejection rates for men and women corresponding authors at two different stages of peer review, before and after peer review. Many papers are immediately rejected by editors/EICs instead of being sent to peer review, often due to issues of scope or percieved quality. We refer to these as editorial rejections. Alternately, editors could send papers out for review by two or three experts in the field, or peers. The reviewers make suggestions to the editor who decides whether the manuscript in question should be accepted, rejected, or sent back for revision. At ASM journals, manuscripts with suggested revisions that are expected to take more than 30 days are rejected, but generally encouraged to resubmit. Papers authored by women are editorially rejected as much as 12 percentage points more often than those authored by men (Figure 5X). The percentage point difference at all ASM journals combined is -3.X (vertical line), and two journals, MCB and mBio, have more extreme percentage point differences. Papers authored by men and women are equally likely to be accepted after the first round of review (Figure 5X, right panel). However, women-authored papers are more likely to be rejected (left panel) while men-authored papers are more often given revision decisions (center panel). Three journals, JB, AAC, and MCB, have percentage point differences in rejection and revision decisions that are more extreme than for all ASM journals combined (+/- X%, vertical line).
 
-_Both men and women editors are more likely to reject papers authored by women than those authored by men and these preferences are partially mediated by author institution_
 ```{r, plot_ed_rej}
 #code/bias/Figure_7.R
 ```
 \includegraphics{Figure_7.png}
 
-**Figure 7. Difference in decisions or reccomendations according to the gatekeeper gender.** (A) Effect of editor gender on the difference in percentage points for decisions following review at all journals combined. (B) Difference in percentage points for review recommendations and (C) how that is affected by reviewer gender.
+**Figure 7. Difference in decisions or reccomendations according to the gatekeeper gender.** (A) Effect of editor gender on the difference in percentage points for decisions following review at all journals combined. (B) Difference in percentage points for review recommendations and (C) how that is affected by reviewer gender. 
 
-**need to connect fig 7 institution info with the story -- stats on gender?-- SUPPLEMENTAL**
+We next wanted to understand the degree to which gatekeeper (editor/reviewer) genders influenced the outcomes observed in Figure 5 following peer review. Both men and women editors reject proportionally more women-authored papers, with men editors making revise decisions on papers authored by men more often than those authored by women (Figure 6X). Reviewers are more likely to suggest rejections for women as compared to men though no difference in revise suggestions were observed (Figure 6X). Both men and women reviewers recommended rejection more often for women-authored manuscripts though only men reccomended acceptance more often for men-authored manuscripts (Figure 6X). Women reviewers suggested revision on women-authored papers more often than men-authored manuscripts.
 
-  + There are two main gatekeeping roles for manuscript decisions: editors & reviewers
-  + This section evaluates disparities made by editors during editorial rejections, and decisions following peer review. 
-  + Women recieve more editorial rejections than men, proportionally (editorial_rejections.R)
-  + may be complications due to geographic bias (eLife paper), restrict to papers submitted in US & examine institution type
+
+The high rejection rate for the unclear population suggested that there may be complications due to geography and prestige bias is a well-established phenomenon so we next looked at the outcome of papers submitted by authors at US institutions. 
   + slight disparity in editorial rejection & acceptance rates according to institution type (rej_by_inst_type.R)
       + greatest difference (4%) occurs for institute/medical schools
       + trend holds for most journals and is >20% diff at JCM (R2s), mBio (Federal), MCB (low research), AEM (industry research) (Supplementary_A)
       + men from institutes/medical schools outperform women >7% for acceptance across all journals 
       + >20% in favor of men at: EC (fed researh), mSphere & JVI (Low research), AEM & MCB (industry research), JCM/JB/JCM (R2 institution) (Supplementary_B)
-  + both men & women editors are more likely to reject women (editor_gender_analysis.R)
-      + men editors are more likely to make revise only & accept decisions for men
       + women editors highly favor men from medical schools, slightly favor men from R2 & industry -- what is the n?
       + men editors favor men from R1, R2 and medical schools, slightly favor women from low & industry research -- what is the n?
-
   + rev_score_analysis.R
-    + reviewers are more likely to suggest rejections for women as compared to men. No difference in revise decisions (A)
     + men at R1, low research, medical schools & fed research are favored by reviewers over women (B)
   + reviewer_gender_analysis.R
-    + both female & male reviewers are more likely to recommend rejection for women. (C)
-    + Male reviewers are more likely to accept papers from men (C)
     + women reviewers are more likely to recommend acceptance for women from low research & federal institutions (D)
     + women reviewers are more likely to recommend acceptance for men from R1 & industry instutitions (C)
     + men are more likely to recommend acceptance for women from R2 institutions & favor men from R1 & medical institutes (D)
   
-_Factors affecting competency_  
 ```{r, other_factors, echo=FALSE, message=FALSE}
 #source("../code/bias/time_to_publication.R")
 #factors_A #days pending at each journal
@@ -204,17 +161,25 @@ _Factors affecting competency_
 
 **Figure 8. Comparison of time to final decision and impact by gender.** The number days (A) between when a manuscript is initally submitted then finally published and (B) that a manuscript spends in the ASM peer review system. How the impact of papers published by men (blue) versus women (orange) vary according to (C) cites and (D) total reads. Citation data includes articles published between 36 and 48 months prior to August 2018. Total reads includes both HTML and PDF online views for articles published between 12 and 24 months prior to August 2018. Impact data are divided by the number of months published.
 
-  + In addition to rejectance/acceptance rates, other disparate outcomes may occur during the peer review process
-  + Time in Peer Reivew (time_to_publication.R)
-      + Papers published by women take slightly longer (from submission to ready for publication) than men at some journals (mSphere, mBio, mSystems, CVI, JB, JCM, AEM) despite spending similar amounts of time at ASM journals (A, B)
-      + but do not require a greater number of revisions to be accepted than men (Supplementary_C)
-      + Papers rejected following review that were submitted by women do not generally take longer (in days) to be rejected (except at mSystems) or have more revisions (Supplementary_D & _E)
-      + Decisions are returned to men & women similarly (time_at_journ.R)
-  + Peer review is not a linear process, it is cyclical and builds upon its self, may also be disparities in impact (impact_analysis.R)
-      + Women tend to receive lower cites per month published than men 
-      + HTML/PDF/Abstract views are equivalent 
-      + women are more likely to be published in lower JIF journals
-      + No disparity in gendered sumissions to high (mBio) vs lower (mSphere) journals (bias_by_jif.R)
+**Additional factors compound the low representation of women authors.** In addition to manuscript decisions, other disparate outcomes may occur during, or after, the peer review process. To identify whether women-authored papers spent more time between submission and being ready for publication, we compared the number of revisions, days spent in the ASM peer review system, and the number of days from submission to ready for publication, which includes time with the author for revision. Papers authored by women take slightly longer (from submission to ready for publication) than men at some journals (mSphere, mBio, mSystems, CVI, JB, JCM, AEM) despite spending similar amounts of time in the ASM journal peer review system, and having **similar revisions prior to acceptance-add to supp** (Supplementary_C). Papers rejected following review that were submitted by women do not generally take longer (in days) to be rejected, or have more revisions (Supplementary). 
+
+The peer review process does not end when a manuscript is published. Instead, it is the continuation of the cyclical and self-reinforcing nature of publishing. Published manuscripts are cited and used to build future research and publications. The number of citations a manuscript recieves has implications for both science and research careers since they amplify visibility of an idea and its author(s). To understand if papers published at ASM journals have differing impacts based on the gender of their corresponding author, we compared paper citations to reads. Women-author papers tend to receive lower cites per month published than those authored by men, despite equivalent internet reads (e.g., HTML, PDF, and abstract views). 
+
+Some consider a journals impact factor to be a proxy measurement of a paper's quality. Previous research has found that women are less likely to be published in high impact factors, despite gender parity in the field. To determine if this was the case at ASM journals we compared how often men and women corresponding authors submitted to two broad scope microbiology journals with differing impact factors. We found that while women submit to both higher and lower journals at similar rates, women are more highly represented in the lower impact journal. **add numbers/stats**
+
+\includegraphics{Figure_5.png}
+
+**Figure 5. The retention of each gender through the publishing roles.** All junior (first or middle) authors were split by gender and tracked through their roles in academic publishing from senior author (last or corresponding), potential reviewer (considered), reviewer (accepted), or editor. Color indicates whether (purple) or not (green) the individual participiated in that role at any point from 2012 to 2018.
+
+The conflation of impact and quality can lead to disparate outcomes for women who publish in lower impact journals as it negatively impacts their perceived competency, a bar that women must work harder to achieve compared to men. Thus the lower impact leads to lower percieved competency which might in turn affect the likelihood of women being recognized for their topical expertise. To address this question, we next asked whether the women who publish at ASM journals as senior authors are viewed with similar competency to men senior authors. Indeed, senior authors that are women are less likely to be considered as reviewers than senior authors that are men, 40 and 50 percent, respectively. 
+
+While the described differences may seem small, they accumulate to reinforce the decreased representation of women as senior authors seen in Figure 1. To better visualize this and the 1X% difference in the proportion of women who are first authors to those who are corresponding authors we asked the proportions at which women have been retained through the peer review system at ASM journals. 
+      + Get actual proportions at each stage
+      + seems as if fewer women progress through each stage than men
+      + large proportion of potential reviewers are not senior authors (both genders)
+  + 
+      + greater # of women (unique indvidiuals) have been suggested as potential reviewers than # of women senior authors -- only 1/2 have actually been reviewers
+      + similar trend for men, except that the proportions of potential & accepted seem to be higher - calculate & add proportions relative to senior authors
 
 ##Discussion
   + Summarize results
@@ -227,6 +192,7 @@ _Factors affecting competency_
           + These observations do/do not correlate with gender of EiC
           + gap between men & women peformance, rejection rates
           + women more likely to be editorially rejected or given rejection after review
+          + that women are more likely to be rejected, have a similar # of versions, and slightly longer times between sub & pub == women are probably given more extensive revisions.
     + Compare to global and ASM membership stats
       + Globally - microbiology researchers are 60:40, M:F - Elsevier
       + ASM membership - `r get_percent(6214, 16193)` (sept 2018)
