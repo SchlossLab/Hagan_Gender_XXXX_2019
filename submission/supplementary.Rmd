@@ -27,9 +27,9 @@ options(knitr.table.format = "latex")
 
 #Gender representation
 
-\includegraphics{supp_inst_stats.png}
+\includegraphics{rep_supp.png}
 
-Supplemental Figure . Break down of individuals in each role by their gender and US institute type. Authors are restricted to senior authors (e.g., corresponding, last).
+Supplemental Figure 1. The proportion of (A) potential reviewers at all ASM journals combined, (B) reviewers at each ASM journal, (C) all submitting (dashed line) and publishing (solid line) middle authors, and (D) all submitting and publishing last authors by gender.
 
 \newpage
 
