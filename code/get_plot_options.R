@@ -53,7 +53,7 @@ gen_levels <- c("female", "male", "none")
 
 gen_breaks <- c("female", "male", "NA")
 
-gen_labels <- c("Women", "Men", "Unclear")
+gen_labels <- c("Women", "Men", "Unknown")
 
 gen_linetype <- c("solid", "dashed", "dotted")
 
@@ -77,7 +77,7 @@ get_gen_prop_text <- function(df, n_row, group){
   
   df %>% 
     arrange(desc(year)) %>% #put most recent year at top
-    head(n = n_row) %>%  #take top n_rows (f/m/unclear)
+    head(n = n_row) %>%  #take top n_rows (f/m/unknown)
     arrange(!!sym(group)) %>% #ensure alphabetical arrangement
     select(!!sym(group), proportion)#drop unness cols
 }
@@ -132,7 +132,7 @@ gender_line_plot <- function(df, ymax, wo_y, me_y, un_y){
     annotate(geom = "text", x = 2018, y = me_y+1.5, label = "Men")
   
   plot <- if(un_y != "N"){ #conditional if some genders are unknown
-    plot + annotate(geom = "text", x = 2018, y = un_y+1.5, label = "Unclear")
+    plot + annotate(geom = "text", x = 2018, y = un_y+1.5, label = "Unknown")
   }else(plot)
   
   plot <- plot + my_theme_horiz

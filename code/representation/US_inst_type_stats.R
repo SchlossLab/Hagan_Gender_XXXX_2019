@@ -17,7 +17,7 @@ gender_n <- inst_stats_data %>%
   
 roles <- c("author", "reviewer", "editor")
 
-summ_stats <- inst_stats_data %>% 
+summ_US_stats <- inst_stats_data %>% 
   group_by(role, gender, US.inst.type) %>% 
   summarise(n = n()) %>% 
   left_join(., gender_n, by = c("role", "gender")) %>% 
@@ -30,16 +30,4 @@ summ_stats <- inst_stats_data %>%
   gather(`Federal Research`:`R2  Institution`, 
          key = US.inst.type, value = percent) 
 
-summ_stats$role <- fct_relevel(summ_stats$role, roles)
-
-summ_stats %>% 
-  ggplot()+
-  geom_col(aes(fill = gender, y = percent, x = role),
-           position = "dodge")+
-  facet_wrap(~US.inst.type, scales = "free_y")+
-  scale_fill_manual(values = gen_ed_colors)+
-  labs(x = "Role", y = "Percent of Gender")+
-  my_theme_horiz
-
-ggsave("supp_inst_stats.png", device = 'png', 
-       path = 'submission/', width = 9, height = 6)
+summ_US_stats$role <- fct_relevel(summ_US_stats$role, roles)
