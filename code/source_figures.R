@@ -13,3 +13,13 @@ source("../code/representation/figure_4.R") #Figure 4
 source("../code/representation/supplemental.R") #supplemental figures
 
 #bias figures
+
+source("../code/bias/Figure_5.R")
+
+source("../code/bias/Figure_6.R")
+
+source("../code/bias/Figure_7.R")
+
+source("../code/bias/Figure_8.R")
+
+source("../code/bias/") #supplemental

@@ -45,21 +45,6 @@ ed_rej_subs_j <- ed_rejs %>%
   group_by(journal, US.inst.type, gender) %>% 
   summarise(ed.rejections = n())
 
-Supplementary_A <- left_join(ASM_subs_j, ed_rej_subs_j, 
-          by = c("US.inst.type", "gender", "journal")) %>% 
-  mutate(prop.ed.rej = get_percent(ed.rejections, total)) %>% 
-  select(-total, -ed.rejections) %>% 
-  spread(key = gender, value = prop.ed.rej) %>%
-  mutate(performance = male - female) %>% 
-  ggplot()+
-  geom_col(aes(x = US.inst.type, y = performance, fill = performance))+
-  coord_flip()+
-  facet_wrap(~journal)+
-  gen_gradient+
-  labs(x = "Institution Type\n", 
-       y = "Difference in Editorial Rejection\n")+
-  my_theme_horiz
-
 #accepted----
 acc <- bias_data %>% 
   filter(EJP.decision == "Accept, no revision") %>% 
