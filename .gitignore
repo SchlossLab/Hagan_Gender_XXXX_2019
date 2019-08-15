@@ -10,3 +10,4 @@ results/
 submission/*.html
 *.jpg
 *.png
+*.log
