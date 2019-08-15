@@ -42,24 +42,26 @@ source('code/learning/generateAUCs.R')
 
 ######################## DATA PREPARATION #############################
 # Read in the gender data
-data <- read.csv("code/learning/published_predict.csv")
+data <- read.csv("code/learning/gender_predict.csv")
 
 data$num.rev[is.na(data$num.rev)] <- 0
 
-data <- data %>% 
-  select(-prop.men.rev) %>% 
-  drop_na() %>%
-  select(-US.inst.type, -reviewed, -num.rev, -US.inst) %>% 
+data <- data %>%
+  filter(num.authors!=1) %>% 
+  filter(prop.fem.auth!=0) %>% 
+  select(-pass.first.review, -prop.men.rev) %>% 
+  drop_na() %>% 
   droplevels()
 
 ## Converting to factors
-for (i in c("editor", "sen.editor", "inst.gender", "journal", "corres.auth")){
+for (i in c("corres.auth", "published", "editor", "sen.editor", "US.inst", "editorial.reject", "sen.editor.x.edreject", "editor.x.revprog",  "journal")){
   data[,i]=as.factor(data[,i])
 }
 # Create dummy variables
-new_data <- dummy.data.frame(data, names=c("editor", "sen.editor", "inst.gender", "journal", "corres.auth"), sep=".")
+new_data <- dummy.data.frame(data, names=c("published", "editor", "sen.editor",  "US.inst", "editorial.reject", "sen.editor.x.edreject", "editor.x.revprog",  "journal"), sep=".")
+
 # Convert the label to a factor
-new_data$published <- as.factor(new_data$published)
+new_data$corres.auth <- as.factor(new_data$corres.auth)
 
 ###################################################################
 
