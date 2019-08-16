@@ -27,6 +27,27 @@ rev_resp <- read_csv("data/2018_rev_resp_ready.csv") %>%
                                "No Response" = c("No Response", "Not Needed", "Contacted"),
                                "Not Contacted" = c("Not Contacted", "Not Used")))
 
+#reviewer_D percent of reviewers contacted by editor gender----
+ed_contact <- rev_resp %>% 
+  mutate(status = fct_collapse(status, 
+                               "Contacted" = c("No Response", "Not Needed", "Contacted", "Accepted", "Declined"),
+                               "Not Contacted" = c("Not Contacted", "Not Used"))) %>% 
+  group_by(editor.gender, reviewer.gender, status) %>%
+  summarise(n = n()) %>% 
+  spread(key = status, value = n) %>% 
+  mutate(percent_cont = get_percent(Contacted, (Contacted + `Not Contacted`)))
+
+reviewer_D <- ed_contact %>% 
+  ggplot()+
+  geom_col(aes(x = editor.gender, y = percent_cont,
+               fill = reviewer.gender), alpha = 0.65,
+           position = "dodge")+
+  scale_fill_manual(values = gen_colors)+
+  gen_x_replace+
+  labs(x = "Editor Gender", y = "\nPercent Contacted")+
+  my_theme_horiz
+
+#reviewer_E response of reviewers by gender
 f_ed_resp <- rev_resp %>% 
   filter(status != "Not Contacted") %>% 
   filter(editor.gender == "female") %>% 
@@ -53,7 +74,7 @@ m_ed_resp <- rev_resp %>%
 
 ed_resp <- rbind(f_ed_resp, m_ed_resp)
 
-reviewer_D <- ed_resp %>% 
+reviewer_E <- ed_resp %>% 
   ggplot()+
   geom_col(aes(x = editor.gender, y = Percent,
                fill = reviewer.gender), 
@@ -67,21 +88,3 @@ reviewer_D <- ed_resp %>%
   my_theme_leg_horiz+
   theme(legend.position = c(0.8, 0.8))
 
-ed_contact <- rev_resp %>% 
-  mutate(status = fct_collapse(status, 
-                               "Contacted" = c("No Response", "Not Needed", "Contacted", "Accepted", "Declined"),
-                               "Not Contacted" = c("Not Contacted", "Not Used"))) %>% 
-  group_by(editor.gender, reviewer.gender, status) %>%
-  summarise(n = n()) %>% 
-  spread(key = status, value = n) %>% 
-  mutate(percent_cont = get_percent(Contacted, (Contacted + `Not Contacted`)))
-
-reviewer_C <- ed_contact %>% 
-  ggplot()+
-  geom_col(aes(x = editor.gender, y = percent_cont,
-               fill = reviewer.gender), alpha = 0.65,
-           position = "dodge")+
-  scale_fill_manual(values = gen_colors)+
-  gen_x_replace+
-  labs(x = "Editor Gender", y = "Percent Contacted")+
-  my_theme_horiz

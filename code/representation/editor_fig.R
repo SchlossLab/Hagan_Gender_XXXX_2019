@@ -1,13 +1,5 @@
 #Generate components of the figure summarizing editor stats
 
-ed_manu_data <- data %>% filter(str_detect(role, "editor")) %>% 
-  mutate(year = year(submitted.date)) %>% 
-  filter(!(EJP.decision == "Reject" & is.na(version.reviewed))) %>% #drop editorial rejects
-  select(grouped.random, year, random.person.id, gender, 
-         role, journal) %>% distinct()
-
-m_journs <- c("mBio", "mSphere", "mSystems")
-
 #A. Proportion of editors (editors + senior.editors) at ASM over time by gender & manuscripts handled----
 
 #proportion of individuals each year
@@ -18,7 +10,7 @@ ed_w_prop <- map_dfr(years, function(x){
 #proportions of individuals weighted by manuscripts
 ed_manu_prop <- map_df(years, function(x){
   
-  ed_manu_data %>% filter(year == x) %>% #restrict to single year
+  editor_data %>% filter(year == x) %>% #restrict to single year
     select(gender, grouped.random, year, random.person.id) %>% 
     distinct() %>% 
     group_by(gender, random.person.id, grouped.random) %>% summarise(n = n()) %>% #calculate number of each gender in that year
@@ -29,7 +21,8 @@ ed_manu_prop <- map_df(years, function(x){
 })
 
 #merge proportions & weighted proportions into single table & tidy
-ed_prop_ASM <- full_join(ed_w_prop, ed_manu_prop, by = c("year", "gender")) %>% distinct() %>% 
+ed_prop_ASM <- full_join(ed_w_prop, ed_manu_prop, by = c("year", "gender")) %>% 
+  distinct() %>% 
   gather(proportion, weighted_proportion, key = type, value = proportion)
 
 ed_prop_text <- get_gen_prop_text(ed_w_prop, 2, "gender") #calc label placement
@@ -39,19 +32,25 @@ editor_A <- ggplot(ed_prop_ASM) +
   coord_cartesian(ylim = c(0, 100))+
   scale_color_manual(breaks = gen_levels, labels = NULL, values = gen_colors)+
   scale_linetype_manual(breaks = c("proportion", "weighted_proportion"), labels = c("Individuals", "Manuscripts Handled"), values = c("solid", "dashed"))+
-  annotate(geom = "text", x = 2018, y = ed_prop_text[1,2]+1.5, label = "Women")+
-  annotate(geom = "text", x = 2018, y = ed_prop_text[2,2]+6, label = "Men")+
-  labs(x = "Year", y = "Proportion of Editors", linetype = "Type")+
+  annotate(geom = "text", x = 2017, y = ed_prop_text[1,2]+2, label = "Women")+
+  annotate(geom = "text", x = 2017, y = ed_prop_text[2,2]+8, label = "Men")+
+  labs(x = "Year", y = "\nProportion of Editors", linetype = "Type")+
   my_theme_horiz
 
-#B. Proportion of editors at each journal over time by gender---- 
+#B. proportion of editors from US institutions by gender----
+editor_B <- summ_US_stats %>% 
+  filter(role == "editor") %>% 
+  ggplot()+
+  geom_col(aes(fill = gender, y = percent, x = US.inst.type),
+           position = "dodge")+
+  coord_flip()+
+  scale_fill_manual(values = gen_ed_colors)+
+  labs(x = "\nU.S. Institution Type", y = "Percent of Editor Gender")+
+  my_theme_horiz
 
-pooled_ed_data <- ed_manu_data %>% 
-  #y7filter(journal %in% m_journs == FALSE) %>% #drop mBio/mSphere/mSystems
-  filter(gender != "NA")
-
+#C. Proportion of editors at each journal over time by gender---- 
 j_ed_prop <-  map_dfr(years, function(x){
-  get_prop_by_yr(x, pooled_ed_data, "gender", "Each")})
+  get_prop_by_yr(x, editor_data, "gender", "Each")})
 
 # Weighted editor proportion
 ed_manu_prop_j <- map_df(years, function(x){
@@ -59,7 +58,7 @@ ed_manu_prop_j <- map_df(years, function(x){
   map_dfr(journals, function(j){#map through the following function for each journal
     
     tryCatch(
-      pooled_ed_data %>% filter(journal == j) %>% #select journal
+      editor_data %>% filter(journal == j) %>% #select journal
         filter(year == x) %>% #restrict to single year
         select(gender, grouped.random, year, random.person.id) %>% distinct() %>% 
         group_by(gender, random.person.id, grouped.random) %>% summarise(n = n()) %>% #calculate number of each gender in that year
@@ -78,17 +77,22 @@ ed_prop_j <- full_join(j_ed_prop, ed_manu_prop_j,
   filter(gender != "NA") %>% 
   gather(proportion, weighted_proportion, key = type, value = proportion)
 
-editor_B <- ggplot(ed_prop_j) + 
+editor_C <- ggplot(ed_prop_j) + 
   geom_line(aes(x = year, y = proportion, linetype = type, color = gender))+
-  facet_wrap(~journal)+
+  facet_wrap(~journal, nrow = 2)+
   coord_cartesian(ylim = c(0, 100))+
   scale_color_manual(breaks = gen_levels, labels = gen_labels, values = gen_colors)+
   scale_linetype_manual(breaks = c("proportion", "weighted_proportion"), labels = c("Individuals", "Manuscripts Handled"), values = c("solid", "dashed"))+
-  labs(x = "Year", y = "\nProportion of Editors/Senior Editors", 
+  labs(x = "Year", y = "\nProportion of Editors", 
        linetype = "Type", color = "Gender")+
   my_theme_leg
 
-plot_grid(editor_A, editor_B, labels = c('A', 'B'), label_size = 18)
+#generate full figures----
+row1 <- plot_grid(editor_A, editor_B, 
+          labels = c('A', 'B'), label_size = 18)
+
+plot_grid(row1, editor_C,
+          labels = c('', 'C'), label_size = 18, nrow = 2)
 
 ggsave("Figure_1.png", device = 'png', 
        path = 'submission/', width = 12, height = 6)

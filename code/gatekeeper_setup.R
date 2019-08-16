@@ -6,9 +6,9 @@
 #editor data----
 editor_data <- data %>% filter(str_detect(role, "editor")) %>% 
   mutate(year = year(submitted.date)) %>% 
-  select(year, random.person.id, country, region, GDP, gender, 
+  select(year, grouped.random, random.person.id, country, gender, 
          role, journal) %>% 
-  filter(!is.na(year)) %>% 
+  filter(gender == "male" | gender == "female") %>% 
   distinct()
 
 editors <- editor_data %>% 
@@ -20,18 +20,14 @@ senior_ed <- editor_data %>%
 #reviewer data----
 reviewer_data <- data %>% filter(role == "reviewer") %>% 
   mutate(year = year(submitted.date)) %>% 
-  select(year, random.person.id, country, region, GDP, gender, 
-         role, journal) %>% 
-  filter(!is.na(year)) %>% 
-  mutate(gender = fct_explicit_na(gender, na_level = "none")) %>% 
+  select(year, grouped.random, random.person.id, country, gender, 
+         role, journal) %>%
   distinct()
 
 #potential reviewer data----
 pot_rev_data <- data %>% 
   filter(role == "potential.reviewer") %>% 
   mutate(year = year(submitted.date)) %>% 
-  filter(!is.na(year)) %>% 
-  mutate(gender = fct_explicit_na(gender, na_level = "none")) %>% 
   distinct()
 
 #metadata----

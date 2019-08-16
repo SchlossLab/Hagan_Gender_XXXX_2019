@@ -6,7 +6,7 @@
 #generate dataset of unqiue authors that submitted each year----
 uniq_author_data <- data %>% filter(role == "author") %>% 
   mutate(year = year(submitted.date)) %>% #new column with the year of submission
-  select(year, region, GDP, random.person.id, gender, contains("auth"), journal) %>% #restrict to year, region, person, gender & author status
+  select(year, random.person.id, gender, contains("auth"), journal) %>% #restrict to year, region, person, gender & author status
   filter(!is.na(year)) %>% #drop data w/o sub year
   mutate(gender = fct_explicit_na(gender, na_level = "none")) %>% #refactor na values so that they can be plotted correctly
   distinct()#single entry for each year/author combo
@@ -28,7 +28,8 @@ pub_author_data <- data %>%
   filter(published == "yes") %>% 
   mutate(year = year(submitted.date)) %>% 
   mutate(gender = fct_explicit_na(gender, na_level = "none")) %>% 
-  select(year, region, GDP, random.person.id, gender, contains("auth"), journal, random.manu.num, grouped.random)
+  select(year, random.person.id, gender, contains("auth"), 
+         journal, random.manu.num, grouped.random)
 
 mS_years <- pub_author_data %>% 
   filter(journal == "mSystems" | journal == "mSphere") %>% 
@@ -50,7 +51,8 @@ sub_author_data <- data %>%
   filter(role == "author") %>% 
   mutate(year = year(submitted.date)) %>% 
   mutate(gender = fct_explicit_na(gender, na_level = "none")) %>% 
-  select(year, random.person.id, gender, country, region, GDP, contains("auth"), journal, random.manu.num, grouped.random)
+  select(year, random.person.id, gender, country, contains("auth"), 
+         journal, random.manu.num, grouped.random)
 
 #break down sub_auth_data by type of authorship 
 sub_mid_auth <- get_auth_type("middle", sub_author_data)
