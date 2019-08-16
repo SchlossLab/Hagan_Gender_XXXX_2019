@@ -38,6 +38,10 @@ Supplemental Figure 1. The proportion of (A) potential reviewers at all ASM jour
 
 Supplemental Figure . Difference in acceptance and rejections by institution type.
 
+\includegraphics{Figure_8.png}
+
+Supplemental Figure . Comparison of time to final decision and impact by gender.** The number days (A) between when a manuscript is initally submitted then finally published and (B) that a manuscript spends in the ASM peer review system. How the impact of papers published by men (blue) versus women (orange) vary according to (C) cites and (D) total reads. Citation data includes articles published between 36 and 48 months prior to August 2018. Total reads includes both HTML and PDF online views for articles published between 12 and 24 months prior to August 2018. Impact data are divided by the number of months published.
+
 \newpage
 \includegraphics{Supp_time.png}
 

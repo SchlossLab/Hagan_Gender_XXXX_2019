@@ -2,6 +2,7 @@
 
 #setup----
 acc_rej_data <- data %>% 
+  filter(version == 0) %>% 
   filter(EJP.decision == "Accept, no revision" | EJP.decision == "Reject") 
 
 auth_types <- c("first", "middle", "last", "corres")
@@ -10,11 +11,11 @@ auth_types <- c("first", "middle", "last", "corres")
 rej_by_auth <- map_df(auth_types, function(x){
   
   get_auth_type(x, acc_rej_data) %>% 
-  filter(role == "author") %>% 
-  select(gender, EJP.decision, grouped.random) %>% distinct() %>% 
-  group_by(gender, EJP.decision) %>% summarise(n = n()) %>% 
-  spread(key = EJP.decision, value = n) %>% 
-  mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) %>% 
+    filter(role == "author") %>% 
+    select(gender, EJP.decision, grouped.random) %>% distinct() %>% 
+    group_by(gender, EJP.decision) %>% summarise(n = n()) %>% 
+    spread(key = EJP.decision, value = n) %>% 
+    mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) %>% 
     mutate(., auth_type = x)
 })
 
@@ -33,9 +34,9 @@ auth_type_A <- rej_by_auth %>%
   facet_wrap(~auth_type)+
   scale_fill_manual(values = gen_colors)+
   scale_x_discrete(breaks = gen_levels,
-                    labels = gen_labels)+
-  annotate(geom = "text", x = 2, 
-           y = (ASM_rej_rate[[3]]+3), label = "ASM rejection rate")+
+    labels = gen_labels)+
+  #annotate(geom = "text", x = 2, 
+  #         y = (ASM_rej_rate[[3]]+3), label = "ASM rejection rate")+
   geom_hline(data = ASM_rej_rate, aes(yintercept = prop_rej))+
   labs(x = "Predicted Gender\n", y = "Percent of Manuscripts Rejected")+
   my_theme_horiz
