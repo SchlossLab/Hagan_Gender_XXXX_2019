@@ -41,7 +41,7 @@ tuning_grid <- function(train_data, model){
 #     2. Return 2class summary and save predictions to calculate cvROC
 #     3. Save the predictions and class probabilities/decision values.
   folds <- 5
-  cvIndex <- createMultiFolds(factor(train_data$corres.auth), folds, times=100)
+  cvIndex <- createMultiFolds(factor(train_data$reviewed), folds, times=100)
   cv <- trainControl(method="repeatedcv",
                      number=folds,
                      index = cvIndex,

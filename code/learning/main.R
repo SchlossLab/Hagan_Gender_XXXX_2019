@@ -42,26 +42,27 @@ source('code/learning/generateAUCs.R')
 
 ######################## DATA PREPARATION #############################
 # Read in the gender data
-data <- read.csv("code/learning/gender_predict.csv")
+data <- read.csv("code/learning/published_predict.csv")
 
 data$num.rev[is.na(data$num.rev)] <- 0
 
+
 data <- data %>%
-  filter(num.authors!=1) %>% 
-  filter(prop.fem.auth!=0) %>% 
-  select(-pass.first.review, -prop.men.rev) %>% 
+  mutate(reviewed = if_else(reviewed==0, "no", "yes")) %>% 
+  select(-US.inst.type, -US.inst, -prop.men.rev, -num.rev, -published, -journal, -num.authors, -inst.gender) %>% 
   drop_na() %>% 
   droplevels()
 
 ## Converting to factors
-for (i in c("corres.auth", "published", "editor", "sen.editor", "US.inst", "editorial.reject", "sen.editor.x.edreject", "editor.x.revprog",  "journal")){
+for (i in c("reviewed", "corres.auth", "editor", "sen.editor")){
   data[,i]=as.factor(data[,i])
 }
 # Create dummy variables
-new_data <- dummy.data.frame(data, names=c("published", "editor", "sen.editor",  "US.inst", "editorial.reject", "sen.editor.x.edreject", "editor.x.revprog",  "journal"), sep=".")
+new_data <- dummy.data.frame(data, names=c("corres.auth", "editor", "sen.editor"), sep=".")
+
 
 # Convert the label to a factor
-new_data$corres.auth <- as.factor(new_data$corres.auth)
+new_data$reviewed <- as.factor(new_data$reviewed)
 
 ###################################################################
 
@@ -79,6 +80,9 @@ new_data$corres.auth <- as.factor(new_data$corres.auth)
 input <- commandArgs(trailingOnly=TRUE)
 seed <- as.numeric(input[1])
 model <- input[2]
+
+set.seed(3)
+new_data <- new_data[sample(1:nrow(new_data)), ]
 
 # Then arguments 1 and 2 will be placed respectively into the functions:
 #   1. set.seed() : creates reproducibility and variability

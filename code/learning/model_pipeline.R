@@ -50,7 +50,7 @@ pipeline <- function(dataset, model){
   # ------------------80-20 Datasplit for each seed------------------------->
   # Do the 80-20 data-split
   # Stratified data partitioning %80 training - %20 testing
-  inTraining <- createDataPartition(dataset$corres.auth, p = .80, list = FALSE)
+  inTraining <- createDataPartition(dataset$reviewed, p = .80, list = FALSE)
   training <- dataset[ inTraining,]
   testing  <- dataset[-inTraining,]
   # ----------------------------------------------------------------------->
@@ -87,7 +87,7 @@ pipeline <- function(dataset, model){
   # ----------------------------------------------------------------------->
   if(model=="L2_Logistic_Regression"){
   print(model)
-  trained_model <-  train(corres.auth ~ ., # label
+  trained_model <-  train(reviewed ~ ., # label
                           data=training, #total data
                           method = method,
                           trControl = cv,
@@ -113,7 +113,7 @@ pipeline <- function(dataset, model){
     # Predict on the test set and get predicted probabilities or decision values
     rpartProbs <- predict(trained_model, testing, type="prob")
     # Calculate the ROC for each model
-    test_roc <- roc(ifelse(testing$corres.auth == "female", 1, 0), rpartProbs[[1]])
+    test_roc <- roc(ifelse(testing$reviewed == "yes", 1, 0), rpartProbs[[1]])
     # Get the AUROC value for test set
     test_auc <- test_roc$auc
     # Get feature weights
