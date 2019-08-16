@@ -46,21 +46,23 @@ data <- read.csv("code/learning/published_predict.csv")
 
 data$num.rev[is.na(data$num.rev)] <- 0
 
+
 data <- data %>%
-  select(-US.inst.type, -prop.men.rev, -num.rev, -reviewed, -journal, -num.authors) %>% 
+  mutate(reviewed = if_else(reviewed==0, "no", "yes")) %>% 
+  select(-US.inst.type, -US.inst, -prop.men.rev, -num.rev, -published, -journal, -num.authors, -inst.gender) %>% 
   drop_na() %>% 
   droplevels()
 
 ## Converting to factors
-for (i in c("published" , "corres.auth", "editor", "sen.editor", "US.inst",  "inst.gender")){
+for (i in c("reviewed", "corres.auth", "editor", "sen.editor")){
   data[,i]=as.factor(data[,i])
 }
 # Create dummy variables
-new_data <- dummy.data.frame(data, names=c("corres.auth", "editor", "sen.editor",  "US.inst", "inst.gender"), sep=".")
+new_data <- dummy.data.frame(data, names=c("corres.auth", "editor", "sen.editor"), sep=".")
 
 
 # Convert the label to a factor
-new_data$published <- as.factor(new_data$published)
+new_data$reviewed <- as.factor(new_data$reviewed)
 
 ###################################################################
 
