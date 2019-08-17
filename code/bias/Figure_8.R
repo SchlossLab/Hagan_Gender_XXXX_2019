@@ -110,4 +110,4 @@ factors_D <- plot_impact_data("Total Reads", 300)
 plot_grid(factors_A, factors_B, factors_C, factors_D, labels = c('A', 'B', 'C', 'D'), label_size = 18)
 
 ggsave("Figure_8.png", device = 'png', 
-       path = 'submission/', width = 12, height = 9)
+       path = '../submission/', width = 12, height = 9)

@@ -12,34 +12,20 @@ rej_by_auth <- map_df(auth_types, function(x){
   
   get_auth_type(x, acc_rej_data) %>% 
     filter(role == "author") %>% 
+    filter(!is.na(gender)) %>% 
     select(gender, EJP.decision, grouped.random) %>% distinct() %>% 
     group_by(gender, EJP.decision) %>% summarise(n = n()) %>% 
     spread(key = EJP.decision, value = n) %>% 
     mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) %>% 
-    mutate(., auth_type = x)
+    mutate(., auth.type = x) #%>% 
+    #select(-Reject, -`Accept, no revision`) %>% 
 })
 
-#cross ASM rejection rate
-ASM_rej_rate <- acc_rej_data %>% 
-  select(EJP.decision, grouped.random) %>% distinct() %>% 
-  group_by(EJP.decision) %>% 
-  summarise(n = n()) %>% 
-  spread(key = EJP.decision, value = n) %>%
-  mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) 
-
-#theme_set(theme_cowplot(font_size=12))
-auth_type_A <- rej_by_auth %>% 
-  ggplot() + 
-  geom_col(aes(x = gender, y = prop_rej, fill = gender)) +
-  facet_wrap(~auth_type)+
-  scale_fill_manual(values = gen_colors)+
-  scale_x_discrete(breaks = gen_levels,
-    labels = gen_labels)+
-  #annotate(geom = "text", x = 2, 
-  #         y = (ASM_rej_rate[[3]]+3), label = "ASM rejection rate")+
-  geom_hline(data = ASM_rej_rate, aes(yintercept = prop_rej))+
-  labs(x = "Predicted Gender\n", y = "Percent of Manuscripts Rejected")+
-  my_theme_horiz
+#cross ASM rejection rate by author type
+ASM_rej_rate <- rej_by_auth %>% 
+  select(-Reject, -`Accept, no revision`) %>% 
+  spread(key = gender, value = prop_rej) %>% 
+  mutate(performance = male - female)
 
 #rejection rates by gender and journal----
 rej_by_journ <- map_df(auth_types, function(x){
@@ -77,13 +63,14 @@ auth_type_B <- rej_by_journ %>%
   ggplot() + 
   geom_col(aes(x = journal, y = difference, fill = difference)) +
   coord_flip()+
-  facet_wrap(~auth.type)+
+  facet_wrap(~auth.type, nrow = 1)+
   gen_gradient+
-  labs(x = "Journal", y = "Difference in Percent Rejection\n",
+  geom_hline(data = ASM_rej_rate, aes(yintercept = performance))+
+  labs(x = "\nJournal", y = "Difference in Percent Rejection\n",
        fill = "% Points\nDifference")+
   my_theme_leg_horiz
 
-#Do women recieve proportionally more editorial rejections than men?
+#Do women recieve proportionally more editorial rejections than men?----
 ed_rejs <- bias_data %>% 
   filter(published == "no") %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
@@ -134,13 +121,13 @@ ed_rejections_A <- ed_rejections %>% select(-n, -total) %>%
   coord_flip()+
   gen_gradient+
   geom_hline(data = ASM_ed_rej, aes(yintercept = performance))+
-  annotate(geom = "text", x = 12, y = -2.5, label = "All Journals")+
+  #annotate(geom = "text", x = 12, y = -2.5, label = "All Journals")+
   #geom_text(aes(x = journal, y = 0.75, label = n))+
-  labs(x = "Journal", 
+  labs(x = "\nJournal", 
        y = "Difference in Editorial Rejections")+
   my_theme_horiz
 
-#break decisions after review down by journal
+#break decisions after review down by journal----
 j_ed_dec_data <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
   filter(version == 0) %>% 
@@ -191,12 +178,14 @@ ed_rejections_E <- j_ed_dec_data %>%
   gen_gradient+
   geom_hline(data = ASM_dec, aes(yintercept = performance))+
   #geom_text(aes(x = journal, y = 1.5, label = n))+
-  labs(x = "Journal", 
-       y = "Difference in Decision after First Review")+
+  labs(x = "\nJournal", 
+       y = "Difference in Decision\nafter First Review")+
   my_theme_horiz
 
-plot_grid(auth_type_A, auth_type_B, ed_rejections_A, ed_rejections_E, 
-          labels = c('A', 'B', 'C', 'D'), label_size = 18)
+row2 <- plot_grid(ed_rejections_A, ed_rejections_E, 
+          labels = c('B', 'C'), label_size = 18, nrow = 1)
+
+plot_grid(auth_type_B, row2, labels = 'A', label_size = 18, nrow = 2)
 
 ggsave("Figure_5.png", device = 'png', 
-       path = 'submission/', width = 12, height = 12)
+       path = '../submission/', width = 9, height = 6)

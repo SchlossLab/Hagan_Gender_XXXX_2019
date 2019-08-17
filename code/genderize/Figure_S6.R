@@ -1,8 +1,5 @@
-source("code/analysis_functions.R")
-source("code/get_plot_options.R")
-
 #full b_c dataset w. country data
-country_impact_data <- read_csv("data/B_C_auth_country_genderize_join_nosp.csv") %>% 
+country_impact_data <- read_csv("../data/B_C_auth_country_genderize_join_nosp.csv") %>% 
   filter(!is.na(country)) %>% #drop data w/o associated country
   filter(!is.na(code)) %>% #drop data w countries that aren't supported by genderize
   filter(str_detect(country, "/") == FALSE) %>% #drop data w. 2+ countries
@@ -72,8 +69,8 @@ plot_country_impact <- predictions_by_country %>%
        caption = "Number indicates total number of names associated with the country")+
   my_theme_horiz
 
-ggsave("Supp_genderize_3.png", plot = plot_country_impact, device = 'png', 
-       path = 'submission/supp_figures', width = 12, height = 9)
+ggsave("Figure_S6.png", plot = plot_country_impact, device = 'png', 
+       path = '../submission/supp_figures', width = 12, height = 9)
 
 #which countries have the most "unknown" gender names?
 #na_by_country <- na_obs %>%

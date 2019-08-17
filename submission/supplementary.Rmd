@@ -27,32 +27,27 @@ options(knitr.table.format = "latex")
 
 #Gender representation
 
-\includegraphics{rep_supp.png}
+\includegraphics{Figure_S1.png}
 
-Supplemental Figure 1. The proportion of (A) potential reviewers at all ASM journals combined, (B) reviewers at each ASM journal, (C) all submitting (dashed line) and publishing (solid line) middle authors, and (D) all submitting and publishing last authors by gender.
+Figure S1. The proportion of (A) potential reviewers at all ASM journals combined, (B) reviewers at each ASM journal, (C) all submitting (dashed line) and publishing (solid line) middle authors, and (D) all submitting and publishing last authors by gender.
 
 \newpage
 
 #Gender bias
-\includegraphics{Supp_inst.png}
+\includegraphics{Figure_S2.png}
 
-Supplemental Figure . Difference in acceptance and rejections by institution type.
+Figure S2. Comparison of time to final decision and impact by gender.** The number days (A) between when a manuscript is initally submitted then finally published and (B) that a manuscript spends in the ASM peer review system. How the impact of papers published by men (blue) versus women (orange) vary according to (C) cites and (D) total reads. Citation data includes articles published between 36 and 48 months prior to August 2018. Total reads includes both HTML and PDF online views for articles published between 12 and 24 months prior to August 2018. Impact data are divided by the number of months published.
 
-\includegraphics{Figure_8.png}
+\includegraphics{Figure_S3.png}
 
-Supplemental Figure . Comparison of time to final decision and impact by gender.** The number days (A) between when a manuscript is initally submitted then finally published and (B) that a manuscript spends in the ASM peer review system. How the impact of papers published by men (blue) versus women (orange) vary according to (C) cites and (D) total reads. Citation data includes articles published between 36 and 48 months prior to August 2018. Total reads includes both HTML and PDF online views for articles published between 12 and 24 months prior to August 2018. Impact data are divided by the number of months published.
-
-\newpage
-\includegraphics{Supp_time.png}
-
-Supplemental Figure . Total days and versions between submission and final rejection at each journal.
+Figure S3. Difference in acceptance and rejections by institution type.
 
 \newpage
 ##Gender prediction and assignment
 
 \includegraphics{genderize_method.png}
 
-Supplemental Figure . Schematic of gender prediction and assignment.
+Figure S4. Schematic of gender prediction and assignment.
 
 \newpage
 ##Validating gender analysis
@@ -60,7 +55,7 @@ Supplemental Figure . Schematic of gender prediction and assignment.
 source("../code/genderize/b_c_comparison.R")
 ```
 
-Supplemental Table 1. sensitivity/specificity/accuracy of genderize thresholds. Bolded text denotes the accuracy of the threshold used in all further analyses.
+Table S1. sensitivity/specificity/accuracy of genderize thresholds. Bolded text denotes the accuracy of the threshold used in all further analyses.
 ```{r genderize_stats, results='asis', echo=FALSE}  
 supp_table_1 <- stats_summary %>% 
   mutate(b_c_data_ascii_pmod85 = ifelse(b_c_data_ascii_pmod85 == "0.9714", 
@@ -81,15 +76,15 @@ supp_table_1
 
 \includegraphics{impact_equation.png}
 
-Supplemental Figure . Equation for calculating negative bias by genderize. C indicates an individual country. 
+Figure S5. Equation for calculating negative bias by genderize. C indicates an individual country. 
 
 \newpage
-\includegraphics{Supp_genderize_3.png}
+\includegraphics{Figure_S6.png}
 
-Supplemental Figure . The negative impact of each country on the overall gender prediction of the validation dataset. Number indicates the total number of names associated with each country.
+Figure S6. The negative impact of each country on the overall gender prediction of the validation dataset. Number indicates the total number of names associated with each country.
 
 \newpage
-\includegraphics{Supp_genderize_4.png}
+\includegraphics{Figure_S7.png}
 
-Supplemental Figure . The negative impact of each country on the overall gender prediction of the full dataset. Number indicates the total number of names associated with each country.
+Figure S7. The negative impact of each country on the overall gender prediction of the full dataset. Number indicates the total number of names associated with each country.
 

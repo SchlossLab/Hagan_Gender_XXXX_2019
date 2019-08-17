@@ -137,4 +137,4 @@ col_2 <- plot_grid(figure4_C, figure4_D,
 plot_grid(col_1, col_2, nrow = 2, rel_heights = c(1.5, 1))
 
 ggsave("Figure_4.png", device = 'png', 
-       path = 'submission/', width = 12, height = 12)
+       path = '../submission/', width = 12, height = 12)

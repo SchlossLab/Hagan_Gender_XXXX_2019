@@ -27,7 +27,7 @@ ed_prop_ASM <- full_join(ed_w_prop, ed_manu_prop, by = c("year", "gender")) %>%
 
 ed_prop_text <- get_gen_prop_text(ed_w_prop, 2, "gender") #calc label placement
 
-editor_A <- ggplot(ed_prop_ASM) + 
+Figure_1B <- ggplot(ed_prop_ASM) + 
   geom_line(aes(x = year, y = proportion, linetype = type, color = gender))+
   coord_cartesian(ylim = c(0, 100))+
   scale_color_manual(breaks = gen_levels, labels = NULL, values = gen_colors)+
@@ -37,8 +37,8 @@ editor_A <- ggplot(ed_prop_ASM) +
   labs(x = "Year", y = "\nProportion of Editors", linetype = "Type")+
   my_theme_horiz
 
-#B. proportion of editors from US institutions by gender----
-editor_B <- summ_US_stats %>% 
+#A. proportion of editors from US institutions by gender----
+Figure_1A <- summ_US_stats %>% 
   filter(role == "editor") %>% 
   ggplot()+
   geom_col(aes(fill = gender, y = percent, x = US.inst.type),
@@ -88,11 +88,11 @@ editor_C <- ggplot(ed_prop_j) +
   my_theme_leg
 
 #generate full figures----
-row1 <- plot_grid(editor_A, editor_B, 
+row1 <- plot_grid(Figure_1A, Figure_1B, 
           labels = c('A', 'B'), label_size = 18)
 
 plot_grid(row1, editor_C,
           labels = c('', 'C'), label_size = 18, nrow = 2)
 
 ggsave("Figure_1.png", device = 'png', 
-       path = 'submission/', width = 12, height = 6)
+       path = '../submission/', width = 12, height = 6)

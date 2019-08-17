@@ -10,12 +10,12 @@ text_values <- get_gen_prop_text(rev_w_prop, 3, "gender")
 max_value <- get_ymax(rev_w_prop) 
 
 #line plot of all journals combined by year
-reviewer_A <- gender_line_plot(rev_w_prop, max_value, 
+Figure_2B <- gender_line_plot(rev_w_prop, max_value, 
                  text_values[1,2], text_values[2,2], text_values[3,2]) + 
   labs(x = "Year\n", y = "\nProportion of Reviewers")
 
 #B. US reviewers by institutions & gender----
-reviewer_B <- summ_US_stats %>% 
+Figure_2A <- summ_US_stats %>% 
   filter(role == "reviewer") %>% 
   ggplot()+
   geom_col(aes(fill = gender, y = percent, x = US.inst.type),
@@ -40,9 +40,9 @@ reviewer_C <- reviewer_data %>%
   labs(x = "\nReviewer Gender", y = "Number of Papers Reviewed")+
   my_theme_horiz  #figure out how to add n of individuals
 
-source("code/representation/rev_suggest_gender.R") #reviewer_D, reviewer_E
+source("../code/representation/rev_suggest_gender.R") #reviewer_D, reviewer_E
 
-plot_AB <- plot_grid(reviewer_A, reviewer_B,
+plot_AB <- plot_grid(Figure_2A, Figure_2B,
           labels = c('A', 'B'), label_size = 18)
 
 plot_CDE <- plot_grid(reviewer_C, reviewer_D, reviewer_E,
@@ -51,4 +51,4 @@ plot_CDE <- plot_grid(reviewer_C, reviewer_D, reviewer_E,
 plot_grid(plot_AB, plot_CDE, nrow = 2)
 
 ggsave("Figure_2.png", device = 'png', 
-       path = 'submission/', width = 12, height = 9)
+       path = '../submission/', width = 12, height = 9)

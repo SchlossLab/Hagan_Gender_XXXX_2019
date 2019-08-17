@@ -1,8 +1,3 @@
-source("code/analysis_functions.R")
-source("code/get_plot_options.R")
-
-people_data <- read_csv("data/2018_people_ready.csv") 
-
 #full b_c dataset w. country data
 ASM_country_impact_data <- people_data %>% 
   select(random.person.id, gender, country) %>% distinct() %>% 
@@ -72,5 +67,5 @@ plot_ASM_country_impact <- ASM_predictions_by_country %>%
        caption = "Number indicates total number of names associated with the country")+
   my_theme_horiz
 
-ggsave("Supp_genderize_4.png", plot = plot_ASM_country_impact, device = 'png', 
-       path = 'submission/supp_figures', width = 12, height = 9)
+ggsave("Figure_S7.png", plot = plot_ASM_country_impact, device = 'png', 
+       path = '../submission/supp_figures', width = 12, height = 9)

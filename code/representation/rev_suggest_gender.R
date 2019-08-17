@@ -15,7 +15,7 @@ authors <- people_data %>% filter(role == "editor") %>%
   select(random.manu.num, gender) %>%
   rename("editor.gender" = "gender") %>% distinct() 
 
-rev_resp <- read_csv("data/2018_rev_resp_ready.csv") %>% 
+rev_resp <- read_csv("../data/2018_rev_resp_ready.csv") %>% 
   left_join(., people, by = "random.person.id") %>% 
   rename("reviewer.gender" = "gender") %>% 
   left_join(., editor_dat, by = "random.manu.num") %>% 
