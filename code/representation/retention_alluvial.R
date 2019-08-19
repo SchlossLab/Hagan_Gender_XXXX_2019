@@ -31,20 +31,20 @@ percent_retent <- alluv_df %>%
   filter(status == "yes")
 
 #alluv_test$role <- factor(alluv_test$role, levels = role_levels) 
-retention_plot <- alluv_df %>% group_by(gender) %>% 
-ggplot(.,
-       aes(x = role, stratum = status, alluvium = random.person.id, 
-           fill = status)) +
-  facet_wrap(~gen_ed_facet(gender), ncol = 1)+
-  scale_fill_brewer(type = "qual", palette = "Accent") +
-  geom_flow(stat = "alluvium", lode.guidance = "rightleft") +
-  geom_stratum()+
-  scale_x_discrete(breaks = c("junior author", "senior author", 
-                              "potential.reviewer", "reviewer", "editor"),
-                   labels = c("Junior Author", "Senior Author",
-                              "Potential Reviewer", "Reviewer", "Editor"))+
-  labs(x = "Role in Publishing", fill = "Filled Role")+
-  my_theme_leg
-
-ggsave("Figure_8.png", device = 'png', 
-       path = '../submission/', width = 12, height = 9)
+#retention_plot <- alluv_df %>% group_by(gender) %>% 
+#ggplot(.,
+#       aes(x = role, stratum = status, alluvium = random.person.id, 
+#           fill = status)) +
+#  facet_wrap(~gen_ed_facet(gender), ncol = 1)+
+#  scale_fill_brewer(type = "qual", palette = "Accent") +
+#  geom_flow(stat = "alluvium", lode.guidance = "rightleft") +
+#  geom_stratum()+
+#  scale_x_discrete(breaks = c("junior author", "senior author", 
+#                              "potential.reviewer", "reviewer", "editor"),
+#                   labels = c("Junior Author", "Senior Author",
+#                              "Potential Reviewer", "Reviewer", "Editor"))+
+#  labs(x = "Role in Publishing", fill = "Filled Role")+
+#  my_theme_leg
+#
+#ggsave("Figure_8.png", device = 'png', 
+#       path = '../submission/', width = 12, height = 9)

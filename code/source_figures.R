@@ -10,7 +10,7 @@ source("../code/representation/Figure_3.R") # Figure 3
 
 source("../code/representation/Figure_4.R") #Figure 4
 
-#source("../code/representation/Figure_8.R") #alluvial summary -- takes forever
+source("../code/representation/retention_alluvial.R") #alluvial summary -- takes forever
 
 source("../code/representation/Figure_S1.R") #supplemental figures
 
