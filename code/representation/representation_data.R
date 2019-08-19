@@ -36,7 +36,7 @@ single_reviewer <- reviewer_data %>%
   arrange(n) %>% 
   head(n = 3)
 
-#authors----
+#authors: proportion of women authors----
 
 auth_data <- data %>% 
   filter(role == "author") %>% 
@@ -54,9 +54,43 @@ author_ratio <- map_dfr(uniq.manu, function(x){
 
 m_corres_prop_fem <- left_join(bias_data, author_ratio, by = c("random.manu.num", "num.authors")) %>% 
   select(random.manu.num, num.authors, prop.fem.auth, gender, journal) %>% 
+  filter(num.authors != 1) %>% 
   filter(gender == "male") %>% 
   distinct() %>% 
   group_by(prop.fem.auth) %>% 
   summarise(n = n())
 
 sum_m_corres <- sum(m_corres_prop_fem$n)
+
+most_w_auth_m_corres <- m_corres_prop_fem %>% filter(prop.fem.auth >= 0.51) %>% 
+  sum(.$n)
+
+f_corres_prop_fem <- left_join(bias_data, author_ratio, by = c("random.manu.num", "num.authors")) %>% 
+  select(random.manu.num, num.authors, prop.fem.auth, gender, journal) %>% 
+  filter(num.authors != 1) %>% 
+  filter(gender == "female") %>% 
+  distinct() %>% 
+  group_by(prop.fem.auth) %>% 
+  summarise(n = n())
+
+sum_f_corres <- sum(f_corres_prop_fem$n)
+
+most_w_auth_f_corres <- f_corres_prop_fem %>% filter(prop.fem.auth >= 0.51) %>% 
+  sum(.$n)
+
+#authors: first author proportions----
+f_authors_avg_prop <- get_sub_pub_prop("sub_first_auth", "pub_first_auth", "All") %>% 
+  filter(gender != "none") %>% 
+  group_by(manu.type, gender) %>% 
+  summarise(avg = round(mean(proportion), digits = 2))
+
+#authors: corres author proportions----
+c_authors_avg_prop <- get_sub_pub_prop("sub_corres_auth", "pub_corres_auth", "All") %>% 
+  filter(gender != "none")%>% 
+  group_by(manu.type, gender) %>% 
+  summarise(avg = round(mean(proportion), digits = 2))
+
+#authors:
+min_perform <- acc_diff_auth_j %>% 
+  arrange(.$dif_rel_rej) %>% 
+  pull(dif_rel_rej) %>% head(n = 1)

@@ -5,9 +5,9 @@ role_levels <- c("junior author", "senior author", "potential.reviewer", "review
 gender_role <- data %>% filter(gender != "none") %>% 
   mutate(role = case_when(
     role == "author" & 
-      author.corres == "false" & author.last == "false" ~ "junior author",
+      author.corres == "FALSE" & author.last == "FALSE" ~ "junior author",
     role == "author" & 
-      (author.corres == "true" | author.last == "true") ~ "senior author",
+      (author.corres == "TRUE" | author.last == "TRUE") ~ "senior author",
     role == "senior.editor" ~ "editor",
     TRUE ~ role
   )) %>% 
@@ -20,7 +20,8 @@ gender_role <- data %>% filter(gender != "none") %>%
   gather(., key = role, value = status, -c(random.person.id, gender)) %>% 
   mutate(role = factor(role, levels = role_levels))
 
-alluv_df <- map_df(role_levels, function(x){gender_role %>% filter(role == x)})
+alluv_df <- map_df(role_levels, function(x){
+  gender_role %>% filter(role == x)})
 
 percent_retent <- alluv_df %>% 
   group_by(gender, role, status) %>%
@@ -45,4 +46,5 @@ ggplot(.,
   labs(x = "Role in Publishing", fill = "Filled Role")+
   my_theme_leg
 
-#ggsave(filename = "test_alluvial.png", path = "results/")
+ggsave("Figure_8.png", device = 'png', 
+       path = '../submission/', width = 12, height = 9)

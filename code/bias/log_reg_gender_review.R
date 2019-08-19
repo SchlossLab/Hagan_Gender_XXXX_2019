@@ -1,25 +1,21 @@
-#plot logistic regression data outputs for prediction of corresponding author gender by the proportion of women authors
+#logistic regression data outputs for prediction of whether or not a paper was reviewed based on gender-data
 
-feat_weights <- read_csv("data/combined_all_imp_features_gender_review.csv") 
 
-auc <- read_csv("data/combined_best_hp_results_gender_review.csv") 
+#calculate auc
+auc <- read_csv("../data/combined_best_hp_results_gender_review.csv") 
 
-prop_fem_median <- feat_weights %>% 
-  pull(prop.fem.auth) %>% 
-  median(abs(.)) %>% round(digits = 2)
+med_auc <- median(auc$test_aucs) %>% round(., digits = 2)
 
-second_median <- feat_weights %>% select(-Bias, -model) %>% 
-  gather(., key = "features", value = "weights") %>% 
-  filter(!str_detect(features, "x")) %>% 
-  mutate(weights = as.numeric(weights)) %>% 
-  group_by(features) %>% 
-  summarise(med.weight = median(weights)) %>% 
-  arrange(desc(med.weight))
+#compare median feature weights----
 
-med_auc <- median(auc$test_aucs)
+#feat_weights <- read_csv("data/combined_all_imp_features_gender_review.csv") 
 
-auc %>% 
-  select(-model) %>% 
-  gather(key = "type", value = "auc") %>% 
-  ggplot()+
-  geom_boxplot(aes(x = type, y = auc))
+#second_median <- feat_weights %>% select(-Bias, -model) %>% 
+#  gather(., key = "features", value = "weights") %>% 
+#  filter(!str_detect(features, "x")) %>% 
+#  mutate(weights = as.numeric(weights)) %>% 
+#  group_by(features) %>% 
+#  summarise(med.weight = median(weights)) %>% 
+#  arrange(desc(med.weight))
+
+

@@ -98,3 +98,26 @@ get_prop_by_yr <- function(x, df, group, journ){
   
   return(t_data)
 }
+
+get_sub_pub_prop <- function(sub_df, pub_df, prop){
+  
+  temp_sub <- as.character(sub_df) 
+  
+  temp_pub <- as.character(pub_df)
+  
+  sub_df <- get(temp_sub) #pull this df from the global environment
+  
+  pub_df <- get(temp_pub)
+  
+  sub_c_authors_w_prop <- map_dfr(years, function(x){
+    get_prop_by_yr(x, sub_df, "gender", prop) %>% 
+      mutate(manu.type = "submitted")}) 
+
+  pub_c_authors_w_prop <- map_dfr(years, function(x){
+    get_prop_by_yr(x, pub_df, "gender", prop) %>% 
+      mutate(manu.type = "published")}) 
+
+  c_authors_w_prop <- rbind(sub_c_authors_w_prop, pub_c_authors_w_prop) 
+  
+  return(c_authors_w_prop)
+}

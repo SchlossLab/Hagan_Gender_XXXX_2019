@@ -1,20 +1,6 @@
 #generate figures to summarize reviewer data
 
-#A. Proportion of Reviewers suggested each Year----
-rev_w_prop <- map_dfr(years, function(x){
-  get_prop_by_yr(x, reviewer_data, "gender", "All")})
-
-#figure out which year is the last & isolate the proportion values
-text_values <- get_gen_prop_text(rev_w_prop, 3, "gender")
-
-max_value <- get_ymax(rev_w_prop) 
-
-#line plot of all journals combined by year
-Figure_2B <- gender_line_plot(rev_w_prop, max_value, 
-                 text_values[1,2], text_values[2,2], text_values[3,2]) + 
-  labs(x = "Year\n", y = "\nProportion of Reviewers")
-
-#B. US reviewers by institutions & gender----
+#A. US reviewers by institutions & gender----
 Figure_2A <- summ_US_stats %>% 
   filter(role == "reviewer") %>% 
   ggplot()+
@@ -24,6 +10,9 @@ Figure_2A <- summ_US_stats %>%
   scale_fill_manual(values = gen_ed_colors)+
   labs(x = "\nU.S. Institution Type", y = "Percent of Reviewer Gender\n")+
   my_theme_horiz
+
+#B. Proportion of Reviewers suggested each Year----
+Figure_2B <- plot_rev_time("reviewer_data")
 
 #C. Number of papers reviewed by Gender----
 reviewer_C <- reviewer_data %>% 

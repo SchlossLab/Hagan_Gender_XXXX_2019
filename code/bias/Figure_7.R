@@ -1,6 +1,6 @@
 #Does the geographical origin & institution of the corresponding author matter?
 
-#A. editoral rejections for U.S. only
+#A. editoral rejections for U.S. only----
 #Do women recieve proportionally more editorial rejections than men?
 US_ed_rejs <- bias_data %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>%
@@ -11,39 +11,39 @@ US_ed_rejs <- bias_data %>%
   distinct()
 
 #percent of submissions that are editorial rejections by gender
-ASM_summary <- bias_data %>% 
+fig7_ASM_summary <- bias_data %>% 
   filter(US.inst == "yes") %>% 
   select(gender, grouped.random) %>% distinct() %>% 
   group_by(gender) %>% summarise(n = n())
 
-ASM_ed_rej <- US_ed_rejs %>% 
+fig7_ASM_ed_rej <- US_ed_rejs %>% 
   group_by(gender) %>% 
   summarise(n = n()) %>% 
-  mutate(prop_rej = get_percent(n, ASM_summary$n)) %>% 
+  mutate(prop_rej = get_percent(n, fig7_ASM_summary$n)) %>% 
   select(-n) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) 
 
 #percent of submissions that are editorial rejections by gender & journal
-journal_summary <- bias_data %>% 
+fig7_journal_summary <- bias_data %>% 
   filter(US.inst == "yes") %>% 
   select(journal, gender, grouped.random) %>% distinct() %>% 
   group_by(journal, gender) %>% summarise(total = n())
 
-ed_rejections <- US_ed_rejs %>% 
+fig7_ed_rejections <- US_ed_rejs %>% 
   group_by(journal, gender) %>% 
   summarise(n = n()) %>% 
-  left_join(., journal_summary, by = c("journal", "gender")) %>% 
+  left_join(., fig7_journal_summary, by = c("journal", "gender")) %>% 
   distinct() %>% 
   mutate(prop_rej = get_percent(n, total)) 
 
-ed_reject_n <- ed_rejections %>% 
+fig7_ed_reject_n <- fig7_ed_rejections %>% 
   select(-total, -prop_rej) %>% 
   spread(key = gender, value = n) %>% 
   mutate(n = male + female) %>% 
   select(-male, -female)
 
-figure_7A <- ed_rejections %>% select(-n, -total) %>% 
+figure_7A <- fig7_ed_rejections %>% select(-n, -total) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) %>% 
   left_join(., ed_reject_n, by = "journal") %>% 
@@ -59,7 +59,7 @@ figure_7A <- ed_rejections %>% select(-n, -total) %>%
        y = "Difference in Editorial Rejections\n")+
   my_theme_horiz
 
-#B. decisions following review for U.S. only
+#B. decisions following review for U.S. only----
 #break decisions after review down by journal
 US_j_ed_dec_data <- bias_data %>% 
   filter(US.inst == "yes") %>% 
@@ -118,7 +118,7 @@ figure_7B <- US_j_ed_dec_data %>%
   my_theme_horiz
 
 #C. acceptance & editorial rejection rates by U.S. insitution----
-ed_rejs <- bias_data %>% 
+fig7c_ed_rejs <- bias_data %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
@@ -126,7 +126,7 @@ ed_rejs <- bias_data %>%
   distinct() #editorially rejected manuscripts
 
 #count all submissions
-ASM_subs <- bias_data %>% 
+fig7c_ASM_subs <- bias_data %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
   select(gender, grouped.random, US.inst.type) %>% 
@@ -134,14 +134,14 @@ ASM_subs <- bias_data %>%
   group_by(US.inst.type, gender) %>% summarise(total = n()) 
 
 #count editorial rejections
-ed_rej_subs <- ed_rejs %>% 
+fig7c_ed_rej_subs <- fig7c_ed_rejs %>% 
   select(gender, grouped.random, US.inst.type) %>% 
   distinct() %>% 
   group_by(US.inst.type, gender) %>% 
   summarise(ed.rejections = n())
 
 #calculate percentage point difference in editorial rejections
-editorial_rej_per <- left_join(ASM_subs, ed_rej_subs, 
+fig7c_editorial_rej_per <- left_join(fig7c_ASM_subs, fig7c_ed_rej_subs, 
                                by = c("US.inst.type", "gender")) %>% 
   mutate(prop.ed.rej = get_percent(ed.rejections, total)) %>% 
   select(-total, -ed.rejections) %>% 
@@ -151,20 +151,20 @@ editorial_rej_per <- left_join(ASM_subs, ed_rej_subs,
   select(-male, -female) 
 
 #accepted---
-acc <- bias_data %>% 
+fig7c_acc <- bias_data %>% 
   filter(EJP.decision == "Accept, no revision") %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>%
   select(-days.to.review, contains("version")) %>% 
   distinct()
 
-acc_subs <- acc %>% 
+fig7c_acc_subs <- fig7c_acc %>% 
   select(gender, grouped.random, US.inst.type) %>% 
   distinct() %>% 
   group_by(US.inst.type, gender) %>% summarise(accepted = n())
 
 #calculate percentage point difference in acceptance
-acc_per <- left_join(ASM_subs, acc_subs, 
+fig7c_acc_per <- left_join(fig7c_ASM_subs, fig7c_acc_subs, 
                                by = c("US.inst.type", "gender")) %>% 
   mutate(prop.acc = get_percent(accepted, total)) %>% 
   select(-total, -accepted) %>% 
@@ -173,10 +173,10 @@ acc_per <- left_join(ASM_subs, acc_subs,
          rate = "Acceptance") %>% 
   select(-male, -female) 
 
-inst_rates <- rbind(editorial_rej_per, acc_per)
+fig7c_inst_rates <- rbind(fig7c_editorial_rej_per, fig7c_acc_per)
 
 #plot
-figure_7C <- inst_rates %>% 
+figure_7C <- fig7c_inst_rates %>% 
   ggplot()+
   geom_col(aes(x = US.inst.type, y = performance, fill = performance))+
   coord_flip()+
@@ -187,12 +187,12 @@ figure_7C <- inst_rates %>%
   my_theme_horiz
 
 #D. acceptance by editor gender and institution type after 1st review----
-ed_genders <- editor_data %>%  
+fig7d_ed_genders <- editor_data %>%  
   select(grouped.random, gender) %>% 
   distinct() %>% 
   rename("editor.gender" = "gender")
 
-ed_dec_data <- bias_data %>% 
+fig7d_ed_dec_data <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
   filter(version == 0) %>% 
   select(gender, journal, grouped.random, 
@@ -200,25 +200,26 @@ ed_dec_data <- bias_data %>%
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
   filter(EJP.decision %in% c("Accept, no revision",
+                             "Revise only",
                              "Reject")) %>% 
-  left_join(., ed_genders, by = "grouped.random") %>%
+  left_join(., fig7d_ed_genders, by = "grouped.random") %>%
   distinct()
 
-sub_inst_gen <- ed_dec_data %>% 
+fig7d_sub_inst_gen <- fig7d_ed_dec_data %>% 
   select(grouped.random, US.inst.type, editor.gender,
          EJP.decision, gender) %>% 
   distinct() %>% 
   group_by(editor.gender, US.inst.type, gender) %>% 
   summarise(total = n())
 
-summ_inst <- ed_dec_data %>% 
+fig7d_summ_inst <- fig7d_ed_dec_data %>% 
   select(grouped.random, editor.gender, US.inst.type, 
          EJP.decision, gender) %>% 
   distinct() %>% 
   group_by(editor.gender, US.inst.type, gender, 
            EJP.decision) %>% 
   summarise(n = n()) %>% as_tibble() %>% 
-  left_join(., sub_inst_gen, by = c("editor.gender",
+  left_join(., fig7d_sub_inst_gen, by = c("editor.gender",
                                     "US.inst.type", 
                                     "gender")) %>% 
   mutate(percent = get_percent(n, total)) %>% 
@@ -227,8 +228,8 @@ summ_inst <- ed_dec_data %>%
   mutate(overperform = male - female)
 
 #plot
-figure_7D <- summ_inst %>% 
-  filter(EJP.decision == "Accept, no revision") %>% 
+figure_7D <- fig7d_summ_inst %>% 
+  filter(EJP.decision == "Reject") %>% 
   ggplot(aes(x = US.inst.type, fill = overperform,
              y = overperform))+
   geom_col(position = "dodge")+
@@ -236,7 +237,7 @@ figure_7D <- summ_inst %>%
   coord_flip()+
   facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
   labs(x = "\nInstitution Type", 
-       y = "Difference in Acceptance\nby Editor Gender")+
+       y = "Difference in Rejection\nby Editor Gender")+
   my_theme_horiz
 
 #C. logistic regression ----
