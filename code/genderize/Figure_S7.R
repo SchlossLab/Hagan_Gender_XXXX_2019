@@ -70,7 +70,7 @@ plot_country_impact <- predictions_by_country %>%
   my_theme_horiz
 
 ggsave("Figure_S7.png", plot = plot_country_impact, device = 'png', 
-       path = '../submission/supp_figures', width = 12, height = 9)
+       path = '../submission', width = 12, height = 9)
 
 #which countries have the most "unknown" gender names?
 #na_by_country <- na_obs %>%

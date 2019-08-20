@@ -46,13 +46,13 @@ fig7_ed_reject_n <- fig7_ed_rejections %>%
 figure_7A <- fig7_ed_rejections %>% select(-n, -total) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) %>% 
-  left_join(., ed_reject_n, by = "journal") %>% 
+  left_join(., fig7_ed_reject_n, by = "journal") %>% 
   ggplot() +
   geom_col(aes(x = fct_reorder(journal, performance), 
                y = performance, fill = performance)) + 
   coord_flip()+
   gen_gradient+
-  geom_hline(data = ASM_ed_rej, aes(yintercept = performance))+
+  geom_hline(data = fig7_ASM_ed_rej, aes(yintercept = performance))+
   annotate(geom = "text", x = 12, y = -2.5, label = "All Journals")+
   #geom_text(aes(x = journal, y = 0.75, label = n))+
   labs(x = "\nJournal", 
@@ -240,9 +240,7 @@ figure_7D <- fig7d_summ_inst %>%
        y = "Difference in Rejection\nby Editor Gender")+
   my_theme_horiz
 
-#C. logistic regression ----
-#D. discipline clusters ----
-
+#generate & save figure----
 plot_grid(figure_7A, figure_7B, figure_7C, figure_7D,
           labels = c('A', 'B', 'C', 'D'), 
           label_size = 18, ncol = 2)

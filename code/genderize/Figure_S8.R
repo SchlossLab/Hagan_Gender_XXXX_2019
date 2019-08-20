@@ -68,4 +68,4 @@ plot_ASM_country_impact <- ASM_predictions_by_country %>%
   my_theme_horiz
 
 ggsave("Figure_S8.png", plot = plot_ASM_country_impact, device = 'png', 
-       path = '../submission/supp_figures', width = 12, height = 9)
+       path = '../submission', width = 12, height = 9)

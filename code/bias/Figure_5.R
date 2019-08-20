@@ -86,7 +86,7 @@ fig5_ASM_summary <- bias_data %>%
 fig5_ASM_ed_rej <- fig5_ed_rejs %>% 
   group_by(gender) %>% 
   summarise(n = n()) %>% 
-  mutate(prop_rej = get_percent(n, ASM_summary$n)) %>% 
+  mutate(prop_rej = get_percent(n, fig5_ASM_summary$n)) %>% 
   select(-n) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) %>% 
@@ -113,7 +113,7 @@ fig5_ed_reject_n <- fig5_ed_rejections %>%
 figure_5B <- fig5_ed_rejections %>% select(-n, -total) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) %>% 
-  left_join(., ed_reject_n, by = "journal") %>% 
+  left_join(., fig5_ed_reject_n, by = "journal") %>% 
   ggplot() +
   geom_col(aes(x = fct_reorder(journal, performance), 
                y = performance, fill = performance)) + 

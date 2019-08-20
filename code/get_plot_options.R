@@ -3,7 +3,7 @@ library(RColorBrewer)
 library(cowplot)
 #library(patchwork)
 
-#preferred themes
+#preferred themes----
 my_theme <- theme_classic() + 
   theme(legend.position = "none", axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"), 
         plot.title = element_text(size=16,face="bold"), 
