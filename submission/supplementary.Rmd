@@ -83,12 +83,12 @@ supp_table_1
 Figure S6. Equation for calculating negative bias by genderize. C indicates an individual country. 
 
 \newpage
-\includegraphics{Figure_S6.png}
+\includegraphics{Figure_S7.png}
 
 Figure S7. The negative impact of each country on the overall gender prediction of the validation dataset. Number indicates the total number of names associated with each country.
 
 \newpage
-\includegraphics{Figure_S7.png}
+\includegraphics{Figure_S8.png}
 
 Figure S8. The negative impact of each country on the overall gender prediction of the full dataset. Number indicates the total number of names associated with each country.
 

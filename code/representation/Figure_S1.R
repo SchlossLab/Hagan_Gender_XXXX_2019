@@ -1,27 +1,44 @@
 
-#A. Proportion of Potential Reviewers suggested each Year----
-sup_A <- plot_rev_time("pot_rev_data")
+#C. Proportion of editors at each journal over time by gender---- 
+j_ed_prop <-  map_dfr(years, function(x){
+  get_prop_by_yr(x, editor_data, "gender", "Each")})
 
-#B. Proportion of reviewer genders by journal-----
-j_rev_w_prop <- map_dfr(years, function(x){
-  get_prop_by_yr(x, reviewer_data, "gender", "Each")})
+# Weighted editor proportion
+ed_manu_prop_j <- map_df(years, function(x){
+  
+  map_dfr(journals, function(j){#map through the following function for each journal
+    
+    tryCatch(
+      editor_data %>% filter(journal == j) %>% #select journal
+        filter(year == x) %>% #restrict to single year
+        select(gender, grouped.random, year, random.person.id) %>% distinct() %>% 
+        group_by(gender, random.person.id, grouped.random) %>% summarise(n = n()) %>% #calculate number of each gender in that year
+        group_by(gender, random.person.id) %>% summarise(n = sum(n)) %>%
+        group_by(gender) %>% summarise(weighted_n = sum(n)) %>% 
+        mutate(weighted_proportion = get_percent(weighted_n, sum(weighted_n))) %>% #add column calculating the proportions for the year, requires analysis_functions.R
+        cbind(year = x, journal = j, .), #add column specifying the year
+      error = function(e) {bind_cols(year = x, journal = j, gender = "NA", weighted_n = as.numeric("0"), weighted_proportion = as.numeric("0"))}) #if nothing present, return NA value in a dataframe 
+  })
+})
 
-max_journ_value <- get_ymax(j_rev_w_prop)
-
-sup_B <- j_rev_w_prop %>% 
+#merge into single dataset & tidy
+ed_prop_j <- full_join(j_ed_prop, ed_manu_prop_j, 
+                       by = c("year", "gender", "journal")) %>%
+  distinct() %>% 
   filter(gender != "NA") %>% 
-  j_gen_line_plot(., max_journ_value) + 
-  labs(x = "Year", y = "\nProportion of Reviewers",
-       linetype = "Gender")
+  gather(proportion, weighted_proportion, key = type, value = proportion)
 
-#C. Proportion of middle authors over time: submitted & published----
-sup_C <- plot_sub_v_pub_time("sub_mid_auth", "pub_mid_auth")
+Fig_S1 <- ggplot(ed_prop_j) + 
+  geom_line(aes(x = year, y = proportion, linetype = type, color = gender))+
+  facet_wrap(~journal, nrow = 2)+
+  coord_cartesian(ylim = c(0, 100))+
+  scale_color_manual(breaks = gen_levels, labels = gen_labels, values = gen_colors)+
+  scale_linetype_manual(breaks = c("proportion", "weighted_proportion"), labels = c("Individuals", "Manuscripts Handled"), values = c("solid", "dashed"))+
+  labs(x = "Year", y = "\nProportion of Editors", 
+       linetype = "Type", color = "Gender")+
+  my_theme_leg
 
-#D. Proportion of last authors over time: submitted & published----
-sup_D <- plot_sub_v_pub_time("sub_last_auth", "pub_last_auth")
-
-plot_grid(sup_A, sup_B, sup_C, sup_D,
-          labels = c('A', 'B', 'C', 'D'), nrow = 4, rel_heights = c(1, 2, 1, 1))
+plot_grid(Fig_S1, labels = c('A'))
 
 ggsave("Figure_S1.png", device = 'png', 
-       path = '../submission/', width = 8, height = 15)
+       path = '../submission/', width = 8, height = 6)

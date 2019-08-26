@@ -1,10 +1,5 @@
 #Calculate proportion of author types & workloads
 
-#A. Proportion of men/women first authors over time: submitted & published----
-figure4_A <- plot_sub_v_pub_time("sub_first_auth", "pub_first_auth")
-
-#B. Proportion of men/women corresponding authors over time: submitted & published----
-figure4_B <- plot_sub_v_pub_time("sub_corres_auth", "pub_corres_auth")
 
 #Calculate percentage point differences----
 auth_types <- c("Middle", "Corresponding", "Last", "First")

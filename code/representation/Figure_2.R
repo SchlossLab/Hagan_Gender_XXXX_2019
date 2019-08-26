@@ -1,21 +1,31 @@
 #generate figures to summarize reviewer data
 
-#A. US reviewers by institutions & gender----
-Figure_2A <- summ_US_stats %>% 
-  filter(role == "reviewer") %>% 
-  ggplot()+
-  geom_col(aes(fill = gender, y = percent, x = US.inst.type),
-           position = "dodge")+
-  coord_flip()+
-  scale_fill_manual(values = gen_ed_colors)+
-  labs(x = "\nU.S. Institution Type", y = "Percent of Reviewer Gender\n")+
+#A. Number of papers handled by gender
+ed_manu_prop <- map_df(years, function(x){
+  
+  editor_data %>% filter(year == x) %>% #restrict to single year
+    select(gender, grouped.random, year, random.person.id) %>% 
+    distinct() %>% 
+    group_by(gender, random.person.id, grouped.random) %>% summarise(n = n()) %>% #calculate number of each gender in that year
+    group_by(gender, random.person.id) %>% summarise(n = sum(n)) %>% 
+    group_by(gender) %>% summarise(weighted_n = sum(n)) %>%
+    mutate(weighted_proportion = get_percent(weighted_n, sum(weighted_n))) %>% #add column calculating the proportions for the year, requires analysis_functions.R
+    cbind(year = x, .) #add year 
+})
+
+ed_manu_text <- get_gen_prop_text(ed_manu_prop, 2, "gender") #calc label placement
+
+Fig_2A <- ggplot(ed_manu_prop) + 
+  geom_line(aes(x = year, y = proportion, color = gender))+
+  coord_cartesian(ylim = c(0, 100))+
+  scale_color_manual(breaks = gen_levels, labels = NULL, values = gen_colors)+
+  annotate(geom = "text", x = 2017, y = ed_manu_text[1,2]+2, label = "Women")+
+  annotate(geom = "text", x = 2017, y = ed_manu_text[2,2]+4, label = "Men")+
+  labs(x = "Year", y = "\nProportion of Editor Workload")+
   my_theme_horiz
 
-#B. Proportion of Reviewers suggested each Year----
-Figure_2B <- plot_rev_time("reviewer_data")
-
-#C. Number of papers reviewed by Gender----
-reviewer_C <- reviewer_data %>% 
+#B. Number of papers reviewed by Gender----
+Fig_2B <- reviewer_data %>% 
   distinct() %>% #doesn't have the manuscript ids
   group_by(random.person.id, gender) %>% 
   summarise(n = n()) %>%
@@ -29,15 +39,16 @@ reviewer_C <- reviewer_data %>%
   labs(x = "\nReviewer Gender", y = "Number of Papers Reviewed")+
   my_theme_horiz  #figure out how to add n of individuals
 
-source("../code/representation/rev_suggest_gender.R") #reviewer_D, reviewer_E
+source("../code/representation/rev_suggest_gender.R") #reviewer_D, reviewer_E -- increase facet label size or space between facets in E
 
-plot_AB <- plot_grid(Figure_2A, Figure_2B,
+plot_AB <- plot_grid(Fig_2A, Fig_2B,
           labels = c('A', 'B'), label_size = 18)
 
-plot_CDE <- plot_grid(reviewer_C, reviewer_D, reviewer_E,
-          labels = c('C', 'D', 'E'), label_size = 18, nrow = 1)
+plot_CDE <- plot_grid(reviewer_D, reviewer_E,
+          labels = c('C', 'D'), label_size = 18)
 
-plot_grid(plot_AB, plot_CDE, nrow = 2)
+plot_grid(plot_AB, plot_CDE, nrow = 2, 
+          rel_heights = c(1, 2))
 
 ggsave("Figure_2.png", device = 'png', 
-       path = '../submission/', width = 12, height = 9)
+     path = '../submission/', width = 12, height = 9)
