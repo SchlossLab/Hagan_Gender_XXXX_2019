@@ -271,7 +271,7 @@ plot_rev_time <- function(rev_df){
   #line plot of all journals combined by year
   plot <- gender_line_plot(all_rev_w_prop, max_value, 
                    text_values[1,2], text_values[2,2], text_values[3,2]) + 
-    labs(x = "Year", y = paste("\nProportion of\n", rev_type))
+    labs(x = "Year", y = paste("\nProportion of ", rev_type))
   
   return(plot)
 }

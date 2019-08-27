@@ -7,9 +7,11 @@ Fig_3A <- summ_US_stats %>%
   geom_col(aes(fill = gender, y = percent, x = US.inst.type),
            position = "dodge")+
   coord_flip()+
-  scale_fill_manual(values = gen_ed_colors)+
-  labs(x = "\nU.S. Institution Type", y = "Percent of Gender\n")+
-  my_theme_horiz
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  labs(x = "\nU.S. Institution Type", y = "Percent of Gender\n",
+       fill = "Gender")+
+  my_theme_leg_horiz+
+  theme(legend.position = c(0.8, 0.8))
 
 #B. Proportion of unique authors each year: unclear/men/women----
 all_authors_w_prop <- map_dfr(years, function(x){
@@ -36,9 +38,9 @@ row_1 <- plot_grid(Fig_3A, labels = c('A'), label_size = 18)
 
 row_2 <- plot_grid(Fig_3B, Fig_3C, Fig_3D,
                    labels = c('B', 'C', 'D'), 
-                   label_size = 18, nrow = 1)
+                   label_size = 18, nrow = 3)
 
-plot_grid(row_1, row_2, nrow = 2)
+plot_grid(row_1, row_2, nrow = 2, rel_heights = c(1, 2))
 #
 ggsave("Figure_3.png", device = 'png', 
        path = '../submission/', width = 9, height = 12)

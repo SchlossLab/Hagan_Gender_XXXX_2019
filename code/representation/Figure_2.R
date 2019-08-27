@@ -1,6 +1,6 @@
 #generate figures to summarize reviewer data
 
-#A. Number of papers handled by gender
+#A. Number of papers handled by gender -- a weighted proportion
 ed_manu_prop <- map_df(years, function(x){
   
   editor_data %>% filter(year == x) %>% #restrict to single year
@@ -9,7 +9,7 @@ ed_manu_prop <- map_df(years, function(x){
     group_by(gender, random.person.id, grouped.random) %>% summarise(n = n()) %>% #calculate number of each gender in that year
     group_by(gender, random.person.id) %>% summarise(n = sum(n)) %>% 
     group_by(gender) %>% summarise(weighted_n = sum(n)) %>%
-    mutate(weighted_proportion = get_percent(weighted_n, sum(weighted_n))) %>% #add column calculating the proportions for the year, requires analysis_functions.R
+    mutate(proportion = get_percent(weighted_n, sum(weighted_n))) %>% #add column calculating the proportions for the year, requires analysis_functions.R
     cbind(year = x, .) #add year 
 })
 
@@ -20,8 +20,8 @@ Fig_2A <- ggplot(ed_manu_prop) +
   coord_cartesian(ylim = c(0, 100))+
   scale_color_manual(breaks = gen_levels, labels = NULL, values = gen_colors)+
   annotate(geom = "text", x = 2017, y = ed_manu_text[1,2]+2, label = "Women")+
-  annotate(geom = "text", x = 2017, y = ed_manu_text[2,2]+4, label = "Men")+
-  labs(x = "Year", y = "\nProportion of Editor Workload")+
+  annotate(geom = "text", x = 2017, y = ed_manu_text[2,2]+5, label = "Men")+
+  labs(x = "Year\n", y = "\nProportion of\nEditor Workload")+
   my_theme_horiz
 
 #B. Number of papers reviewed by Gender----
@@ -36,7 +36,7 @@ Fig_2B <- reviewer_data %>%
   coord_flip()+
   scale_x_discrete(labels = gen_labels)+
   scale_fill_manual(values = gen_colors)+
-  labs(x = "\nReviewer Gender", y = "Number of Papers Reviewed")+
+  labs(x = "\nReviewer Gender", y = "Number of Papers Reviewed\n")+
   my_theme_horiz  #figure out how to add n of individuals
 
 source("../code/representation/rev_suggest_gender.R") #reviewer_D, reviewer_E -- increase facet label size or space between facets in E

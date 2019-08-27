@@ -6,10 +6,12 @@ Fig_1A <- summ_US_stats %>%
   ggplot()+
   geom_col(aes(fill = gender, y = percent, x = US.inst.type),
            position = "dodge")+
-  coord_flip()+
-  scale_fill_manual(values = gen_ed_colors)+
-  labs(x = "\nU.S. Institution Type", y = "Percent of Editor Gender")+
-  my_theme_horiz_leg
+  coord_flip(ylim = c(0, 60))+
+  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
+  labs(x = "\nU.S. Institution Type", y = "Percent of Editor Gender\n",
+       fill = "Gender")+
+  my_theme_leg_horiz+
+  theme(legend.position = c(0.8, 0.4))
 
 #B. Proportion of editors (editors + senior.editors) at ASM over time by gender & manuscripts handled----
 
@@ -37,14 +39,14 @@ Fig_1C <- summ_US_stats %>%
            position = "dodge")+
   coord_flip()+
   scale_fill_manual(values = gen_ed_colors)+
-  labs(x = "\nU.S. Institution Type", y = "Percent of Reviewer Gender\n")+
+  labs(x = "\nU.S. Institution Type", y = "Percent of Reviewer Gender")+
   my_theme_horiz
 
 #D. Proportion of Reviewers suggested each Year----
 Fig_1D <- plot_rev_time("reviewer_data") #add color?
 
 #generate full figures----
-row1 <- plot_grid(Fig_1A, Fig_1B, Fig_1C, Fig_1D,
+plot_grid(Fig_1A, Fig_1B, Fig_1C, Fig_1D,
           labels = c('A', 'B', 'C', 'D'), label_size = 18,
           nrow = 2)
 #

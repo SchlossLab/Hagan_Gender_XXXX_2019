@@ -59,7 +59,7 @@ journ_rej_rates <- map_df(journals, function(x){
   mutate(., journal = x)
 })
 
-figure_5A <- rej_by_journ %>% 
+figure_4A <- rej_by_journ %>% 
   ggplot() + 
   geom_col(aes(x = journal, y = difference, fill = difference)) +
   coord_flip()+
@@ -71,7 +71,7 @@ figure_5A <- rej_by_journ %>%
   my_theme_leg_horiz
 
 #B. Do women recieve proportionally more editorial rejections than men?----
-fig5_ed_rejs <- bias_data %>% 
+fig4_ed_rejs <- bias_data %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
   select(grouped.random, gender, 
          EJP.decision, contains("days"), journal,
@@ -79,47 +79,47 @@ fig5_ed_rejs <- bias_data %>%
   distinct()
 
 #percent of submissions that are editorial rejections by gender
-fig5_ASM_summary <- bias_data %>% 
+fig4_ASM_summary <- bias_data %>% 
   select(gender, grouped.random) %>% distinct() %>% 
   group_by(gender) %>% summarise(n = n())
 
-fig5_ASM_ed_rej <- fig5_ed_rejs %>% 
+fig4_ASM_ed_rej <- fig4_ed_rejs %>% 
   group_by(gender) %>% 
   summarise(n = n()) %>% 
-  mutate(prop_rej = get_percent(n, fig5_ASM_summary$n)) %>% 
+  mutate(prop_rej = get_percent(n, fig4_ASM_summary$n)) %>% 
   select(-n) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) %>% 
   cbind(journal = "All Combined", .) %>% as_tibble()
 
 #percent of submissions that are editorial rejections by gender & journal
-fig5_journal_summary <- bias_data %>% 
+fig4_journal_summary <- bias_data %>% 
   select(journal, gender, grouped.random) %>% distinct() %>% 
   group_by(journal, gender) %>% summarise(total = n())
 
-fig5_ed_rejections <- fig5_ed_rejs %>% 
+fig4_ed_rejections <- fig4_ed_rejs %>% 
   group_by(journal, gender) %>% 
   summarise(n = n()) %>% 
-  left_join(., fig5_journal_summary, by = c("journal", "gender")) %>% 
+  left_join(., fig4_journal_summary, by = c("journal", "gender")) %>% 
   distinct() %>% 
   mutate(prop_rej = get_percent(n, total)) 
 
-fig5_ed_reject_n <- fig5_ed_rejections %>% 
+fig4_ed_reject_n <- fig4_ed_rejections %>% 
   select(-total, -prop_rej) %>% 
   spread(key = gender, value = n) %>% 
   mutate(n = male + female) %>% 
   select(-male, -female)
 
-figure_5B <- fig5_ed_rejections %>% select(-n, -total) %>% 
+figure_4B <- fig4_ed_rejections %>% select(-n, -total) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) %>% 
-  left_join(., fig5_ed_reject_n, by = "journal") %>% 
+  left_join(., fig4_ed_reject_n, by = "journal") %>% 
   ggplot() +
   geom_col(aes(x = fct_reorder(journal, performance), 
                y = performance, fill = performance)) + 
   coord_flip()+
   gen_gradient+
-  geom_hline(data = fig5_ASM_ed_rej, aes(yintercept = performance))+
+  geom_hline(data = fig4_ASM_ed_rej, aes(yintercept = performance))+
   #annotate(geom = "text", x = 12, y = -2.5, label = "All Journals")+
   #geom_text(aes(x = journal, y = 0.75, label = n))+
   labs(x = "\nJournal", 
@@ -127,7 +127,7 @@ figure_5B <- fig5_ed_rejections %>% select(-n, -total) %>%
   my_theme_horiz
 
 #C. break decisions after review down by journal----
-fig5_j_ed_dec_data <- bias_data %>% 
+fig4_j_ed_dec_data <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
   filter(version == 0) %>% 
   select(gender, journal, grouped.random, EJP.decision, version) %>% 
@@ -135,39 +135,39 @@ fig5_j_ed_dec_data <- bias_data %>%
                              "Reject", "Revise only")) %>% 
   distinct()
 
-fig5_ASM_summary_dec <- bias_data %>% 
+fig4_ASM_summary_dec <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
   filter(version == 0) %>% 
   select(gender, grouped.random, EJP.decision) %>% distinct() %>% 
   group_by(gender) %>% summarise(total = n())
 
-fig5_ASM_dec <- fig5_j_ed_dec_data %>% 
+fig4_ASM_dec <- fig4_j_ed_dec_data %>% 
   group_by(gender, EJP.decision) %>% 
   summarise(n = n()) %>% 
-  left_join(., fig5_ASM_summary_dec, by = "gender") %>% 
+  left_join(., fig4_ASM_summary_dec, by = "gender") %>% 
   mutate(prop_dec = get_percent(n, total)) %>%
   select(-n, -total) %>% distinct() %>% 
   spread(key = gender, value = prop_dec) %>% 
   mutate(performance = male - female)
 
-fig5_journal_summary <- fig5_j_ed_dec_data %>% 
+fig4_journal_summary <- fig4_j_ed_dec_data %>% 
   group_by(journal, gender) %>% summarise(total = n())
 
-fig5_journal_dec_summary <- fig5_j_ed_dec_data %>% 
+fig4_journal_dec_summary <- fig4_j_ed_dec_data %>% 
   group_by(journal, EJP.decision) %>% 
   summarise(n = n())
 
-figure_5C <- fig5_j_ed_dec_data %>% 
+figure_4C <- fig4_j_ed_dec_data %>% 
   group_by(journal, gender, EJP.decision) %>% 
   summarise(n = n()) %>% 
-  left_join(., fig5_journal_summary, 
+  left_join(., fig4_journal_summary, 
             by = c("journal", "gender")) %>% 
   distinct() %>% 
   mutate(prop_rej = get_percent(n, total)) %>%
   select(-n, -total) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) %>% 
-  left_join(., fig5_journal_dec_summary, 
+  left_join(., fig4_journal_dec_summary, 
             by = c("journal", "EJP.decision")) %>% 
   ggplot() +
   geom_col(aes(x = fct_reorder(journal, performance), 
@@ -175,16 +175,16 @@ figure_5C <- fig5_j_ed_dec_data %>%
   facet_wrap(~EJP.decision)+
   coord_flip()+
   gen_gradient+
-  geom_hline(data = fig5_ASM_dec, aes(yintercept = performance))+
+  geom_hline(data = fig4_ASM_dec, aes(yintercept = performance))+
   #geom_text(aes(x = journal, y = 1.5, label = n))+
   labs(x = "\nJournal", 
        y = "Difference in Decision\nafter First Review")+
   my_theme_horiz
 
-row2 <- plot_grid(figure_5B, figure_5C, 
+row2 <- plot_grid(figure_4B, figure_4C, 
           labels = c('B', 'C'), label_size = 18, nrow = 1)
 
-plot_grid(figure_5A, row2, labels = 'A', label_size = 18, nrow = 2)
+plot_grid(figure_4A, row2, labels = 'A', label_size = 18, nrow = 2)
 
-ggsave("Figure_5.png", device = 'png', 
+ggsave("Figure_4.png", device = 'png', 
        path = '../submission/', width = 9, height = 6)

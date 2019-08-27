@@ -13,7 +13,7 @@ accepted_data <- acc_data %>%
   distinct()
 
 #days from submission to production
-figure_S2A <- accepted_data %>% 
+figure_S5A <- accepted_data %>% 
   ggplot(aes(x = days.pending, fill = gender))+
   geom_density(alpha = 0.5)+
   coord_cartesian(xlim = c(0, 200))+
@@ -36,7 +36,7 @@ manu_summary <- map_df(manus, function(x){
 acc_data <- acc_data %>% 
   left_join(., manu_summary, by = c("grouped.random", "random.manu.num"))
 
-figure_S2B <- acc_data %>% 
+figure_S5B <- acc_data %>% 
   select(gender, grouped.random, total.decision, journal) %>% distinct() %>% 
   filter(total.decision >= 0 & total.decision <= 200) %>% 
   ggplot()+
@@ -56,7 +56,7 @@ accepted_versions <- map_dfr(manus, function(x){
 })
 
 #number of revisions before acceptance
-figure_S2C <- accepted_versions %>% 
+figure_S5C <- accepted_versions %>% 
   ggplot(aes(x = gender, y = num.versions, fill = gender))+
   geom_boxplot()+
   facet_wrap(~journal)+
@@ -65,8 +65,8 @@ figure_S2C <- accepted_versions %>%
   labs(x = "Gender", y = "\nNumber of Versions")+
   my_theme
 
-plot_grid(figure_S2A, figure_S2B, figure_S2C,
+plot_grid(figure_S5A, figure_S5B, figure_S5C,
           labels = c('A', 'B', 'C'), label_size = 18)
 
-ggsave("Figure_S3.png", device = 'png', 
+ggsave("Figure_S5.png", device = 'png', 
        path = '../submission/', width = 12, height = 12)

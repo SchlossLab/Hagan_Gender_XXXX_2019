@@ -79,7 +79,7 @@ reviewer_E <- ed_resp %>%
   geom_col(aes(x = editor.gender, y = Percent,
                fill = reviewer.gender), 
            position = "dodge", alpha = 0.65)+
-  facet_wrap(~Rev.Resp)+
+  facet_wrap(~ if_else(Rev.Resp == "No_Resp", "No Response", "Accept"))+
   scale_fill_manual(values = gen_colors, 
                     labels = gen_labels)+
   labs(x = "Editor Gender", y = "\nPercent of Reviewers",

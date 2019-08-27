@@ -39,6 +39,7 @@ data <- data %>%
   left_join(., binned_inst, by = "institution") %>% distinct() %>% 
   mutate(gender = fct_explicit_na(gender, na_level = "none"),
          reviewer.gender = fct_explicit_na(reviewer.gender, na_level = "none"),
+         US.inst.type = fct_explicit_na(US.inst.type, na_level = "Non-US Inst"),
          EJP.decision = factor(EJP.decision, levels = decisions)) %>% 
   filter(!is.na(year))
 

@@ -63,16 +63,10 @@ figure4_D <- acc_diff_auth_j %>%
   labs(x = "Journal", y = "Difference in Acceptance Rate",
        fill = "% Point\nDifference")+
   my_theme_leg
-  
-col_1 <- plot_grid(figure4_A, figure4_B,
-                   labels = c('A', 'B'), 
-                   label_size = 18, nrow = 2)
 
-col_2 <- plot_grid(figure4_C, figure4_D,
-                   labels = c('C', 'D'), 
+plot_grid(figure4_C, figure4_D,
+                   labels = c('A', 'B'), 
                    label_size = 18, nrow = 1)
 
-plot_grid(col_1, col_2, nrow = 2, rel_heights = c(1.5, 1))
-
-ggsave("Figure_4.png", device = 'png', 
-       path = '../submission/', width = 12, height = 12)
+ggsave("Figure_S4.png", device = 'png', 
+       path = '../submission/', width = 12, height = 6)

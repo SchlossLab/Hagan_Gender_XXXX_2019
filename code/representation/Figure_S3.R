@@ -30,7 +30,7 @@ Fig_S3C <- ggplot(collab_data)+
   geom_freqpoly(aes(x = prop.fem.auth, color = gender), size = 1)+
   scale_color_manual(labels = gen_ed_labels, values = gen_ed_colors)+
   labs(x = "Proportion of Women Authors", 
-       y = "Number of Papers",
+       y = "\nNumber of Papers",
        color = "Corres Auth\nGender")+
   my_theme_leg_horiz+
   theme(legend.position = c(0.8, 0.8))
@@ -41,19 +41,19 @@ Fig_S3D <- ggplot(collab_data, aes(x = as.numeric(num.authors),
                   geom = "polygon")+
   coord_cartesian(xlim = c(0, 15))+
   labs(x = "Number of Authors",
-       y = "Proportion of\nWomen Authors",
+       y = "\nProportion of\nWomen Authors",
        fill = "Density")+
   my_theme_leg_horiz+
   theme(legend.position = c(0.8, 0.8))
 
 #make figure----
 row1 <- plot_grid(Fig_S3A, Fig_S3B, labels = c('A', 'B'), 
-                  label_size = 18, nrow = 1)
-
-row3 <- plot_grid(Fig_S3C, Fig_S3D, labels = c('C', 'D'), 
                   label_size = 18, nrow = 2)
 
-plot_grid(row1, row3, nrow = 1, rel_heights = c(2, 1))
+row3 <- plot_grid(Fig_S3C, Fig_S3D, labels = c('C', 'D'), 
+                  label_size = 18, nrow = 1)
 
-ggsave("Figure_S2.png", device = 'png', 
+plot_grid(row1, row3, nrow = 2, rel_heights = c(2, 1))
+
+ggsave("Figure_S3.png", device = 'png', 
        path = '../submission/', width = 9, height = 12)

@@ -1,5 +1,5 @@
 #Does the institution of the corresponding author matter? Supplementary
-#S3A. difference in editorial rejection by journal & inst type----
+#S6A. difference in editorial rejection by journal & inst type----
 ed_rejs <- bias_data %>% 
   filter(published == "no") %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
@@ -22,7 +22,7 @@ ed_rej_subs_j <- ed_rejs %>%
   group_by(journal, US.inst.type, gender) %>% 
   summarise(ed.rejections = n())
 
-Figure_S3A <- left_join(ASM_subs_j, ed_rej_subs_j, 
+Figure_S6A <- left_join(ASM_subs_j, ed_rej_subs_j, 
           by = c("US.inst.type", "gender", "journal")) %>% 
   mutate(prop.rejected = get_percent(ed.rejections, total)) %>% 
   select(-total, -ed.rejections) %>% 
@@ -38,7 +38,7 @@ Figure_S3A <- left_join(ASM_subs_j, ed_rej_subs_j,
        y = "Difference in Editorial Rejections\n")+
   my_theme_horiz
 
-#S3B. Difference in accepted rates by journal & inst type----
+#S6B. Difference in accepted rates by journal & inst type----
 acc <- bias_data %>% 
   filter(EJP.decision == "Accept, no revision") %>% 
   filter(US.inst == "yes") %>% 
@@ -59,7 +59,7 @@ acc_subs_j <- acc %>%
   group_by(journal, US.inst.type, gender) %>% 
   summarise(accepted = n())
 
-Figure_S3B <- left_join(ASM_subs_j, acc_subs_j, 
+Figure_S6B <- left_join(ASM_subs_j, acc_subs_j, 
           by = c("US.inst.type", "gender", "journal")) %>% 
   mutate(prop.accepted = get_percent(accepted, total)) %>% 
   select(-total, -accepted) %>% 
@@ -75,7 +75,7 @@ Figure_S3B <- left_join(ASM_subs_j, acc_subs_j,
        y = "Difference in Acceptance Rates\n")+
   my_theme_horiz
 
-#S3C. Difference in review recommendation by institution type----
+#S6C. Difference in review recommendation by institution type----
 rev_rec_inst <- bias_data %>% 
   filter(!is.na(review.recommendation)) %>% 
   filter(US.inst == "yes") %>% 
@@ -90,7 +90,7 @@ US_inst_totals <- rev_rec_inst %>%
   group_by(US.inst.type, gender) %>% 
   summarise(n = n())
 
-Figure_S3C <- rev_rec_inst %>%   
+Figure_S6C <- rev_rec_inst %>%   
   group_by(US.inst.type, review.recommendation, gender) %>% 
   summarise(n = n()) %>% as_tibble() %>% 
   spread(key = review.recommendation, value = n) %>% 
@@ -110,7 +110,7 @@ Figure_S3C <- rev_rec_inst %>%
        y = "Difference in Review Recommendation")+
   my_theme_horiz
 
-#S3D. difference in acceptance recommendation by reviewer gender----
+#S6D. difference in acceptance recommendation by reviewer gender----
 rev_rec_data <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
   filter(version == 0) %>% 
@@ -148,7 +148,7 @@ summ_inst <- rev_rec_data %>%
   spread(key = gender, value = percent) %>% 
   mutate(overperform = male - female)
 
-Figure_S3D <- summ_inst %>% 
+Figure_S6D <- summ_inst %>% 
   filter(review.recommendation == "Accept, no revision") %>% 
   ggplot(aes(x = US.inst.type, fill = overperform,
              y = overperform))+
@@ -162,10 +162,10 @@ Figure_S3D <- summ_inst %>%
   my_theme_horiz
 
 #generate & save figure----
-plot_grid(Figure_S3A, Figure_S3B, Figure_S3C, Figure_S3D,
+plot_grid(Figure_S6A, Figure_S6B, Figure_S6C, Figure_S6D,
           labels = c('A', 'B', 'C', 'D'),
           label_size = 18,
           nrow = 2)
 
-ggsave("Figure_S4.png", device = 'png', 
+ggsave("Figure_S6.png", device = 'png', 
        path = '../submission/', width = 15, height = 15)

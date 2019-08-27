@@ -1,4 +1,4 @@
-library(ggalluvial)
+#library(ggalluvial)
 
 role_levels <- c("junior author", "senior author", "potential.reviewer", "reviewer", "editor")
 
@@ -30,6 +30,7 @@ percent_retent <- alluv_df %>%
   ungroup() %>% 
   filter(status == "yes")
 
+#dropped plot----
 #alluv_test$role <- factor(alluv_test$role, levels = role_levels) 
 #retention_plot <- alluv_df %>% group_by(gender) %>% 
 #ggplot(.,
