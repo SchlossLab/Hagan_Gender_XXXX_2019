@@ -191,4 +191,5 @@ binned_inst <- data %>% #deal w. multiple inst?
     institution %in% R2 | str_detect(institution, r2) ~ "R2 Univ",
     institution %in% low_research | str_detect(institution, low) ~ "Low Research Univ",
     institution %in% fed_labs | str_detect(institution, govt) ~ "Federal Research", 
-    TRUE ~ "Other"))
+    TRUE ~ "Other"), 
+    US.inst = "yes")

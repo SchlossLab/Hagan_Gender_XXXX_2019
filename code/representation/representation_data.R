@@ -27,6 +27,14 @@ prop_rev <- reviewer_data %>%
 
 num_rev <- sum(prop_rev$n)
 
+med_rev <- reviewer_data %>% 
+  distinct() %>% #doesn't have the manuscript ids
+  group_by(random.person.id, gender) %>% 
+  summarise(n = n()) %>% 
+  group_by(gender) %>% 
+  summarise(med.rev = median(n),
+            iqr.rev = IQR(n))
+
 single_reviewer <- reviewer_data %>% 
   distinct() %>% #doesn't have the manuscript ids
   group_by(random.person.id, gender) %>% 
@@ -36,6 +44,18 @@ single_reviewer <- reviewer_data %>%
   arrange(n) %>% 
   head(n = 3) %>% as_tibble() %>% 
   mutate(prop = get_percent(num.rev, prop_rev$n))
+
+med_contacted <- ed_contact %>% 
+  group_by(editor.gender) %>% 
+  summarise(med.cont = median(percent_cont))
+
+avg_f_ed_resp <- f_ed_resp %>% 
+  group_by(Rev.Resp) %>% 
+  summarise(avg.resp = mean(Percent))
+  
+avg_m_ed_resp <- m_ed_resp %>% 
+  group_by(Rev.Resp) %>% 
+  summarise(avg.resp = mean(Percent))
 
 #authors: proportion of women authors----
 

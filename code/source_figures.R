@@ -15,7 +15,6 @@ source("../code/representation/Figure_S2.R") #supplemental
 
 source("../code/representation/Figure_S3.R") #supplemental
 
-source("../code/representation/Figure_S4.R") #supplemental
 
 #bias figures----
 
@@ -25,12 +24,12 @@ source("../code/bias/Figure_5.R")
 
 source("../code/bias/Figure_6.R")
 
-source("../code/bias/Figure_S5.R") #supplemental
+source("../code/bias/Figure_S4.R") #supplemental
 
-source("../code/bias/Figure_S6.R") #supplemental
+source("../code/bias/Figure_S5.R") #supplemental
 
 #genderize figures----
 
-source("../code/genderize/Figure_S7.R")
+source("../code/genderize/Figure_S8.R")
 
-source("../code/genderize/Figure_S8.R")#
+source("../code/genderize/Figure_S9.R")#

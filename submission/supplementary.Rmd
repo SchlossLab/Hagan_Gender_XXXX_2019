@@ -42,22 +42,17 @@ Figure S3. The proportion of all submitting (dashed line) and publishing (solid 
 \newpage
 \includegraphics{Figure_S4.png}
 
-Figure S4. The difference in percentage points of papers accepted. The difference in percentage points of papers accepted at (A) all journals or (B) for each journal. 
+Figure S4. Comparison of time to final decision and impact by gender. The number days (A) between when a manuscript is initally submitted then finally published and (B) that a manuscript spends in the ASM peer review system. How the impact of papers published by men (blue) versus women (orange) vary according to (C) cites and (D) total reads. Citation data includes articles published between 36 and 48 months prior to August 2018. Total reads includes both HTML and PDF online views for articles published between 12 and 24 months prior to August 2018. Impact data are divided by the number of months published.
 
 \newpage
 \includegraphics{Figure_S5.png}
 
-Figure S5. Comparison of time to final decision and impact by gender. The number days (A) between when a manuscript is initally submitted then finally published and (B) that a manuscript spends in the ASM peer review system. How the impact of papers published by men (blue) versus women (orange) vary according to (C) cites and (D) total reads. Citation data includes articles published between 36 and 48 months prior to August 2018. Total reads includes both HTML and PDF online views for articles published between 12 and 24 months prior to August 2018. Impact data are divided by the number of months published.
-
-\newpage
-\includegraphics{Figure_S6.png}
-
-Figure S6. Difference in acceptance and rejections by institution type.
+Figure S5. Difference in acceptance and rejections by institution type.
 
 \newpage
 \includegraphics{genderize_method.png}
 
-Figure S7. Schematic of gender prediction and assignment.
+Figure S6. Schematic of gender prediction and assignment.
 
 \newpage
 ```{r genderize_setup, include=FALSE}
@@ -85,15 +80,15 @@ supp_table_1
 
 \includegraphics{impact_equation.png}
 
-Figure S8. Equation for calculating negative bias by genderize. C indicates an individual country. 
-
-\newpage
-\includegraphics{Figure_S7.png}
-
-Figure S9. The negative impact of each country on the overall gender prediction of the validation dataset. Number indicates the total number of names associated with each country.
+Figure S7. Equation for calculating negative bias by genderize. C indicates an individual country. 
 
 \newpage
 \includegraphics{Figure_S8.png}
 
-Figure S10. The negative impact of each country on the overall gender prediction of the full dataset. Number indicates the total number of names associated with each country.
+Figure S8. The negative impact of each country on the overall gender prediction of the validation dataset. Number indicates the total number of names associated with each country.
+
+\newpage
+\includegraphics{Figure_S9.png}
+
+Figure S9. The negative impact of each country on the overall gender prediction of the full dataset. Number indicates the total number of names associated with each country.
 

@@ -28,7 +28,7 @@ Fig_2A <- ggplot(ed_manu_prop) +
 Fig_2B <- reviewer_data %>% 
   distinct() %>% #doesn't have the manuscript ids
   group_by(random.person.id, gender) %>% 
-  summarise(n = n()) %>%
+  summarise(n = n()) %>% 
   ggplot()+
   geom_boxplot(aes(x = gender, group = gender, y = n, fill = gender))+
   scale_y_log10()+
@@ -36,7 +36,7 @@ Fig_2B <- reviewer_data %>%
   coord_flip()+
   scale_x_discrete(labels = gen_labels)+
   scale_fill_manual(values = gen_colors)+
-  labs(x = "\nReviewer Gender", y = "Number of Papers Reviewed\n")+
+  labs(x = "\nReviewer Gender", y = "Number of Manuscripts Reviewed\n")+
   my_theme_horiz  #figure out how to add n of individuals
 
 source("../code/representation/rev_suggest_gender.R") #reviewer_D, reviewer_E -- increase facet label size or space between facets in E
@@ -44,7 +44,7 @@ source("../code/representation/rev_suggest_gender.R") #reviewer_D, reviewer_E --
 plot_AB <- plot_grid(Fig_2A, Fig_2B,
           labels = c('A', 'B'), label_size = 18)
 
-plot_CDE <- plot_grid(reviewer_D, reviewer_E,
+plot_CDE <- plot_grid(reviewer_E, reviewer_D,
           labels = c('C', 'D'), label_size = 18)
 
 plot_grid(plot_AB, plot_CDE, nrow = 2, 

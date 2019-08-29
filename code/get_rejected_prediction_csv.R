@@ -47,27 +47,27 @@ reviewers <- reg_data %>%
   filter(!is.na(reviewer.random.id)) %>% distinct()
 
 #list of reviewed manuscripts--- 
-uniq.rev.manu <- reviewers %>% pull(random.manu.num) %>% unique()
-
-#calculate the proportion of reviewers predicted to be men by looping through each manuscript (includes unknown in total number of reviewers)----
-men_rev_data <- map_dfr(uniq.rev.manu, function(x){
-  
-  summary <- reviewers %>% filter(random.manu.num == x) %>% 
-    distinct() %>% summary()#restrict to single manuscript & get reviewer count
-  
-  num_rev <- paste(c(summary[1,1], summary[2,1], 
-                     summary[3,1]), collapse = "") %>% #pull reviewer count from summary
-    str_extract_all(., "\\d") %>% #get values (drop gender)
-    unlist() %>% as.numeric(.) #collapse to single vector
-  
-  df <- reviewers %>% filter(random.manu.num == x) %>% #restrict to single manu
-    select(random.manu.num) %>% distinct() %>% #drop to single entry
-    cbind(., prop.men.rev = num_rev[2]/sum(num_rev), #calculate proportion of reviewers that were men
-          num.rev = sum(num_rev))#calculate total number of reviewers
-  
-  return(df)
-
-})
+#uniq.rev.manu <- reviewers %>% pull(random.manu.num) %>% unique()
+#
+##calculate the proportion of reviewers predicted to be men by looping through each manuscript (includes #unknown in total number of reviewers)----
+#men_rev_data <- map_dfr(uniq.rev.manu, function(x){
+#  
+#  summary <- reviewers %>% filter(random.manu.num == x) %>% 
+#    distinct() %>% summary()#restrict to single manuscript & get reviewer count
+#  
+#  num_rev <- paste(c(summary[1,1], summary[2,1], 
+#                     summary[3,1]), collapse = "") %>% #pull reviewer count from summary
+#    str_extract_all(., "\\d") %>% #get values (drop gender)
+#    unlist() %>% as.numeric(.) #collapse to single vector
+#  
+#  df <- reviewers %>% filter(random.manu.num == x) %>% #restrict to single manu
+#    select(random.manu.num) %>% distinct() %>% #drop to single entry
+#    cbind(., prop.men.rev = num_rev[2]/sum(num_rev), #calculate proportion of reviewers that were men
+#          num.rev = sum(num_rev))#calculate total number of reviewers
+#  
+#  return(df)
+#
+#})
 
 #dataset of author genders
 auth_data <- reg_data %>% 
@@ -92,13 +92,13 @@ ed_reject <- reg_data %>%
   select(random.manu.num) %>% 
   mutate(editorial.reject = "yes")
 
-rev_1_progress <- reg_data %>% 
-  filter(version.reviewed == 0) %>% 
-  select(random.manu.num, EJP.decision) %>% 
-  distinct() %>% 
-  mutate(pass.first.review = 
-           if_else(EJP.decision == "Reject", "no", "yes")) %>% 
-  select(-EJP.decision)
+#rev_1_progress <- reg_data %>% 
+#  filter(!is.na(days.to.review)) %>% 
+#  select(random.manu.num, EJP.decision) %>% 
+#  distinct() %>% 
+#  mutate(pass.first.review = 
+#           if_else(EJP.decision == "Reject", "no", "yes")) %>% 
+#  select(-EJP.decision)
 
 #join final dataset----
 reg2_data <- full_join(corres_auth, editor, 
@@ -108,16 +108,19 @@ reg2_data <- full_join(corres_auth, editor,
   full_join(., sen_editor, 
             by = "random.manu.num") %>% 
   left_join(., author_ratio, by = "random.manu.num") %>% 
-  left_join(., men_rev_data, by = "random.manu.num") %>% 
+  #left_join(., men_rev_data, by = "random.manu.num") %>% 
   left_join(., ed_reject, by = "random.manu.num") %>%  
-  left_join(., rev_1_progress, by = "random.manu.num") %>% 
+  #left_join(., rev_1_progress, by = "random.manu.num") %>% 
   distinct() %>% 
-  mutate(reviewed = if_else(is.na(num.rev), 0, 1),
+  mutate(#reviewed = if_else(is.na(num.rev), 0, 1),
          inst.gender = paste0(US.inst.type, ".", corres.auth),
-         US.gender = paste0(US.inst, ",", corres.auth),
+         US.gender = paste0(US.inst, ".", corres.auth),
          editorial.reject = replace_na(editorial.reject, "no"),
          sen.editor.x.edreject = paste0(sen.editor, ".", editorial.reject),
-         editor.x.revprog = paste0(editor, ".", pass.first.review)) %>% 
+         #editor.x.revprog = paste0(editor, ".", pass.first.review),
+         edreject.gender = paste0(editorial.reject, ".", corres.auth)
+         #revprog.gender = paste0(pass.first.review, ".", corres.auth)
+         ) %>% 
   select(-random.manu.num) %>% 
   mutate_all(as.factor)
 
