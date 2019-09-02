@@ -25,38 +25,41 @@ options(kableExtra.auto_format = FALSE)
 options(knitr.table.format = "latex")
 ```
 
-#Gender representation
+\includegraphics{Figure_S1.png}
 
-\includegraphics{rep_supp.png}
-
-Supplemental Figure 1. The proportion of (A) potential reviewers at all ASM journals combined, (B) reviewers at each ASM journal, (C) all submitting (dashed line) and publishing (solid line) middle authors, and (D) all submitting and publishing last authors by gender.
+Figure S1. The proportion of editors (solid line) and their workloads (dashed line) at each ASM journal from 2012 to 2018.
 
 \newpage
+\includegraphics{Figure_S2.png}
 
-#Gender bias
-\includegraphics{Supp_inst.png}
-
-Supplemental Figure . Difference in acceptance and rejections by institution type.
+Figure S2. The proportion of (A) potential reviewers at all ASM journals combined, (B) reviewers at each ASM journal.
 
 \newpage
-\includegraphics{Supp_time.png}
+\includegraphics{Figure_S3.png}
 
-Supplemental Figure . Total days and versions between submission and final rejection at each journal.
+Figure S3. The proportion of all submitting (dashed line) and publishing (solid line) (A) middle and (B) last authors by gender at each ASM journal. The proportion of women authors on submitted papers according to (D) the gender of the corresponding author or (E) the number of authors. 
 
 \newpage
-##Gender prediction and assignment
+\includegraphics{Figure_S4.png}
 
+Figure S4. Comparison of time to final decision and impact by gender. The number days (A) between when a manuscript is initally submitted then finally published and (B) that a manuscript spends in the ASM peer review system. How the impact of papers published by men (blue) versus women (orange) vary according to (C) cites and (D) total reads. Citation data includes articles published between 36 and 48 months prior to August 2018. Total reads includes both HTML and PDF online views for articles published between 12 and 24 months prior to August 2018. Impact data are divided by the number of months published.
+
+\newpage
+\includegraphics{Figure_S5.png}
+
+Figure S5. Difference in acceptance and rejections by institution type.
+
+\newpage
 \includegraphics{genderize_method.png}
 
-Supplemental Figure . Schematic of gender prediction and assignment.
+Figure S6. Schematic of gender prediction and assignment.
 
 \newpage
-##Validating gender analysis
 ```{r genderize_setup, include=FALSE}
 source("../code/genderize/b_c_comparison.R")
 ```
 
-Supplemental Table 1. sensitivity/specificity/accuracy of genderize thresholds. Bolded text denotes the accuracy of the threshold used in all further analyses.
+Table S1. sensitivity/specificity/accuracy of genderize thresholds. Bolded text denotes the accuracy of the threshold used in all further analyses.
 ```{r genderize_stats, results='asis', echo=FALSE}  
 supp_table_1 <- stats_summary %>% 
   mutate(b_c_data_ascii_pmod85 = ifelse(b_c_data_ascii_pmod85 == "0.9714", 
@@ -77,15 +80,15 @@ supp_table_1
 
 \includegraphics{impact_equation.png}
 
-Supplemental Figure . Equation for calculating negative bias by genderize. C indicates an individual country. 
+Figure S7. Equation for calculating negative bias by genderize. C indicates an individual country. 
 
 \newpage
-\includegraphics{Supp_genderize_3.png}
+\includegraphics{Figure_S8.png}
 
-Supplemental Figure . The negative impact of each country on the overall gender prediction of the validation dataset. Number indicates the total number of names associated with each country.
+Figure S8. The negative impact of each country on the overall gender prediction of the validation dataset. Number indicates the total number of names associated with each country.
 
 \newpage
-\includegraphics{Supp_genderize_4.png}
+\includegraphics{Figure_S9.png}
 
-Supplemental Figure . The negative impact of each country on the overall gender prediction of the full dataset. Number indicates the total number of names associated with each country.
+Figure S9. The negative impact of each country on the overall gender prediction of the full dataset. Number indicates the total number of names associated with each country.
 

@@ -3,7 +3,7 @@ library(RColorBrewer)
 library(cowplot)
 #library(patchwork)
 
-#preferred themes
+#preferred themes----
 my_theme <- theme_classic() + 
   theme(legend.position = "none", axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"), 
         plot.title = element_text(size=16,face="bold"), 
@@ -161,6 +161,117 @@ j_gen_line_plot <- function(df, ymax){
     facet_wrap(~ journal)
   
   plot <- plot + my_theme_leg
+  
+  return(plot)
+}
+
+#line plot of submissions versus publications for each gender by journal
+plot_sub_v_pub_j_time <- function(temp_sub, temp_pub){
+  
+  name <- paste0(as.character(temp_sub)) #isolate the name of the df as a string
+  
+  print(name)
+  
+  auth_type <- case_when( #identify authors being examined
+    str_detect(name, "first") ~ "First",
+    str_detect(name, "last") ~ "Last",
+    str_detect(name, "corres") ~ "Corresponding",
+    str_detect(name, "mid") ~ "Middle",
+    TRUE ~ "All"
+  )
+  
+  j_authors_w_prop <- get_sub_pub_prop(temp_sub, temp_sub, "Each")
+  
+  max_journ_value <- get_ymax(j_authors_w_prop)
+  
+  plot <- j_authors_w_prop %>% 
+    filter(gender == "male" | gender == "female") %>% 
+    ggplot() + 
+    geom_line(aes(x = year, y = proportion, linetype = manu.type, color = gender))+
+    coord_cartesian(ylim = c(0, max_journ_value)) +
+    scale_color_manual(values = gen_ed_colors, 
+                       breaks = gen_ed_labels)+
+    facet_wrap(~ journal)+ 
+    my_theme_leg +
+    labs(x ="Year",
+         y = paste("\nProportion of", auth_type, "Authors"),
+         linetype = "Manuscript Status")
+  
+  return(plot)
+}
+
+#line plot of submissions versus publications for each gender, all journals combined-
+plot_sub_v_pub_time <- function(temp_sub, temp_pub){
+  
+  name <- paste0(as.character(temp_sub)) #isolate the name of the df as a string
+  
+  print(name)
+  
+  auth_type <- case_when( #identify authors being examined
+    str_detect(name, "first") ~ "First",
+    str_detect(name, "last") ~ "Last",
+    str_detect(name, "corres") ~ "Corresponding",
+    str_detect(name, "mid") ~ "Middle",
+    TRUE ~ "All"
+  )
+  
+  c_authors_w_prop <- get_sub_pub_prop(temp_sub, temp_pub, "All") %>% 
+    filter(gender == "female" | gender == "male")
+  
+  #figure out which year is the last & isolate the proportion values
+  m_text_values <- c_authors_w_prop %>% 
+    filter(year == "2017") %>% filter(gender == "male")
+  
+  f_text_values <- c_authors_w_prop %>% 
+    filter(year == "2017") %>% filter(gender == "female")
+  
+  max_value <- get_ymax(c_authors_w_prop) 
+  
+  #line plot
+  plot <- c_authors_w_prop %>%  
+    ggplot() + 
+    geom_line(aes(x = year, y = proportion, linetype = manu.type,
+                  color = gender), size = 0.75)+
+    coord_cartesian(ylim = c(0, max_value))+
+    scale_color_manual(values = gen_ed_colors, 
+                       breaks = gen_ed_labels)+
+    annotate(geom = "text", x = 2017, y = m_text_values[2,5]+2, label = "Men")+
+    annotate(geom = "text", x = 2017, y = f_text_values[2,5]+2, label = "Women")+
+    my_theme_leg_horiz + 
+    labs(x = "Year",
+         y = paste("\nProportion of\n", auth_type, "Authors"),
+         linetype = "Manuscript Status")
+  
+  return(plot)
+}
+
+plot_rev_time <- function(rev_df){
+  
+  rev_df <- as.character(rev_df)
+  
+  this_df <- get(rev_df) #pull this df from the global environment
+  
+  name <- paste0(rev_df) #isolate the name of the df as a string
+  
+  print(name)
+  
+  rev_type <- case_when( #identify reviewers being examined
+    str_detect(name, "reviewer") ~ "Reviewers",
+    str_detect(name, "pot_rev") ~ "Potential Reviewers"
+  )
+  
+  all_rev_w_prop <- map_dfr(years, function(x){
+    get_prop_by_yr(x, this_df, "gender", "All")}) 
+  
+  #figure out which year is the last & isolate the proportion values
+  text_values <- get_gen_prop_text(all_rev_w_prop, 3, "gender")
+  
+  max_value <- get_ymax(all_rev_w_prop) 
+  
+  #line plot of all journals combined by year
+  plot <- gender_line_plot(all_rev_w_prop, max_value, 
+                   text_values[1,2], text_values[2,2], text_values[3,2]) + 
+    labs(x = "Year", y = paste("\nProportion of ", rev_type))
   
   return(plot)
 }

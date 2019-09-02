@@ -34,7 +34,7 @@ get_summary_stats <- function(df){
     
     stats <- c(round(x[[4]][[1]], digits = 4), #pull sensitivity
                round(x[[4]][[2]], digits = 4), #pull specificity
-               round(x[[3]][[1]], digits = 4)) %>% as.tibble() #pull accuracy and convert to df
+               round(x[[3]][[1]], digits = 4)) %>% as_tibble() #pull accuracy and convert to df
     
     return(stats)
   }
@@ -43,7 +43,7 @@ get_summary_stats <- function(df){
   
   rows <- c("Sensitivity", "Specificity", "Accuracy") #stats measured
   
-  stats_summary <- as.tibble(rows) %>% cbind(., stats_df) #bind measure names with summary stats
+  stats_summary <- as_tibble(rows) %>% cbind(., stats_df) #bind measure names with summary stats
   
   colnames(stats_summary) <- c("Measure", paste0(deparse(substitute(df)), "_all"), 
                                paste0(deparse(substitute(df)), "_p85"), 
