@@ -44,7 +44,7 @@ data <- data %>%
   filter(!is.na(year))
 
 #ensure ordered levels  
-data$US.inst <- fct_relevel(data$US.inst, inst_list)  
+data$US.inst.type <- fct_relevel(data$US.inst.type, inst_list)  
 
 #bias analysis dataset  
 bias_data <- data %>% 
