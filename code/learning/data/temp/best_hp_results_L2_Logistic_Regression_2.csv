@@ -1,0 +1,2 @@
+cv_aucs,test_aucs,model
+0.5573069581616952,0.5624529569892474,L2_Logistic_Regression
