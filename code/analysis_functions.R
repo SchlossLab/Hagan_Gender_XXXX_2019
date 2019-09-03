@@ -40,15 +40,19 @@ list_to_sent <- function(df, sort, n, pull){
   
   sort_quo <- parse_quo(sort, env = caller_env()) #parse sorting col 
   
-  df %>% 
+  collapse <- df %>% 
     arrange(desc(!!sort_quo)) %>% #arrange df by sorting col
     when(
       n >= 0 ~ head(., n = n), #if n is +, get first n rows
       ~ tail(., n = -n) #if n is -, get last n rows
     ) %>% 
     pull(pull) %>% #convert "pull" column to a vector
-    paste(., sep = "", collapse = ", ") %>% #collapse into a string
-    str_replace(., ",\\s(?=[:alpha:]+$)", ", and ")#add oxford comma, &
+    paste(., sep = "", collapse = ", ")#collapse into a string
+  
+  sent <- collapse %>% 
+    str_replace("fixed((?<=,\\s.,\\s.),[[:space:]])", ", and ")#add oxford comma, &
+  
+  return(sent)
 }
 
 
