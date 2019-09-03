@@ -45,16 +45,16 @@ source('code/learning/generateAUCs.R')
 data <- read.csv("code/learning/reject_predict.csv")
 
 data <- data %>%
-  select(-US.inst, -US.inst.type, -inst.gender, -US.gender, -journal) %>% 
+  select(-journal) %>% 
   drop_na() %>% 
   droplevels()
 
 ## Converting to factors
-for (i in c( "corres.auth", "editor", "sen.editor", "editorial.reject")){
+for (i in c( "corres.auth", "editor", "sen.editor", "editorial.reject", "US.inst", "US.inst.type", "inst.gender", "US.gender" )){
   data[,i]=as.factor(data[,i])
 }
 # Create dummy variables
-new_data <- dummy.data.frame(data, names=c("editor", "sen.editor", "US.inst", "US.inst.type",  "corres.auth"), sep=".")
+new_data <- dummy.data.frame(data, names=c("editor", "sen.editor", "corres.auth", "US.inst", "US.inst.type", "inst.gender", "US.gender" ), sep=".")
 
 
 # Convert the label to a factor
