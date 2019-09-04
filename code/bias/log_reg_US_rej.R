@@ -8,9 +8,9 @@ published_weights <- feat_weights %>% select(-Bias, -model) %>%
   gather(., key = "features", value = "weights") %>% 
   filter(!str_detect(features, "x")) %>% 
   mutate(weights = as.numeric(weights)) %>% 
-  #group_by(features) %>% 
-  #summarise(med.weight = median(weights)) %>% 
-  #arrange(desc(med.weight)) %>% 
+  group_by(features) %>% 
+  summarise(med.weight = median(weights)) %>% 
+  arrange(desc(med.weight)) %>% 
   mutate(clean_feat = features %>% str_replace("\\.{3}", " & ") %>% 
            str_replace("\\.female", "\\.women") %>% 
            str_replace("\\.male", "\\.men") %>% 
@@ -24,7 +24,3 @@ published_weights <- feat_weights %>% select(-Bias, -model) %>%
            trimws())
 
 med_auc_US <- round(median(auc$test_aucs), digits = 2)
-
-published_weights %>% 
-  ggplot()+
-  geom_boxplot(aes(x = clean_feat, y = weights))

@@ -12,4 +12,4 @@ published_weights <- feat_weights %>% select(-Bias, -model) %>%
   summarise(med.weight = median(weights)) %>% 
   arrange(desc(med.weight))
 
-med_auc_US <- round(median(auc$test_aucs), digits = 2)
+med_auc_gend <- round(median(auc$test_aucs), digits = 2)

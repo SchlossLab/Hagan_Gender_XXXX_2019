@@ -47,7 +47,7 @@ auth_data <- data %>%
 #  theme(legend.position = c(0.8, 0.8))
 
 #make figure----
-row1 <- plot_grid(Fig_S3A, Fig_S3B, labels = c('A', 'B'), 
+plot_grid(Fig_S3A, Fig_S3B, labels = c('A', 'B'), 
                   label_size = 18, nrow = 2)
 
 #row3 <- plot_grid(Fig_S3C, Fig_S3D, labels = c('C', 'D'), 
@@ -56,4 +56,4 @@ row1 <- plot_grid(Fig_S3A, Fig_S3B, labels = c('A', 'B'),
 #plot_grid(row1, row3, nrow = 2, rel_heights = c(2, 1))
 
 ggsave("Figure_S3.png", device = 'png', 
-       path = '../submission/', width = 9, height = 12)
+       path = '../submission', width = 9, height = 12)

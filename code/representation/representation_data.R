@@ -117,6 +117,7 @@ c_authors_avg_prop <- get_sub_pub_prop("sub_corres_auth",
   summarise(avg = round(mean(proportion), digits = 2))
 
 #authors:
-min_perform <- acc_diff_auth_j %>% 
-  arrange(.$dif_rel_rej) %>% 
-  pull(dif_rel_rej) %>% head(n = 1)
+#min_perform <- acc_diff_auth_j %>% 
+#  arrange(.$dif_rel_rej) %>% 
+#  pull(dif_rel_rej) %>% head(n = 1)
+#

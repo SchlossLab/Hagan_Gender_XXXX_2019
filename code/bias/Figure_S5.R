@@ -69,4 +69,4 @@ plot_grid(figure_S5A, figure_S5B, figure_S5C,
           labels = c('A', 'B', 'C'), label_size = 18)
 
 ggsave("Figure_S5.png", device = 'png', 
-       path = '../submission/', width = 12, height = 12)
+       path = '../submission', width = 12, height = 12)

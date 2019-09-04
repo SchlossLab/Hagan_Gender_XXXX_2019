@@ -26,7 +26,7 @@ source("../code/bias/Figure_5.R")
 
 source("../code/bias/Figure_6.R")
 
-source("..code/bias/Figure_S5.R") #supplemental
+source("../code/bias/Figure_S5.R") #supplemental
 
 source("../code/bias/Figure_S6.R") #supplemental
 
