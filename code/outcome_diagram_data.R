@@ -24,7 +24,8 @@ first_descision <- data %>%
   filter(EJP.decision %in% c("Accept", "Revise", "Reject")) %>% 
   distinct()
 
-genders <- first_descision %>% group_by(EJP.decision, gender) %>% 
+genders <- first_descision %>% 
+  group_by(EJP.decision, gender) %>% 
   summarise(n = n())
 
 decisions <- first_descision %>% 

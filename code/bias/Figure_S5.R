@@ -1,9 +1,9 @@
 acc_data <- bias_data %>% 
   select(published, version, grouped.random, random.manu.num, gender, 
-         EJP.decision, contains("days"), journal,
+         EJP.decision, contains("days"), journal, grouped.vers,
          num.versions, days.to.review) %>% 
   filter(published == "yes") %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   distinct()
 
 manus <- acc_data %>% pull(grouped.random) %>% unique()

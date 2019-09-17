@@ -17,7 +17,8 @@ Fig_S2B <- j_rev_w_prop %>%
 
 plot_grid(Fig_S2A, Fig_S2B,
           labels = c('A', 'B'), label_size = 18,
-          rel_heights = c(1, 2))
+          rel_heights = c(1, 1.5), 
+          ncol = 1)
 
 ggsave("Figure_S2.png", device = 'png', 
-       path = '../submission', width = 12, height = 9)
+       path = '../submission', width = 8, height = 8)

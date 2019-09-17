@@ -158,7 +158,7 @@ j_gen_line_plot <- function(df, ymax){
     #scale_y_continuous(breaks = c(0, 15, 30, 45))+
     scale_linetype_manual(values = gen_linetype, breaks = gen_levels, labels = gen_labels)+
     coord_cartesian(ylim = c(0, ymax)) +
-    facet_wrap(~ journal)
+    facet_wrap(~ journal, nrow = 2)
   
   plot <- plot + my_theme_leg
   
@@ -271,7 +271,7 @@ plot_rev_time <- function(rev_df){
   #line plot of all journals combined by year
   plot <- gender_line_plot(all_rev_w_prop, max_value, 
                    text_values[1,2], text_values[2,2], text_values[3,2]) + 
-    labs(x = "Year", y = paste("\nProportion of ", rev_type))
+    labs(x = "Year", y = paste("\nProportion of\n", rev_type))
   
   return(plot)
 }

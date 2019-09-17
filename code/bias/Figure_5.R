@@ -6,11 +6,11 @@ ed_genders <- data %>%
 
 ed_dec_data <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   select(gender, journal, grouped.random, 
          US.inst, US.inst.type, EJP.decision) %>% 
-  filter(EJP.decision %in% c("Accept, no revision",
-                             "Reject", "Revise only")) %>% 
+  filter(EJP.decision %in% c("Accept",
+                             "Reject", "Revise")) %>% 
   left_join(., ed_genders, by = "grouped.random") %>% 
   filter(editor.gender %in% c("female", "male")) %>% 
   distinct()
@@ -71,7 +71,7 @@ ed_rejections_B <- summary_gen_ed %>%
 #reviewer recommendations by gender----
 rev_rec_data <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   select(gender, journal, published, review.recommendation, 
          reviewer.gender, reviewer.random.id, random.manu.num, version.reviewed, 
          US.inst, US.inst.type) %>% distinct() %>% 

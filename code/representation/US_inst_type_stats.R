@@ -21,12 +21,12 @@ summ_US_stats <- inst_stats_data %>%
   summarise(n = n()) %>% 
   left_join(., gender_n, by = c("role", "gender")) %>% 
   spread(key = US.inst.type, value = n) %>% 
-  mutate_at(vars(`Federal Research`:`Non-US Inst`), 
+  mutate_at(vars(`R1 Univ`:`Non-US Inst`), 
          list(~ get_percent(., total))
     ) %>% 
   select(-total) %>% 
   na.omit() %>% 
-  gather(`Federal Research`:`Non-US Inst`, 
+  gather(`R1 Univ`:`Non-US Inst`, 
          key = US.inst.type, value = percent) 
 
 summ_US_stats$role <- fct_relevel(summ_US_stats$role, roles)

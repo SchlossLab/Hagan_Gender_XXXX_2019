@@ -64,16 +64,15 @@ figure_6A <- fig6_ed_rejections %>% select(-n, -total) %>%
 US_j_ed_dec_data <- bias_data %>% 
   filter(US.inst == "yes") %>% 
   filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   select(gender, journal, grouped.random, EJP.decision, version) %>% 
-  filter(EJP.decision %in% c("Accept, no revision",
-                             "Reject", "Revise only")) %>% 
+  filter(EJP.decision %in% c("Accept", "Reject", "Revise")) %>% 
   distinct()
 
 US_ASM_summary_dec <- bias_data %>% 
   filter(US.inst == "yes") %>% 
   filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   select(gender, grouped.random, EJP.decision) %>% distinct() %>% 
   group_by(gender) %>% summarise(total = n())
 
@@ -152,7 +151,7 @@ fig6c_editorial_rej_per <- left_join(fig6c_ASM_subs, fig6c_ed_rej_subs,
 
 #accepted---
 fig6c_acc <- bias_data %>% 
-  filter(EJP.decision == "Accept, no revision") %>% 
+  filter(EJP.decision == "Accept") %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>%
   select(-days.to.review, contains("version")) %>% 
@@ -194,14 +193,12 @@ fig6d_ed_genders <- editor_data %>%
 
 fig6d_ed_dec_data <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   select(gender, journal, grouped.random, 
          US.inst, US.inst.type, EJP.decision) %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
-  filter(EJP.decision %in% c("Accept, no revision",
-                             "Revise only",
-                             "Reject")) %>% 
+  filter(EJP.decision %in% c("Accept", "Revise", "Reject")) %>% 
   left_join(., fig6d_ed_genders, by = "grouped.random") %>%
   distinct()
 

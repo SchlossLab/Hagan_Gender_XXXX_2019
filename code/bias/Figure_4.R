@@ -2,8 +2,8 @@
 
 #setup----
 acc_rej_data <- data %>% 
-  filter(version == 0) %>% 
-  filter(EJP.decision == "Accept, no revision" | EJP.decision == "Reject") 
+  filter(grouped.vers == 1) %>% 
+  filter(EJP.decision == "Accept" | EJP.decision == "Reject") 
 
 auth_types <- c("first", "middle", "last", "corres")
 
@@ -16,14 +16,14 @@ rej_by_auth <- map_df(auth_types, function(x){
     select(gender, EJP.decision, grouped.random) %>% distinct() %>% 
     group_by(gender, EJP.decision) %>% summarise(n = n()) %>% 
     spread(key = EJP.decision, value = n) %>% 
-    mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) %>% 
+    mutate(prop_rej = round((Reject/(Reject + Accept))*100, digits = 2)) %>% 
     mutate(., auth.type = x) #%>% 
-    #select(-Reject, -`Accept, no revision`) %>% 
+    #select(-Reject, -Accept) %>% 
 })
 
 #cross ASM rejection rate by author type
 ASM_rej_rate <- rej_by_auth %>% 
-  select(-Reject, -`Accept, no revision`) %>% 
+  select(-Reject, -Accept) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female)
 
@@ -38,8 +38,8 @@ rej_by_journ <- map_df(auth_types, function(x){
     group_by(journal, gender, EJP.decision) %>% 
     summarise(n = n()) %>% 
     spread(key = EJP.decision, value = n) %>% 
-    mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) %>% 
-    select(-Reject, -`Accept, no revision`) %>% 
+    mutate(prop_rej = round((Reject/(Reject + Accept))*100, digits = 2)) %>% 
+    select(-Reject, -Accept) %>% 
     spread(key = gender, value = prop_rej) %>% 
     mutate(difference = male - female) %>% 
     mutate(., auth.type = x)
@@ -55,7 +55,7 @@ journ_rej_rates <- map_df(journals, function(x){
   group_by(EJP.decision) %>% 
   summarise(n = n()) %>% 
   spread(key = EJP.decision, value = n) %>%
-  mutate(prop_rej = round((Reject/(Reject + `Accept, no revision`))*100, digits = 2)) %>% 
+  mutate(prop_rej = round((Reject/(Reject + Accept))*100, digits = 2)) %>% 
   mutate(., journal = x)
 })
 
@@ -63,7 +63,7 @@ figure_4A <- rej_by_journ %>%
   ggplot() + 
   geom_col(aes(x = journal, y = difference, fill = difference)) +
   coord_flip()+
-  facet_wrap(~auth.type, nrow = 1)+
+  facet_wrap(~str_to_title(auth.type), nrow = 1)+
   gen_gradient+
   geom_hline(data = ASM_rej_rate, aes(yintercept = performance))+
   labs(x = "\nJournal", y = "Difference in Percent Rejection\n",
@@ -131,8 +131,7 @@ fig4_j_ed_dec_data <- bias_data %>%
   filter(version.reviewed == 0) %>% 
   filter(version == 0) %>% 
   select(gender, journal, grouped.random, EJP.decision, version) %>% 
-  filter(EJP.decision %in% c("Accept, no revision",
-                             "Reject", "Revise only")) %>% 
+  filter(EJP.decision %in% c("Accept", "Reject", "Revise")) %>% 
   distinct()
 
 fig4_ASM_summary_dec <- bias_data %>% 

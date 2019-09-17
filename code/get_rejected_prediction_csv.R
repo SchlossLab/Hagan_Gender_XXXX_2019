@@ -11,7 +11,7 @@ editor_cols <- c("editor", "sen.editor")
 
 #select data----
 reg_data <- data %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   select(role, journal, num.versions, num.authors, 
          author.seq, author.corres, gender, days.to.review,
          reviewer.gender, reviewer.random.id,  

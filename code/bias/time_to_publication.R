@@ -1,14 +1,14 @@
 acc_data <- bias_data %>% 
   select(published, version, grouped.random, random.manu.num, gender, 
          EJP.decision, contains("days"), journal,
-         num.versions, -days.to.review) %>% 
+         num.versions, -days.to.review, grouped.vers) %>% 
   distinct()
 
 manus <- acc_data %>% pull(grouped.random) %>% unique()
 
 accepted_data <- acc_data %>% 
   filter(published == "yes") %>% 
-  filter(version == "0") %>% 
+  filter(version == 0) %>% 
   select(-num.versions) %>% 
   distinct()
 
@@ -28,7 +28,7 @@ factors_A <- accepted_data %>%
 final_decision <- map_df(manus, function(x){
   acc_data %>% filter(grouped.random == x) %>% 
     distinct() %>% 
-    arrange(desc(num.versions)) %>% head(n = 1)
+    arrange(desc(grouped.vers)) %>% head(n = 1)
 })
 
 vers_data <- final_decision %>% 

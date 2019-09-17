@@ -30,8 +30,7 @@ data <- left_join(manu_data, gender_reviews,
 source("../code/institution_bins.R")
 
 #merge final dataset ----
-decisions <- c("Withdrawn", "Reject", "Revise and re-review",
-               "Revise only", "Accept, no revision")
+decisions <- c("Withdrawn", "Reject", "Revise", "Accept")
 
 data <- data %>% 
   mutate(institution = str_to_lower(institution)) %>% 
@@ -40,11 +39,14 @@ data <- data %>%
          reviewer.gender = fct_explicit_na(reviewer.gender, na_level = "none"),
          US.inst.type = fct_explicit_na(US.inst.type, na_level = "Non-US Inst"),
          US.inst = fct_explicit_na(US.inst, na_level = "no"),
-         EJP.decision = factor(EJP.decision, levels = decisions)) %>% 
+         EJP.decision = fct_collapse(EJP.decision, 
+                                     "Accept" = "Accept, no revision",
+                                     "Revise" = c("Revise only", "Revise and re-review"))) %>% 
   filter(!is.na(year))
 
 #ensure ordered levels  
-data$US.inst.type <- fct_relevel(data$US.inst.type, inst_list)  
+data$US.inst.type <- fct_relevel(data$US.inst.type, inst_list)
+data$EJP.decision <- fct_relevel(data$EJP.decision, decisions)
 
 #bias analysis dataset  
 bias_data <- data %>% 

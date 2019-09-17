@@ -1,5 +1,4 @@
 #representation figures----
-
 source("../code/representation/US_inst_type_stats.R") #data for figures by institution ype & gender
 source("../code/representation/Figure_1.R") #Figure 1
 
@@ -16,7 +15,6 @@ source("../code/representation/Figure_S2.R") #supplemental
 source("../code/representation/Figure_S3.R") #supplemental
 
 source("../code/representation/Figure_S4.R") #supplemental
-
 
 #bias figures----
 

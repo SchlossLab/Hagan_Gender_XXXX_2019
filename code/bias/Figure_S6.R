@@ -40,7 +40,7 @@ Figure_S6A <- left_join(ASM_subs_j, ed_rej_subs_j,
 
 #S6B. Difference in accepted rates by journal & inst type----
 acc <- bias_data %>% 
-  filter(EJP.decision == "Accept, no revision") %>% 
+  filter(EJP.decision == "Accept") %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>%
   select(-days.to.review, contains("version")) %>% 
@@ -95,7 +95,7 @@ Figure_S6C <- rev_rec_inst %>%
   summarise(n = n()) %>% as_tibble() %>% 
   spread(key = review.recommendation, value = n) %>% 
   mutate_if(is.numeric, 
-            funs(get_percent(., US_inst_totals$n))) %>% 
+            funs(get_percent(., US_inst_totals$n))) %>%
   gather(`Accept, no revision`:`Revise only`,
          key = review.recommendation, value = percent) %>% 
   spread(key = gender, value = percent) %>% 
@@ -117,7 +117,8 @@ rev_rec_data <- bias_data %>%
   select(gender, journal, published, review.recommendation, 
          reviewer.gender, reviewer.random.id, random.manu.num, version.reviewed, 
          US.inst, US.inst.type) %>% distinct() %>% 
-  filter(review.recommendation %in% c("Revise only", "Reject", "Accept, no revision")) %>%
+    filter(review.recommendation %in% c("Revise only", "Reject", 
+                                        "Accept, no revision")) %>%
   distinct()
 
 sub_inst_gen <- rev_rec_data %>% 
@@ -168,4 +169,4 @@ plot_grid(Figure_S6A, Figure_S6B, Figure_S6C, Figure_S6D,
           nrow = 2)
 
 ggsave("Figure_S6.png", device = 'png', 
-       path = '../submission', width = 16, height = 13)
+       path = '../submission', width = 16, height = 14)

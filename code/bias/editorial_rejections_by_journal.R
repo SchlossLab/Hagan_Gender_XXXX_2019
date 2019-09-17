@@ -4,7 +4,7 @@ j_ed_dec_data <- bias_data %>%
 #                          "China", "Singapore", "Hong Kong", 
 #                          "Korea, Republic of"))) %>% 
   filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   #filter(US.inst == "yes") %>% 
   select(gender, journal, grouped.random, EJP.decision, version) %>% 
   filter(EJP.decision %in% c("Accept, no revision",
@@ -13,7 +13,7 @@ j_ed_dec_data <- bias_data %>%
 
 ASM_summary_dec <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   select(gender, grouped.random, EJP.decision) %>% distinct() %>% 
   group_by(gender) %>% summarise(total = n())
 

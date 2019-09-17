@@ -6,7 +6,7 @@ ed_genders <- data %>%
 
 ed_dec_data <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
+  filter(grouped.vers == 1) %>% 
   select(gender, journal, grouped.random, 
          US.inst, US.inst.type, EJP.decision) %>% 
   filter(EJP.decision %in% c("Accept, no revision",
