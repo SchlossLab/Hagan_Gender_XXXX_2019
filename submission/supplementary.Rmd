@@ -1,5 +1,5 @@
 ---
-title: "Supplementary"
+title: "Supplementary Text"
 csl: mbio.csl
 fontsize: 11pt
 output:
@@ -25,34 +25,32 @@ options(kableExtra.auto_format = FALSE)
 options(knitr.table.format = "latex")
 ```
 
-\includegraphics{Figure_S1.png}
 
-Figure S1. The proportion of editors (solid line) and their workloads (dashed line) at each ASM journal from 2012 to 2018.
 
-\newpage
-\includegraphics{Figure_S2.png}
+```{r genderize_setup, include=FALSE}
+source("../code/genderize/b_c_comparison.R")
+```
 
-Figure S2. The proportion of (A) potential reviewers at all ASM journals combined, (B) reviewers at each ASM journal.
+**Validation of gender prediction** We first validated the genderize.io algorithm using a set of `r total_names_ascii` names whose gender had been hand-coded based on appearance (Broderick & Casadevall cite). The names were supplied to the genderize algorithm both with and without the accompanying country data. The genderize algorithm returned gender predictions for `r compared_names_ascii` queries when first names were given and `r country_ascii_compared_names` when country data was also supplied (`r compared_names_ascii - country_ascii_compared_names` names were associated with countries unsupported by genderize).
+  
+  Sensitivity and specificity, are measurements of the algorithm's tendency to return correct answers instead of false positives (e.g., a man incorrectly gendered as a woman) or false negatives (e.g., a woman incorrectly gendered as a man). The closer these values are to 1, the smaller the chance that the algorithm will return the correlating false response. Accuracy is a composite measure of the algorithm's ability to differentiate the genders correctly. These measurements were calculated from the data sets (with and without country data supplied) at three different probability threshold cutoffs: the default genderize (0.5), a probability threshold of 0.85 (0.85), and a modified probability  of 0.85, which factors in the number of instances returned (pmod0.85)(citations). 
+  
+   At the 0.5 threshold, the data set returned a sensitivity of `r b_c_ascii_summary[1,2]` and specificity of `r  b_c_ascii_summary[2,2]` for an accuracy of `r b_c_ascii_summary[3,2]`, compared to a marginally higher accuracy of `r b_c_country_ascii_summary[3,2]` for the data set where country data were included (Table S1). Generally speaking, the accuracy increases as the threshold increases, with slight trade offs between sensitivity and specificity. For the purposes of our analysis, we opted to use the pmod0.85 threshold moving forward (Table S1, in bold). 
 
-\newpage
-\includegraphics{Figure_S3.png}
+```{r country_impact, message=FALSE}
+source("../code/genderize/b_c_country_na.R")
+```
+  To understand the extent of geographic bias in our gender assignment against regions and languages with gender-less naming conventions, or that lack social media for incorporation into the genderize algorithm, we compared the number of names predicted without associated country data to when country data was also supplied. In our test data set, the top five countries associated with names were `r top_five_num` and the countries with the highest proportion of un-predicted genders when country data were supplied are `r top_five_na`, where the maximum number of names supplied ranged from `r min_names_five_na` to `r max_names_five_na`. To determine the impact of each country towards the overall percentage of names whose genders were not predicted (`r percent_unpredicted`%), we found the difference between the percent of names un-predicted for each country and the overall percentage, multiplied by the proportion of observations from that country to the total observations and finally divided by the overall percentage of un-predicted names (Fig. S8A). The top five countries with the greatest impact on un-predicted names, and thus the countries receiving the most negative bias from genderize were `r top_five_impact`. These data suggest that there is likely some bias against countries with gender-neutral naming conventions (China), and indicates the stringency with which the algorithm applies gender to names that are accompanied by country data. For instance, strongly gendered names such as Peter and Pedro were not assigned gender when associated with Canada.
 
-Figure S3. The proportion of all submitting (dashed line) and publishing (solid line) (A) middle and (B) last authors by gender at each ASM journal. The proportion of women authors on submitted papers according to (D) the gender of the corresponding author or (E) the number of authors. 
+```{r editor_genderize, message=FALSE}
+source("../code/genderize/editor_comparison.R")
+```
+  We next applied the genderize algorithm at the pmod0.85 threshold to our journals data set and tested its validity on a small portion. All first names collected from our data set were submitted to genderize both with and without country data and only those with a pmod equivalent to or greater than 0.85 were retained. Next, the predicted genders were assigned to individuals as described previously (Fig. S7). Given the relatively small number of editors and senior editors in our data set, the presenting gender (man/woman) of editors and senior editors in our data set was hand-validated using Google where possible. Of the `r total_ed_names` editor names, `r compared_ed_names` were predicted by our application of genderize for an accuracy of `r ed_accuracy`, thus increasing our confidence in the gender predictions where made. 
 
-\newpage
-\includegraphics{Figure_S4.png}
-
-Figure S4. Comparison of time to final decision and impact by gender. The number days (A) between when a manuscript is initally submitted then finally published and (B) that a manuscript spends in the ASM peer review system. How the impact of papers published by men (blue) versus women (orange) vary according to (C) cites and (D) total reads. Citation data includes articles published between 36 and 48 months prior to August 2018. Total reads includes both HTML and PDF online views for articles published between 12 and 24 months prior to August 2018. Impact data are divided by the number of months published.
-
-\newpage
-\includegraphics{Figure_S5.png}
-
-Figure S5. Difference in acceptance and rejections by institution type.
-
-\newpage
-\includegraphics{genderize_method.png}
-
-Figure S6. Schematic of gender prediction and assignment.
+```{r ASM_genderize, message=FALSE}
+source("../code/genderize/ASM_country_na.R")
+```
+  In our full data set, the five countries with the most individuals were `r ASM_top_five_num` and the countries with the highest proportion of un-predicted genders were `r ASM_top_five_na`, where the maximum number of names supplied ranged from `r ASM_min_names_five_na` to `r ASM_max_names_five_na`. Proportionally, fewer names in our full data set were assigned gender than in our validation data set (`r ASM_percent_unpredicted`% un-predicted versus `r percent_unpredicted`% un-predicted, respectively). Since adjusting the workflow to predict the gender of names both with and without country data, the countries receiving the most negative bias from genderize were `r ASM_top_five_impact` (Fig. S8B). These data indicate what we previously predicted, that the genderize algorithm has bias against countries with gender-neutral naming conventions.
 
 \newpage
 ```{r genderize_setup, include=FALSE}
@@ -75,20 +73,4 @@ knitr::kable(., format = "latex", digits = 4, col.names = c("Measure", "p0.5", "
 
 supp_table_1
 ```
-
-\vspace{40mm}
-
-\includegraphics{impact_equation.png}
-
-Figure S7. Equation for calculating negative bias by genderize. C indicates an individual country. 
-
-\newpage
-\includegraphics{Figure_S8.png}
-
-Figure S8. The negative impact of each country on the overall gender prediction of the validation dataset. Number indicates the total number of names associated with each country.
-
-\newpage
-\includegraphics{Figure_S9.png}
-
-Figure S9. The negative impact of each country on the overall gender prediction of the full dataset. Number indicates the total number of names associated with each country.
 
