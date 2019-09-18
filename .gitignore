@@ -11,3 +11,4 @@ submission/*.html
 *.jpg
 *.png
 *.log
+submission/*.RData
