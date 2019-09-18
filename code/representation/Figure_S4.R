@@ -61,4 +61,4 @@ plot_fem_by_auth <- fem_by_auth_num %>%
   theme(legend.position = c(0.8, 0.1))
 
 ggsave("Figure_S4.png", device = 'png', 
-       path = '../submission', width = 8, height = 8)
+       path = 'submission', width = 8, height = 8)

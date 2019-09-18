@@ -41,4 +41,4 @@ Fig_S1 <- ggplot(ed_prop_j) +
 plot_grid(Fig_S1, labels = c('A'))
 
 ggsave("Figure_S1.png", device = 'png', 
-       path = '../submission', width = 8, height = 5)
+       path = 'submission', width = 8, height = 5)

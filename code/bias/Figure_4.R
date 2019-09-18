@@ -186,4 +186,4 @@ row2 <- plot_grid(figure_4B, figure_4C,
 plot_grid(figure_4A, row2, labels = 'A', label_size = 18, nrow = 2)
 
 ggsave("Figure_4.png", device = 'png', 
-       path = '../submission', width = 9, height = 6)
+       path = 'submission', width = 9, height = 6)

@@ -1,12 +1,12 @@
 #carnegie classifications (R1, R2 research etc)----
-carnegie_class <- read_csv("../data/carnegie_class.csv") %>% 
+carnegie_class <- read_csv("data/carnegie_class.csv") %>% 
   select(name, city, state, Basic)
 
-us_industries <- read_csv("../data/us_industries.csv") %>% 
+us_industries <- read_csv("data/us_industries.csv") %>% 
   pull(institution.name) %>% 
   str_to_lower(.) %>% unique()
 
-fed_labs <- read_csv("../data/fed_state_labs.csv") %>% 
+fed_labs <- read_csv("data/fed_state_labs.csv") %>% 
   pull(institution.name) %>% 
   str_to_lower(.) %>% unique()
 

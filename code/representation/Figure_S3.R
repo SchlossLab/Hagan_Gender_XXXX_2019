@@ -56,4 +56,4 @@ plot_grid(Fig_S3A, Fig_S3B, labels = c('A', 'B'),
 #plot_grid(row1, row3, nrow = 2, rel_heights = c(2, 1))
 
 ggsave("Figure_S3.png", device = 'png', 
-       path = '../submission', width = 8, height = 6)
+       path = 'submission', width = 8, height = 6)

@@ -1,7 +1,7 @@
 library(tidyverse)
 
 #full b_c dataset w. country data
-ASM_country_impact_data <- people_data %>% 
+ASM_country_impact_data <- people %>% 
   select(random.person.id, gender, country) %>% distinct() %>% 
   mutate(predicted = if_else(is.na(gender) == TRUE, "no", "yes") %>% as.factor()) %>% #add binary factor for prediction
   mutate(country = as.factor(country)) %>% #convert countries to factors

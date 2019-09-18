@@ -243,4 +243,4 @@ plot_grid(figure_6A, figure_6B, figure_6C, figure_6D,
           label_size = 18, ncol = 2)
 
 ggsave("Figure_6.png", device = 'png', 
-       path = '../submission', width = 12, height = 9)
+       path = 'submission', width = 12, height = 9)

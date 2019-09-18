@@ -165,4 +165,4 @@ plot_BC <- plot_grid(reviewer_A, reviewer_C, labels = c('B', 'C'), label_size = 
 plot_grid(plot_A, plot_BC, nrow = 2)
 
 ggsave("Figure_5.png", device = 'png', 
-       path = '../submission', width = 12, height = 7)
+       path = 'submission', width = 12, height = 7)

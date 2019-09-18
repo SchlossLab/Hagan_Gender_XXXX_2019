@@ -21,4 +21,4 @@ plot_grid(Fig_S2A, Fig_S2B,
           ncol = 1)
 
 ggsave("Figure_S2.png", device = 'png', 
-       path = '../submission', width = 8, height = 8)
+       path = 'submission', width = 8, height = 8)

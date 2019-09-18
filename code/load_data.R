@@ -3,17 +3,17 @@ library(tidyverse)
 library(lubridate)
 library(rlang)
 
-source("../code/analysis_functions.R") #functions used during analysis
-source("../code/get_plot_options.R") #plotting preferences & variables
+source("code/analysis_functions.R") #functions used during analysis
+source("code/get_plot_options.R") #plotting preferences & variables
 
-manu_data <- read_csv("../data/2018_manu_ready.csv")
+manu_data <- read_csv("data/2018_manu_ready.csv")
 
-people_data <- read_csv("../data/2018_people_ready.csv") #%>% 
+people_data <- read_csv("data/2018_people_ready.csv") #%>% 
   #select(-number_authors)
 
-reviews_data <- read_csv("../data/2018_reviews_ready.csv")
+reviews_data <- read_csv("data/2018_reviews_ready.csv")
 
-eic_data <- read_csv("../data/eic_genders.csv")
+eic_data <- read_csv("data/eic_genders.csv")
 
 gender_reviews <- people_data %>% 
   select(-role, -contains("auth"), -random.manu.num, -grouped.random, -title) %>% 
@@ -27,7 +27,7 @@ data <- left_join(manu_data, gender_reviews,
   filter(year(submitted.date) >= "2011") #drop anything submitted in 2011
 
 #bin US institutions w. carnegie classifications----
-source("../code/institution_bins.R")
+source("code/institution_bins.R")
 
 #merge final dataset ----
 decisions <- c("Withdrawn", "Reject", "Revise", "Accept")
@@ -58,7 +58,7 @@ bias_data <- data %>%
   distinct()
 
 #representation analysis datasets
-source("../code/author_setup.R")
-source("../code/gatekeeper_setup.R")
+source("code/author_setup.R")
+source("code/gatekeeper_setup.R")
 
 mjourns <- c("mBio", "mSphere", "mSystems")

@@ -43,4 +43,4 @@ row_2 <- plot_grid(Fig_3B, Fig_3C, Fig_3D,
 plot_grid(row_1, row_2, nrow = 2, rel_heights = c(1, 2))
 #
 ggsave("Figure_3.png", device = 'png', 
-       path = '../submission', width = 9, height = 12)
+       path = 'submission', width = 9, height = 12)
