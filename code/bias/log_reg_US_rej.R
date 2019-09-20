@@ -1,4 +1,5 @@
 #plot logistic regression data outputs for prediction of corresponding author gender by the proportion of women authors
+library(tidyverse)
 
 feat_weights <- read_csv("../data/combined_all_imp_features_US_rej.csv") 
 

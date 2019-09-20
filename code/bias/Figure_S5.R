@@ -52,12 +52,12 @@ figure_S5B <- acc_data %>%
 accepted_versions <- map_dfr(manus, function(x){
   acc_data %>%  
     filter(grouped.random == x) %>% 
-    arrange(desc(num.versions)) %>% head(n = 1)
+    arrange(desc(grouped.vers)) %>% head(n = 1)
 })
 
 #number of revisions before acceptance
 figure_S5C <- accepted_versions %>% 
-  ggplot(aes(x = gender, y = num.versions, fill = gender))+
+  ggplot(aes(x = gender, y = grouped.vers, fill = gender))+
   geom_boxplot()+
   facet_wrap(~journal)+
   scale_fill_manual(values = gen_colors)+
