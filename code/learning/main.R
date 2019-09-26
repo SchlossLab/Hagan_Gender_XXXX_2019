@@ -45,20 +45,23 @@ source('code/learning/generateAUCs.R')
 data <- read.csv("code/learning/reject_predict.csv")
 
 data <- data %>%
-  select(-journal, -sen.editor.x.edreject, -edreject.gender, -US.inst, -US.inst.type, -inst.gender, -US.gender) %>% 
+  filter(num.authors!=1) %>% 	 
+  filter(prop.fem.auth!=1) %>% 	
+  filter(prop.fem.auth!=0) %>% 	
+  select(-sen.editor.x.edreject, -edreject.gender, -inst.gender, -US.gender) %>% 
   drop_na() %>% 
   droplevels()
 
 ## Converting to factors
-for (i in c("corres.auth", "editor", "sen.editor", "editorial.reject")){
+for (i in c( "corres.auth", "editor", "sen.editor", "US.inst", "US.inst.type", "journal", "editorial.reject")){
   data[,i]=as.factor(data[,i])
 }
 # Create dummy variables
-new_data <- dummy.data.frame(data, names=c("editor", "sen.editor","corres.auth"), sep=".")
+new_data <- dummy.data.frame(data, names=c("editor", "sen.editor", "US.inst", "US.inst.type", "journal", "editorial.reject"), sep=".")
 
 
 # Convert the label to a factor
-new_data$editorial.reject <- as.factor(new_data$editorial.reject)
+new_data$corres.auth <- as.factor(new_data$corres.auth)
 
 ###################################################################
 
@@ -77,7 +80,7 @@ input <- commandArgs(trailingOnly=TRUE)
 seed <- as.numeric(input[1])
 model <- input[2]
 
-set.seed(4)
+set.seed(3)
 new_data <- new_data[sample(1:nrow(new_data)), ]
 
 # Then arguments 1 and 2 will be placed respectively into the functions:
