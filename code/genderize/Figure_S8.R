@@ -73,8 +73,7 @@ plot_ASM_country_impact <- ASM_predictions_by_country %>%
   geom_col()+
   geom_text(aes(label = total), vjust = .5, hjust = -.15)+
   coord_flip(ylim = c(0.0, 0.25))+
-  labs(x = "Publication Country", y = "Negative Impact on Overall Gender Prediction",
-       caption = "Number indicates total number of names associated with the country")+
+  labs(x = "Publication Country", y = "Negative Impact on Overall Gender Prediction")+
   my_theme_horiz
 
 plot_grid(equ_plot, plot_ASM_country_impact, rel_heights = c(0.5, 2),

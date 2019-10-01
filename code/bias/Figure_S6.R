@@ -75,7 +75,7 @@ Figure_S6B <- left_join(ASM_subs_j, acc_subs_j,
        y = "Difference in Acceptance Rates\n")+
   my_theme_horiz
 
-#S6C. Difference in review recommendation by institution type----
+#FormerS6C. Difference in review recommendation by institution type----
 rev_rec_inst <- bias_data %>% 
   filter(!is.na(review.recommendation)) %>% 
   filter(US.inst == "yes") %>% 
@@ -90,27 +90,27 @@ US_inst_totals <- rev_rec_inst %>%
   group_by(US.inst.type, gender) %>% 
   summarise(n = n())
 
-Figure_S6C <- rev_rec_inst %>%   
-  group_by(US.inst.type, review.recommendation, gender) %>% 
-  summarise(n = n()) %>% as_tibble() %>% 
-  spread(key = review.recommendation, value = n) %>% 
-  mutate_if(is.numeric, 
-            funs(get_percent(., US_inst_totals$n))) %>%
-  gather(`Accept, no revision`:`Revise only`,
-         key = review.recommendation, value = percent) %>% 
-  spread(key = gender, value = percent) %>% 
-  mutate(overperformance = male - female) %>%
-  ggplot(aes(x = US.inst.type, 
-             y = overperformance, fill = overperformance))+
-  geom_col(position = "dodge")+
-  facet_wrap(~review.recommendation, ncol = 1)+
-  gen_gradient+
-  coord_flip()+
-  labs(x = "\nInstitution Type", 
-       y = "Difference in Review Recommendation")+
-  my_theme_horiz
+#Figure_S6C <- rev_rec_inst %>%   
+#  group_by(US.inst.type, review.recommendation, gender) %>% 
+#  summarise(n = n()) %>% as_tibble() %>% 
+#  spread(key = review.recommendation, value = n) %>% 
+#  mutate_if(is.numeric, 
+#            funs(get_percent(., US_inst_totals$n))) %>%
+#  gather(`Accept, no revision`:`Revise only`,
+#         key = review.recommendation, value = percent) %>% 
+#  spread(key = gender, value = percent) %>% 
+#  mutate(overperformance = male - female) %>%
+#  ggplot(aes(x = US.inst.type, 
+#             y = overperformance, fill = overperformance))+
+#  geom_col(position = "dodge")+
+#  facet_wrap(~review.recommendation, ncol = 1)+
+#  gen_gradient+
+#  coord_flip()+
+#  labs(x = "\nInstitution Type", 
+#       y = "Difference in Review Recommendation")+
+#  my_theme_horiz
 
-#S6D. difference in acceptance recommendation by reviewer gender----
+#S6C. difference in acceptance recommendation by reviewer gender----
 rev_rec_data <- bias_data %>% 
   filter(version.reviewed == 0) %>% 
   filter(version == 0) %>% 
@@ -149,7 +149,7 @@ summ_inst <- rev_rec_data %>%
   spread(key = gender, value = percent) %>% 
   mutate(overperform = male - female)
 
-Figure_S6D <- summ_inst %>% 
+Figure_S6C <- summ_inst %>% 
   filter(review.recommendation == "Accept, no revision") %>% 
   ggplot(aes(x = US.inst.type, fill = overperform,
              y = overperform))+
@@ -160,6 +160,18 @@ Figure_S6D <- summ_inst %>%
   facet_wrap(~gen_ed_facet(reviewer.gender), ncol = 1)+
   labs(x = "\nInstitution Type", 
        y = "Difference in Acceptance Recomendation\nby Reviewer Gender")+
+  my_theme_horiz
+
+#S6D. important features for editorial rejection----
+Figure_S6D <- published_weights %>% 
+  filter(avg.weight > 0.2 | avg.weight < -0.2) %>%
+  ggplot(aes(x=reorder(clean_feat, -avg.weight), y=avg.weight, 
+             ymin=(avg.weight-sd.weight), ymax=(avg.weight+sd.weight))) +
+  geom_errorbar(width=0) +
+  geom_point(size=2, color="red") +
+  geom_hline(yintercept=0, color="gray") +
+  coord_flip(ylim=c(-2,2)) +
+  labs(x="\nFeature", y="Mean importance")+
   my_theme_horiz
 
 #generate & save figure----

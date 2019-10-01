@@ -1,4 +1,4 @@
-#plot logistic regression data outputs for prediction of corresponding author gender by the proportion of women authors
+#plot logistic regression data outputs for prediction of editorial rejections using all meta-data
 library(tidyverse)
 
 feat_weights <- read_csv("../data/combined_all_imp_features_US_rej.csv") 
@@ -10,8 +10,7 @@ published_weights <- feat_weights %>% select(-Bias, -model) %>%
   filter(!str_detect(features, "x")) %>% 
   mutate(weights = as.numeric(weights)) %>% 
   group_by(features) %>% 
-  summarise(med.weight = median(weights)) %>% 
-  arrange(desc(med.weight)) %>% 
+  summarise(avg.weight = mean(weights), sd.weight = sd(weights)) %>% 
   mutate(clean_feat = features %>% str_replace("\\.{3}", " & ") %>% 
            str_replace("\\.female", "\\.women") %>% 
            str_replace("\\.male", "\\.men") %>% 
