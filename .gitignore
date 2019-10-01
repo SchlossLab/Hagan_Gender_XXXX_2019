@@ -12,3 +12,4 @@ submission/*.html
 *.png
 *.log
 submission/*.RData
+submission/coauthor_comments/
