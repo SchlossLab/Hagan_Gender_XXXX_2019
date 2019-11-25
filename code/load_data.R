@@ -32,7 +32,7 @@ data <- left_join(manu_data, gender_reviews,
                   by = c("random.manu.num", "grouped.random")) %>% 
   left_join(., people_data, by = c("grouped.random", "random.manu.num")) %>% 
   distinct() %>% 
-  filter(year(submitted.date) >= "2012") #drop anything submitted in 2011
+  filter(year(submitted.date) != "2011") #drop anything submitted in 2011
 
 #bin US institutions w. carnegie classifications----
 source("code/institution_bins.R")
