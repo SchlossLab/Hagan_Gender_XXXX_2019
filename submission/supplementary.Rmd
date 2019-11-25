@@ -1,14 +1,17 @@
 ---
 title: "Supplementary Text"
+bibliography: references.bib
 csl: mbio.csl
-fontsize: 11pt
 output:
   pdf_document:
     includes:
       in_header: header.tex
     keep_tex: yes
-always_allow_html: yes
+  html_document:
+    df_print: paged
 geometry: margin=1.0in
+fontsize: 11pt
+always_allow_html: yes
 ---
 
 ```{r supp_setup, include=FALSE}
@@ -34,16 +37,16 @@ options(knitr.table.format = "latex")
 source("../code/genderize/b_c_comparison.R")
 ```
 
-**Validation of gender prediction.** We first validated the genderize.io algorithm using a set of `r total_names_ascii` names whose gender had been hand-coded based on appearance (Broderick & Casadevall cite). The names were supplied to the genderize algorithm both with and without the accompanying country data. The genderize algorithm returned gender predictions for `r compared_names_ascii` queries when first names were given and `r country_ascii_compared_names` when country data was also supplied (`r compared_names_ascii - country_ascii_compared_names` names were associated with countries unsupported by genderize).
+**Validation of gender prediction.** We first validated the genderize.io algorithm using a set of `r total_names_ascii` names whose gender had been hand-coded based on appearance [@broderick_gender_2019]. The names were supplied to the genderize algorithm both with and without the accompanying country data. The genderize algorithm returned gender predictions for `r compared_names_ascii` queries when first names were given and `r country_ascii_compared_names` when country data was also supplied (`r compared_names_ascii - country_ascii_compared_names` names were associated with countries unsupported by genderize).
   
-  Sensitivity and specificity, are measurements of the algorithm's tendency to return correct answers instead of false positives (e.g., a man incorrectly gendered as a woman) or false negatives (e.g., a woman incorrectly gendered as a man). The closer these values are to 1, the smaller the chance that the algorithm will return the correlating false response. Accuracy is a composite measure of the algorithm's ability to differentiate the genders correctly. These measurements were calculated from the data sets (with and without country data supplied) at three different probability threshold cutoffs: the default genderize (0.5), a probability threshold of 0.85 (0.85), and a modified probability  of 0.85, which factors in the number of instances returned (pmod0.85)(citations). 
+  Sensitivity and specificity are measurements of an algorithm's tendency to return correct answers instead of false positives (e.g., a man incorrectly gendered as a woman) or false negatives (e.g., a woman incorrectly gendered as a man). The closer these values are to 1, the smaller the chance that the algorithm will return the correlating false response. Accuracy is a composite measure of the algorithm's ability to differentiate the genders correctly. These measurements were calculated from the data sets (with and without country data supplied) at three different probability threshold cutoffs: the default genderize (0.5), a probability threshold of 0.85 (0.85), and a modified probability  of 0.85, which factors in the number of instances returned (pmod0.85)[@edwards_gender_2018;@holman_gender_2018]. 
   
    At the 0.5 threshold, the data set returned a sensitivity of `r b_c_ascii_summary[1,2]` and specificity of `r  b_c_ascii_summary[2,2]` for an accuracy of `r b_c_ascii_summary[3,2]`, compared to a marginally higher accuracy of `r b_c_country_ascii_summary[3,2]` for the data set where country data were included (Table S1). Generally speaking, the accuracy increases as the threshold increases, with slight trade offs between sensitivity and specificity. For the purposes of our analysis, we opted to use the pmod0.85 threshold moving forward (Table S1, in bold). 
 
 ```{r country_impact, message=FALSE}
 source("../code/genderize/b_c_country_na.R")
 ```
-  To understand the extent of geographic bias in our gender assignment against regions and languages with gender-less naming conventions, or that lack social media for incorporation into the genderize algorithm, we compared the number of names predicted without associated country data to when country data was also supplied. In our test data set, the top five countries associated with names were the United States, Germany, the United Kingdom, France, and China. The countries with the highest proportion of un-predicted genders when country data were supplied are Cambodia, Iceland, Indonesia, Ireland, and Mexico, where the maximum number of names supplied ranged from `r min_names_five_na` to `r max_names_five_na`. To determine the impact of each country towards the overall percentage of names whose genders were not predicted (`r percent_unpredicted`%), we found the difference between the percent of names un-predicted for each country and the overall percentage, multiplied by the proportion of observations from that country to the total observations and finally divided by the overall percentage of un-predicted names (Fig. S8A). The top five countries with the greatest impact on un-predicted names, and thus the countries receiving the most negative bias from genderize were Canada, China, Ireland, Belgium, and Sweden. These data suggest that there is likely some bias against countries with gender-neutral naming conventions (China), and indicates the stringency with which the algorithm applies gender to names that are accompanied by country data. For instance, strongly gendered names such as Peter and Pedro were not assigned gender when associated with Canada.
+  To understand the extent of geographic bias in our gender assignment against regions and languages with gender-less naming conventions or that lack social media for incorporation into the genderize algorithm, we compared the number of names predicted without associated country data to when country data was also supplied. In our test data set, the top five countries associated with names were the United States, Germany, the United Kingdom, France, and China. The countries with the highest proportion of un-predicted genders when country data were supplied are Cambodia, Iceland, Indonesia, Ireland, and Mexico, where the maximum number of names supplied ranged from `r min_names_five_na` to `r max_names_five_na`. To determine the impact of each country towards the overall percentage of names whose genders were not predicted (`r percent_unpredicted`%), we found the difference between the percent of names un-predicted for each country and the overall percentage, multiplied by the proportion of observations from that country to the total observations and finally divided by the overall percentage of un-predicted names (Fig. S8A). The top five countries with the greatest impact on un-predicted names, and thus the countries receiving the most negative bias from genderize were Canada, China, Ireland, Belgium, and Sweden. These data suggest that there is likely some bias against countries with gender-neutral naming conventions (China), and indicates the stringency with which the algorithm applies gender to names that are accompanied by country data. For instance, strongly gendered names such as Peter and Pedro were not assigned gender when associated with Canada.
 
 ```{r editor_genderize, message=FALSE}
 source("../code/genderize/editor_comparison.R")
@@ -57,19 +60,22 @@ source("../code/genderize/ASM_country_na.R")
 
 \vspace{40mm}
 
-Table S1. sensitivity/specificity/accuracy of genderize thresholds. Bolded text denotes the accuracy of the threshold used in all further analyses.
-```{r genderize_stats, results='asis', echo=FALSE}  
+Table S1. Sensitivity, specificity, and accuracy of genderize thresholds for data provided by Broderick and Casadevall [@broderick_gender_2019]. Bolded text denotes the accuracy of the threshold used in all further analyses. Also included are the percent of names not assigned a gender (percent unknown) at each threshold.
+```{r genderize_stats, results='asis', echo=FALSE, message=FALSE}  
+source("../code/genderize/Table_S1.R")
 supp_table_1 <- stats_summary %>% 
   mutate(b_c_data_ascii_pmod85 = ifelse(b_c_data_ascii_pmod85 == "0.9714", 
-    cell_spec(b_c_data_ascii_pmod85, bold = T),
-    cell_spec(b_c_data_ascii_pmod85, background = "white")),
-    b_c_country_data_ascii_pmod85 = ifelse(b_c_country_data_ascii_pmod85 == "0.9695", 
-    cell_spec(b_c_country_data_ascii_pmod85, bold = T),
-    cell_spec(b_c_country_data_ascii_pmod85, background = "white"))
+                                        cell_spec(b_c_data_ascii_pmod85, bold = T),
+                                        cell_spec(b_c_data_ascii_pmod85, background = "white")),
+         b_c_country_data_ascii_pmod85 = ifelse(b_c_country_data_ascii_pmod85 == "0.9695", 
+                                                cell_spec(b_c_country_data_ascii_pmod85, bold = T),
+                                                cell_spec(b_c_country_data_ascii_pmod85, background = "white"))
   ) %>% 
-knitr::kable(., format = "latex", digits = 4, col.names = c("Measure", "p0.5", "p0.85", "pmod0.85", "p0.5", "p0.85", "pmod0.85"), escape = F) %>%
+  knitr::kable(., format = "latex", #table.attr = "style = \"color: black;\"", 
+               digits = 4, col.names = c("Measure", "p0.5", "p0.85", "pmod0.85", "p0.5", "p0.85", "pmod0.85"), escape = F) %>%
   kable_styling() %>% 
-  add_header_above(c(" " = 1, "First Names" = 3, "Plus Country Data" = 3)) 
+  add_header_above(c(" " = 1, "First Names" = 3, "Plus Country Data" = 3)) %>% 
+  footnote(general = "Bolded text denotes the accuracy of the threshold used in all further analyses") 
 
 supp_table_1
 ```

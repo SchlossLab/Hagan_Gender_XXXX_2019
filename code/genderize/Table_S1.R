@@ -11,72 +11,72 @@ convert_gender <- function(x){
   )
 }
 
-#function to compare genderize outcomes to reference data & return summary stats----
-get_summary_stats <- function(df){
-  
-  data <- df %>% 
+arrange_data <- function(x){
+  x %>% 
     select(contains("gender"), probability, count) %>% 
-    mutate(pmod = (probability*count+2)/(count+4)) %>% 
     filter(!is.na(actual.gender) & !is.na(genderize.gender)) %>% 
     mutate(actual.gender = map(actual.gender, convert_gender) %>% unlist() %>% as.factor()) %>% 
     mutate(genderize.gender = map(genderize.gender, convert_gender) %>% unlist() %>% as.factor())
+}
+
+#function to compare genderize outcomes to reference data & return summary stats----
+get_summary_stats <- function(input_df){
   
-  p85 <- data %>% filter(probability >= 0.85)
+  df_name <- input_df
   
-  pmod85 <- data %>% filter(pmod >= 0.85)
+  df <- get(input_df) %>% mutate(pmod = (probability*count+2)/(count+4))
   
-  all_dfs <- list(data, p85, pmod85)
+  p85 <- df %>% filter(probability >= 0.85)
+  
+  pmod85 <- df %>% filter(pmod >= 0.85)
+  
+  all_dfs <- list(df, p85, pmod85)
   
   #function to loop through each dataframe & create a df of the specified summary stats
   get_stats_df <- function(df){
     
-    #print(df)
-    
+    df <- arrange_data(df)
+
     x <- confusionMatrix(df[[2]], df[[1]]) #create confusion matrix & summary stats
     
     stats <- c(round(x[[4]][[1]], digits = 4), #pull sensitivity
                round(x[[4]][[2]], digits = 4), #pull specificity
-               round(x[[3]][[1]], digits = 4)) %>% as.tibble() #pull accuracy and convert to df
+               round(x[[3]][[1]], digits = 4)) %>% #pull accuracy
+      enframe(name = NULL)#convert to df
     
     return(stats)
   }
   
-  stats_df <- map_dfc(all_dfs, get_stats_df) #create df of all summary stats
+  stats_df <- map_dfc(all_dfs, get_stats_df) %>% 
+    rename(., "v1" = "value", "v2" = "value1", "v3" = "value2") #create df of all summary stats
   
-  rows <- c("Sensitivity", "Specificity", "Accuracy") #stats measured
+  #colnames(stats_df) <- c("1", "2", "3")
   
-  stats_summary <- as.tibble(rows) %>% cbind(., stats_df) #bind measure names with summary stats
+  prop_na_df <- c(
+    get_percent(
+      nrow(filter(df, is.na(genderize.gender))),
+      nrow(df)),
+    get_percent((nrow(df) - nrow(p85)), nrow(df)),
+    get_percent((nrow(df) - nrow(pmod85)), nrow(df))
+  ) %>% tibble() %>% t() %>% unname() %>% as_tibble()
   
-  colnames(stats_summary) <- c("Measure", paste0(deparse(substitute(df)), "_all"), 
-                               paste0(deparse(substitute(df)), "_p85"), 
-                               paste0(deparse(substitute(df)), "_pmod85"))
+  colnames(prop_na_df) <- c("v1", "v2", "v3")
+  
+  rows <- c("Sensitivity", "Specificity", "Accuracy", "Percent Unknown") %>% 
+    as_tibble() #stats measured
+  
+  stats_summary <-  bind_rows(stats_df, prop_na_df) %>% 
+    cbind(rows, .) #bind measure names with summary stats
+  
+  colnames(stats_summary) <- c("Measure", paste0(df_name, "_all"), 
+                               paste0(df_name, "_p85"), 
+                               paste0(df_name, "_pmod85"))
   
   return(stats_summary)
 }
 
-#summary stats for dataset, no country added----
-b_c_data <- read_csv("data/B_C_auth_genderize_join.csv") 
-
-total_names <- nrow(b_c_data)
-
-unknown_names <- b_c_data %>% filter(is.na(actual.gender)) %>% nrow() 
-
-compared_names <- b_c_data %>% filter(!is.na(actual.gender) & !is.na(genderize.gender)) %>% nrow()
-
-na_names <- b_c_data %>% filter(is.na(genderize.gender)) %>% nrow()
-
-b_c_summary <- get_summary_stats(b_c_data)
-
-#compare genderize outcomes using country codes to nichole's data----
-country_gender_data <- read_csv("data/B_C_auth_country_genderize_join.csv") 
-
-country_compared_names <- country_gender_data %>% 
-  filter(!is.na(actual.gender) & !is.na(genderize.gender)) %>% nrow()
-
-country_summary <- get_summary_stats(b_c_data)
-
 #compare outcomes after having converted to ASCII, w. no country data----
-b_c_data_ascii <- read_csv("data/B_C_auth_genderize_join_nosp.csv")
+b_c_data_ascii <- read_csv("../data/B_C_auth_genderize_join_nosp.csv")
 
 total_names_ascii <- nrow(b_c_data_ascii)
 
@@ -86,31 +86,18 @@ compared_names_ascii <- b_c_data_ascii %>% filter(!is.na(actual.gender) & !is.na
 
 na_names_ascii <- b_c_data_ascii %>% filter(is.na(genderize.gender)) %>% nrow()
 
-b_c_ascii_summary <- get_summary_stats(b_c_data_ascii)
+b_c_ascii_summary <- get_summary_stats("b_c_data_ascii")
 
 #compare outcomes after having converted to ASCII, with country data----
-b_c_country_data_ascii <- read_csv("data/B_C_auth_country_genderize_join_nosp.csv")
+b_c_country_data_ascii <- read_csv("../data/B_C_auth_country_genderize_join_nosp.csv")
 
 country_ascii_compared_names <- b_c_country_data_ascii %>% 
   filter(!is.na(actual.gender) & !is.na(genderize.gender)) %>% nrow()
 
-b_c_country_ascii_summary <- get_summary_stats(b_c_country_data_ascii)
+b_c_country_ascii_summary <- get_summary_stats("b_c_country_data_ascii")
 
 #summary table using ascii data -- slightly decreased accuracy but increased the proportion of names genderized
 stats_summary <- left_join(b_c_ascii_summary, b_c_country_ascii_summary, by = "Measure")
 
-#generate summary table image
-table <- stats_summary %>% 
-  mutate(b_c_data_ascii_pmod85 = ifelse(b_c_data_ascii_pmod85 == "0.9714", 
-                                        cell_spec(b_c_data_ascii_pmod85, bold = T),
-                                        cell_spec(b_c_data_ascii_pmod85, background = "white")),
-         b_c_country_data_ascii_pmod85 = ifelse(b_c_country_data_ascii_pmod85 == "0.9695", 
-                                                cell_spec(b_c_country_data_ascii_pmod85, bold = T),
-                                                cell_spec(b_c_country_data_ascii_pmod85, background = "white"))
-  ) %>% 
-  knitr::kable(., format = "html", table.attr = "style = \"color: black;\"", digits = 4, col.names = c("Measure", "p0.5", "p0.85", "pmod0.85", "p0.5", "p0.85", "pmod0.85"), escape = F) %>%
-  kable_styling() %>% 
-  add_header_above(c(" " = 1, "First Names" = 3, "Plus Country Data" = 3)) %>% 
-  footnote(general = "Bolded text denotes the accuracy of the threshold used in all further analyses") 
 
 
