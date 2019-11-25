@@ -3,13 +3,15 @@
 #A. proportion of editors from US institutions by gender----
 Fig_1A <- summ_US_stats %>% 
   filter(role == "editor") %>% 
-  ggplot()+
-  geom_col(aes(fill = gender, y = percent, x = US.inst.type),
-           position = "dodge")+
+  ggplot(aes(fill = gender, y = percent, x = US.inst.type, label = n))+
+  geom_col(position = "dodge")+
   coord_flip(ylim = c(0, 60))+
-  scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  labs(x = "\nU.S. Institution Type", y = "Percent of Editor Gender\n",
+  scale_fill_manual(labels = gen_labels, values = gen_colors)+
+  labs(x = "\n", y = "Percent of Editor Gender\n",
        fill = "Gender")+
+  geom_text(aes(y = percent + 1.5), 
+            position = position_dodge(width = 0.9), 
+            vjust = 0.5)+
   my_theme_leg_horiz+
   theme(legend.position = c(0.8, 0.4))
 
@@ -34,13 +36,16 @@ Fig_1B <- ggplot(ed_w_prop) +
 #C. US reviewers by institutions & gender----
 Fig_1C <- summ_US_stats %>% 
   filter(role == "reviewer") %>% 
-  ggplot()+
-  geom_col(aes(fill = gender, y = percent, x = US.inst.type),
-           position = "dodge")+
+  ggplot(aes(fill = gender, y = percent, x = US.inst.type, label = n))+
+  geom_col(position = "dodge")+
   coord_flip()+
-  scale_fill_manual(values = gen_ed_colors)+
-  labs(x = "\nU.S. Institution Type", y = "Percent of Reviewer Gender")+
-  my_theme_horiz
+  scale_fill_manual(labels = gen_labels, values = gen_colors)+
+  labs(x = "\n", y = "Percent of Reviewer Gender", fill = "Gender")+
+  geom_text(aes(y = percent + 1.5), 
+            position = position_dodge(width = 0.9), 
+            vjust = 0.5)+
+  my_theme_leg_horiz+
+  theme(legend.position = c(0.8, 0.4))
 
 #D. Proportion of Reviewers suggested each Year----
 Fig_1D <- plot_rev_time("reviewer_data") #add color?
