@@ -505,7 +505,7 @@ we trained a L2-regularized logistic regression model to predict whether
 or not a manuscript was reviewed (i.e.~editorially rejected or not). We
 used the genders of senior editor, editor, and corresponding author, as
 well as the proportion of authors that were women as variables to train
-the model. The median AUROC value was 0.62, which indicated that
+the model. The median AUROC value was 0.61, which indicated that
 editorial decisions were not completely random. However, the AUROC value
 is relatively low indicating that there are factors other than the
 variables we included in our model that influence editorial decisions.
@@ -559,19 +559,19 @@ L2-regularized regression model to predict if a manuscript was
 editorially rejected or not, using the variables: origin (US vs non),
 institution (US institution type), number of authors, proportion of
 authors that were women, and the genders of both gatekeepers and
-authors. The model had a median AUROC value of 0.68 which indicated that
+authors. The model had a median AUROC value of 0.67 which indicated that
 there is a non-random interaction between these factors and editorial
 decisions. To investigate the relationship of each variable to the model
 prediction, we reviewed the signs of the variable weights of the trained
 model. Authors from U.S. ``other'' institutions, men EICs, men that are
 corresponding authors from ``other'' U.S. institutions, and women from
 medical schools and institutes were all variables with positive weights,
-which means they increased the likelihood of an editorial rejection.
-Conversely, authors from R1 institutions, authors from the U.S., EiCs
-that are women, and the number of authors were variables with negative
-weights, which increased the likelihood of a manuscript going to review.
-These results confirm that the country of origin and prestige bias
-impact decisions in a non-random manner.
+which means they increased the likelihood of an editorial rejection
+(Fig. S6D). Conversely, authors from R1 institutions, authors from the
+U.S., EiCs that are women, and the number of authors were variables with
+negative weights, which increased the likelihood of a manuscript going
+to review (Fig. S6D). These results confirm that the country of origin
+and prestige bias impact decisions in a non-random manner.
 
 \subsection{Discussion}\label{discussion}
 
@@ -592,7 +592,8 @@ mediated by whether or not the corresponding author was based in the US
 or not and by the institution for US-based authors (Fig. 7). However,
 the trend for women corresponding authors to receive more negative
 outcomes held, indicating a pattern of gender-influenced editorial
-decisions.
+decisions regardless of journal quality (as determined by impact
+factor).
 
 While the proportion of women as first authors is equivalent to data
 obtained globally and from self-reported ASM membership data, it was
@@ -1063,8 +1064,13 @@ months published.
 
 \newpage
 
-\includegraphics{Figure_S6.png} Figure S6. Difference in acceptance and
-rejections by institution type.
+\includegraphics{Figure_S6.png} Figure S6. Difference in A) editorial
+rejection and B) acceptance rates by journal and institution type. C)
+Difference in review reccomendations by reviewer gender and author
+institution type. D) Mean importance (red dot) of features affecting
+editorial rejections and their standard deviations (black line).
+Features were filtered for those with an absolute mean importance
+greater than or equal to 0.2.
 
 \newpage
 
