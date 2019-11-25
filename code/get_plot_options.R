@@ -123,17 +123,13 @@ plot_impact_data <- function(measure, coord_max){
 }  
 
 #plot proportion of each gender in a role over time, assumes df output from get_prop_by_yr()
-gender_line_plot <- function(df, ymax, wo_y, me_y, un_y){
+gender_line_plot <- function(df, ymax){
   plot <- ggplot(df) + 
-    geom_line(aes(x = year, y = proportion, linetype = gender), size =0.75)+
+    geom_line(aes(x = year, y = proportion, color = gender), size =0.75)+
     coord_cartesian(ylim = c(0, ymax))+
-    scale_linetype_manual(breaks = gen_levels, labels = gen_labels, values = gen_linetype)+
-    annotate(geom = "text", x = 2018, y = wo_y+1.5, label = "Women")+
-    annotate(geom = "text", x = 2018, y = me_y+1.5, label = "Men")
-  
-  plot <- if(un_y != "N"){ #conditional if some genders are unknown
-    plot + annotate(geom = "text", x = 2018, y = un_y+1.5, label = "Unknown")
-  }else(plot)
+    scale_color_manual(breaks = gen_levels, 
+                       labels = gen_labels, 
+                       values = gen_colors)
   
   plot <- plot + my_theme_horiz
   
@@ -219,12 +215,12 @@ plot_sub_v_pub_time <- function(temp_sub, temp_pub){
     filter(gender == "female" | gender == "male")
   
   #figure out which year is the last & isolate the proportion values
-  m_text_values <- c_authors_w_prop %>% 
-    filter(year == "2017") %>% filter(gender == "male")
-  
-  f_text_values <- c_authors_w_prop %>% 
-    filter(year == "2017") %>% filter(gender == "female")
-  
+  #m_text_values <- c_authors_w_prop %>% 
+  #  filter(year == "2017") %>% filter(gender == "male")
+  #
+  #f_text_values <- c_authors_w_prop %>% 
+  #  filter(year == "2017") %>% filter(gender == "female")
+  #
   max_value <- get_ymax(c_authors_w_prop) 
   
   #line plot
@@ -235,9 +231,8 @@ plot_sub_v_pub_time <- function(temp_sub, temp_pub){
     coord_cartesian(ylim = c(0, max_value))+
     scale_color_manual(values = gen_ed_colors, 
                        breaks = gen_ed_labels)+
-    annotate(geom = "text", x = 2017, y = m_text_values[2,5]+2, label = "Men")+
-    annotate(geom = "text", x = 2017, y = f_text_values[2,5]+2, label = "Women")+
-    my_theme_leg_horiz + 
+    #annotate(geom = "text", x = 2017, y = m_text_values[2,5]+2, label = "Men")+
+    #annotate(geom = "text", x = 2017, y = f_text_values[2,5]+2, label = "Women")+
     labs(x = "Year",
          y = paste("\nProportion of\n", auth_type, "Authors"),
          linetype = "Manuscript Status")
