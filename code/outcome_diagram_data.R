@@ -20,7 +20,9 @@ vers_auth_summary <- final_outcome %>%
 
 first_descision <- data %>% 
   filter(grouped.vers == 1) %>% 
-  select(grouped.random, EJP.decision, role, random.person.id, gender) %>% 
+  filter(!is.na(review.start)) %>% 
+  select(grouped.random, EJP.decision, role, 
+         random.person.id, gender) %>% 
   filter(EJP.decision %in% c("Accept", "Revise", "Reject")) %>% 
   distinct()
 
@@ -29,6 +31,22 @@ genders <- first_descision %>%
   summarise(n = n())
 
 decisions <- first_descision %>% 
+  select(EJP.decision, grouped.random) %>% 
+  distinct() %>% 
+  group_by(EJP.decision) %>% summarise(n = n())
+
+editor_descision <- data %>% 
+  filter(grouped.vers == 1) %>% 
+  filter(is.na(review.start)) %>% 
+  select(grouped.random, EJP.decision, role, random.person.id, gender) %>% 
+  filter(EJP.decision %in% c("Accept", "Revise", "Reject")) %>% 
+  distinct()
+
+ed_des_genders <- editor_descision %>% 
+  group_by(EJP.decision, gender) %>% 
+  summarise(n = n())
+
+ed_decisions <- editor_descision %>% 
   select(EJP.decision, grouped.random) %>% 
   distinct() %>% 
   group_by(EJP.decision) %>% summarise(n = n())
