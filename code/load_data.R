@@ -75,3 +75,5 @@ source("code/author_setup.R")
 source("code/gatekeeper_setup.R")
 
 mjourns <- c("mBio", "mSphere", "mSystems")
+
+op_inst_list <- c("Non-US Inst", "Other", "Industry Research", "Federal Research", "Med School & Institutes", "Low Research Univ", "R2 Univ", "R1 Univ")

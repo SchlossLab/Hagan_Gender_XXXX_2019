@@ -49,17 +49,20 @@ gen_gradient <- scale_fill_gradient2(low = "#D55E00", mid='snow3',
                                        high = "#0072B2", space = "Lab")
 
 #settings----
-gen_levels <- c("female", "male", "none")
+gen_levels <- c("none", "male", "female")
 
-gen_breaks <- c("female", "male", "NA")
+gen_ed_levels <- c("female", "male")
 
-gen_labels <- c("Women", "Men", "Unknown")
+gen_breaks <- c("NA", "male", "female")
+
+gen_labels <- c("Unknown", "Men", "Women")
 
 gen_linetype <- c("solid", "dashed", "dotted")
 
 gen_ed_labels <- c("Women", "Men")
 
-gen_colors <- c("#D55E00", "#0072B2", "#999999")
+gen_colors <- c("none" = "#999999", "male" = "#0072B2",
+                "female" = "#D55E00")
 
 gen_ed_colors <- c("#D55E00", "#0072B2")
 
@@ -67,7 +70,11 @@ gen_x_replace <- scale_x_discrete(breaks=gen_levels,
                  labels=gen_labels)
 
 gen_ed_facet <- function(x){
-  ifelse(x == "female", "Woman", "Man")
+  ifelse(x == "female", "Women Editors", "Men Editors")
+}
+
+gen_rev_facet <- function(x){
+  ifelse(x == "female", "Women Reviewers", "Men Reviewers")
 }
 
 #figure out which year is the last & isolate the proportion values
@@ -125,13 +132,14 @@ plot_impact_data <- function(measure, coord_max){
 #plot proportion of each gender in a role over time, assumes df output from get_prop_by_yr()
 gender_line_plot <- function(df, ymax){
   plot <- ggplot(df) + 
-    geom_line(aes(x = year, y = proportion, color = gender), size =0.75)+
+    geom_line(aes(x = year, y = proportion, 
+                  color = gender), size =0.75)+
     coord_cartesian(ylim = c(0, ymax))+
     scale_color_manual(breaks = gen_levels, 
                        labels = gen_labels, 
                        values = gen_colors)
   
-  plot <- plot + my_theme_horiz
+  #plot <- plot + my_theme_horiz
   
   return(plot)
 }
@@ -150,13 +158,16 @@ gender_bar_plot <- function(df){
 #line plot of the proportions of all journals, assumes df output from get_prop_j_by_yr
 j_gen_line_plot <- function(df, ymax){
   plot <- ggplot(df) + 
-    geom_line(aes(x = year, y = proportion, group = gender, linetype = gender))+
+    geom_line(aes(x = year, y = proportion, group = gender, 
+                  color = gender))+
     #scale_y_continuous(breaks = c(0, 15, 30, 45))+
-    scale_linetype_manual(values = gen_linetype, breaks = gen_levels, labels = gen_labels)+
+    scale_color_manual(values = gen_colors, 
+                          breaks = gen_levels, 
+                          labels = gen_labels)+
     coord_cartesian(ylim = c(0, ymax)) +
     facet_wrap(~ journal, nrow = 2)
   
-  plot <- plot + my_theme_leg
+  #plot <- plot
   
   return(plot)
 }
@@ -197,7 +208,7 @@ plot_sub_v_pub_j_time <- function(temp_sub, temp_pub){
 }
 
 #line plot of submissions versus publications for each gender, all journals combined-
-plot_sub_v_pub_time <- function(temp_sub, temp_pub){
+plot_sub_v_pub_time <- function(temp_sub, temp_pub, text){
   
   name <- paste0(as.character(temp_sub)) #isolate the name of the df as a string
   
@@ -215,12 +226,12 @@ plot_sub_v_pub_time <- function(temp_sub, temp_pub){
     filter(gender == "female" | gender == "male")
   
   #figure out which year is the last & isolate the proportion values
-  #m_text_values <- c_authors_w_prop %>% 
-  #  filter(year == "2017") %>% filter(gender == "male")
-  #
-  #f_text_values <- c_authors_w_prop %>% 
-  #  filter(year == "2017") %>% filter(gender == "female")
-  #
+  m_text_values <- c_authors_w_prop %>% 
+    filter(year == "2017") %>% filter(gender == "male")
+  
+  f_text_values <- c_authors_w_prop %>% 
+    filter(year == "2017") %>% filter(gender == "female")
+  
   max_value <- get_ymax(c_authors_w_prop) 
   
   #line plot
@@ -230,9 +241,17 @@ plot_sub_v_pub_time <- function(temp_sub, temp_pub){
                   color = gender), size = 0.75)+
     coord_cartesian(ylim = c(0, max_value))+
     scale_color_manual(values = gen_ed_colors, 
-                       breaks = gen_ed_labels)+
-    #annotate(geom = "text", x = 2017, y = m_text_values[2,5]+2, label = "Men")+
-    #annotate(geom = "text", x = 2017, y = f_text_values[2,5]+2, label = "Women")+
+                       breaks = gen_ed_labels)
+  
+  plot <- if(text == "TRUE"){
+    plot +
+    annotate(geom = "text", x = 2017, 
+             y = m_text_values[2,5]+2, label = "Men")+
+    annotate(geom = "text", x = 2017, 
+             y = f_text_values[2,5]+2, label = "Women")
+    }else{plot}
+  
+  plot <- plot +
     labs(x = "Year",
          y = paste("\nProportion of\n", auth_type, "Authors"),
          linetype = "Manuscript Status")
@@ -259,14 +278,14 @@ plot_rev_time <- function(rev_df){
     get_prop_by_yr(x, this_df, "gender", "All")}) 
   
   #figure out which year is the last & isolate the proportion values
-  text_values <- get_gen_prop_text(all_rev_w_prop, 3, "gender")
+  #text_values <- get_gen_prop_text(all_rev_w_prop, 3, "gender")
   
   max_value <- get_ymax(all_rev_w_prop) 
   
   #line plot of all journals combined by year
-  plot <- gender_line_plot(all_rev_w_prop, max_value, 
-                   text_values[1,2], text_values[2,2], text_values[3,2]) + 
-    labs(x = "Year", y = paste("\nProportion of\n", rev_type))
+  plot <- gender_line_plot(all_rev_w_prop, max_value) + 
+    labs(x = "Year", y = paste("\nProportion of\n", rev_type),
+         color = "Gender")
   
   return(plot)
 }

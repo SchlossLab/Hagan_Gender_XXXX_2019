@@ -1,9 +1,9 @@
 #plot logistic regression data outputs for prediction of editorial rejections using all meta-data
 library(tidyverse)
 
-feat_weights <- read_csv("../data/combined_all_imp_features_US_rej.csv") 
+feat_weights <- read_csv("data/combined_all_imp_features_US_rej.csv") 
 
-auc <- read_csv("../data/combined_best_hp_results_US_rej.csv") 
+auc <- read_csv("data/combined_best_hp_results_US_rej.csv") 
 
 published_weights <- feat_weights %>% select(-Bias, -model) %>% 
   gather(., key = "features", value = "weights") %>% 
