@@ -63,7 +63,7 @@ ed_rejections_B <- summary_gen_ed %>%
   gen_gradient+
   coord_flip()+
   facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
-  labs(x = "\nDecision", 
+  labs(x = "\n", 
        y = "Difference Following Review by Editor Gender\n",
        fill = "Percentage Point\nDifference")+
   my_theme_leg_horiz
@@ -120,9 +120,9 @@ reviewer_C <- summary_gen_rev %>%
   geom_col(position = "dodge")+
   gen_gradient+
   coord_flip()+
-  facet_wrap(~gen_ed_facet(reviewer.gender), ncol = 1)+
-  labs(x = "\nReview Recommendation", 
-       y = "Difference by Reviewer Gender")+
+  facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1)+
+  labs(x = "\n", 
+       y = "Difference in Review\nRecommendation")+
   my_theme_horiz
 
 
@@ -151,7 +151,7 @@ reviewer_A <- rev_rec_data %>%
   geom_col(position = "dodge")+
   gen_gradient+
   coord_flip()+
-  labs(x = "\nReview Recommendation", 
+  labs(x = "\n", 
        y = "Difference in Review Recommendation")+
   my_theme_horiz
 

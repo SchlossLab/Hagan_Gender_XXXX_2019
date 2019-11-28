@@ -34,7 +34,7 @@ Figure_S6A <- left_join(ASM_subs_j, ed_rej_subs_j,
   facet_wrap(~US.inst.type)+
   coord_flip()+
   gen_gradient+
-  labs(x = "\nJournal", 
+  labs(x = "\n", 
        y = "Difference in Editorial Rejections\n")+
   my_theme_horiz
 
@@ -71,7 +71,7 @@ Figure_S6B <- left_join(ASM_subs_j, acc_subs_j,
   facet_wrap(~US.inst.type)+
   coord_flip()+
   gen_gradient+
-  labs(x = "\nJournal", 
+  labs(x = "\n", 
        y = "Difference in Acceptance Rates\n")+
   my_theme_horiz
 
@@ -158,7 +158,7 @@ Figure_S6C <- summ_inst %>%
                        high = "#0072B2", space = "Lab")+
   coord_flip()+
   facet_wrap(~gen_ed_facet(reviewer.gender), ncol = 1)+
-  labs(x = "\nInstitution Type", 
+  labs(x = "\n", 
        y = "Difference in Acceptance Recomendation\nby Reviewer Gender")+
   my_theme_horiz
 

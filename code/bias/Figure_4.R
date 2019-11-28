@@ -5,7 +5,7 @@ acc_rej_data <- data %>%
   filter(grouped.vers == 1) %>% 
   filter(EJP.decision == "Accept" | EJP.decision == "Reject") 
 
-auth_types <- c("first", "middle", "last", "corres")
+auth_types <- c("first", "middle", "last", "corresponding")
 
 #rejection rates by author type----
 rej_by_auth <- map_df(auth_types, function(x){
@@ -66,7 +66,7 @@ figure_4A <- rej_by_journ %>%
   facet_wrap(~str_to_title(auth.type), nrow = 1)+
   gen_gradient+
   geom_hline(data = ASM_rej_rate, aes(yintercept = performance))+
-  labs(x = "\nJournal", y = "Difference in Percent Rejection\n",
+  labs(x = "\n", y = "Difference in Percent Rejection\n",
        fill = "% Points\nDifference")+
   my_theme_leg_horiz
 
@@ -122,7 +122,7 @@ figure_4B <- fig4_ed_rejections %>% select(-n, -total) %>%
   geom_hline(data = fig4_ASM_ed_rej, aes(yintercept = performance))+
   #annotate(geom = "text", x = 12, y = -2.5, label = "All Journals")+
   #geom_text(aes(x = journal, y = 0.75, label = n))+
-  labs(x = "\nJournal", 
+  labs(x = "\n", 
        y = "Difference in Editorial Rejections")+
   my_theme_horiz
 
@@ -176,7 +176,7 @@ figure_4C <- fig4_j_ed_dec_data %>%
   gen_gradient+
   geom_hline(data = fig4_ASM_dec, aes(yintercept = performance))+
   #geom_text(aes(x = journal, y = 1.5, label = n))+
-  labs(x = "\nJournal", 
+  labs(x = "\n", 
        y = "Difference in Decision\nafter First Review")+
   my_theme_horiz
 

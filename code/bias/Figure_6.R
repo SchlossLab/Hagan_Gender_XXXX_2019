@@ -55,7 +55,7 @@ figure_6A <- fig6_ed_rejections %>% select(-n, -total) %>%
   geom_hline(data = fig6_ASM_ed_rej, aes(yintercept = performance))+
   annotate(geom = "text", x = 12, y = -2.5, label = "All Journals")+
   #geom_text(aes(x = journal, y = 0.75, label = n))+
-  labs(x = "\nJournal", 
+  labs(x = "\n", 
        y = "Difference in Editorial Rejections\n")+
   my_theme_horiz
 
@@ -112,7 +112,7 @@ figure_6B <- US_j_ed_dec_data %>%
   gen_gradient+
   geom_hline(data = US_j_dec, aes(yintercept = performance))+
   #geom_text(aes(x = journal, y = 1.5, label = n))+
-  labs(x = "\nJournal", 
+  labs(x = "\n", 
        y = "Difference in Decision after First Review\n")+
   my_theme_horiz
 
@@ -181,8 +181,8 @@ figure_6C <- fig6c_inst_rates %>%
   coord_flip()+
   facet_wrap(~rate, nrow = 2)+
   gen_gradient+
-  labs(x = "\nInstitution Type", 
-       y = "Difference")+
+  labs(x = "\n", 
+       y = "Difference in Decision")+
   my_theme_horiz
 
 #D. acceptance by editor gender and institution type after 1st review----
@@ -233,8 +233,8 @@ figure_6D <- fig6d_summ_inst %>%
   gen_gradient+
   coord_flip()+
   facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
-  labs(x = "\nInstitution Type", 
-       y = "Difference in Rejection\nby Editor Gender")+
+  labs(x = "\n", 
+       y = "Difference in Decision")+
   my_theme_horiz
 
 #generate & save figure----
