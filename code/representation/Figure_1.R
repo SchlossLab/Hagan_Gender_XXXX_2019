@@ -11,7 +11,7 @@ Fig_1A <- summ_US_stats %>%
        fill = "Gender")+
   geom_text(aes(y = percent + 1.5), 
             position = position_dodge(width = 0.9), 
-            vjust = 0.5)+
+            vjust = 0.7, size = 3)+
   my_theme_leg_horiz+
   theme(legend.position = c(0.8, 0.4))
 
@@ -28,8 +28,8 @@ Fig_1B <- ggplot(ed_w_prop) +
   geom_line(aes(x = year, y = proportion, color = gender))+
   coord_cartesian(ylim = c(0, 100))+
   scale_color_manual(breaks = gen_levels, labels = NULL, values = gen_colors)+
-  annotate(geom = "text", x = 2017, y = ed_prop_text[1,2]+2, label = "Women")+
-  annotate(geom = "text", x = 2017, y = ed_prop_text[2,2]+4, label = "Men")+
+  #annotate(geom = "text", x = 2017, y = ed_prop_text[1,2]+2, label = "Women")+
+  #annotate(geom = "text", x = 2017, y = ed_prop_text[2,2]+4, label = "Men")+
   labs(x = "Year", y = "\nProportion of Editors")+
   my_theme_horiz
 
@@ -43,7 +43,7 @@ Fig_1C <- summ_US_stats %>%
   labs(x = "\n", y = "Percent of Reviewer Gender", fill = "Gender")+
   geom_text(aes(y = percent + 1.5), 
             position = position_dodge(width = 0.9), 
-            vjust = 0.5)+
+            vjust = 0.5, size = 2)+
   my_theme_leg_horiz+
   theme(legend.position = c(0.8, 0.4))
 

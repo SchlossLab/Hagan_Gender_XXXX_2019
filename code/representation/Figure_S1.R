@@ -32,13 +32,15 @@ Fig_S1 <- ggplot(ed_prop_j) +
   geom_line(aes(x = year, y = proportion, linetype = type, color = gender))+
   facet_wrap(~journal, nrow = 2)+
   coord_cartesian(ylim = c(0, 100))+
-  scale_color_manual(breaks = gen_levels, labels = gen_labels, values = gen_colors)+
+  scale_color_manual(breaks = gen_ed_levels, 
+                     labels = gen_ed_labels, 
+                     values = gen_ed_colors)+
   scale_linetype_manual(breaks = c("proportion", "weighted_proportion"), labels = c("Individuals", "Manuscripts Handled"), values = c("solid", "dashed"))+
-  labs(x = "Year", y = "\nProportion of Editors", 
+  labs(x = "Year", y = "\nPercent of Editors", 
        linetype = "Type", color = "Gender")+
   my_theme_leg
 
-plot_grid(Fig_S1, labels = c('A'))
+plot_grid(Fig_S1)
 
 ggsave("Figure_S1.png", device = 'png', 
        path = 'submission', width = 8, height = 5)

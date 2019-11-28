@@ -26,12 +26,14 @@ Fig_3B <- gender_line_plot(all_authors_w_prop, max_value) +
   labs(x = "Year\n", y = "\nProportion of Authors", color = "Gender")
 
 #C. Proportion of men/women first authors over time: submitted & published----
-Fig_3C <- plot_sub_v_pub_time("sub_first_auth", "pub_first_auth")+
+Fig_3C <- plot_sub_v_pub_time("sub_first_auth", 
+                              "pub_first_auth", FALSE)+
   my_theme_leg_horiz +
   theme(legend.position = c(0.8, 0.3))
 
 #D. Proportion of men/women corresponding authors over time: submitted & published----
-Fig_3D <- plot_sub_v_pub_time("sub_corres_auth", "pub_corres_auth")+
+Fig_3D <- plot_sub_v_pub_time("sub_corres_auth", 
+                              "pub_corres_auth", FALSE)+
   my_theme_horiz
 
 #make figure----
@@ -42,6 +44,6 @@ row_2 <- plot_grid(Fig_3B, Fig_3C, Fig_3D,
                    label_size = 18, nrow = 3)
 
 plot_grid(row_1, row_2, nrow = 2, rel_heights = c(1, 2))
-#
+
 ggsave("Figure_3.png", device = 'png', 
        path = 'submission', width = 9, height = 12)

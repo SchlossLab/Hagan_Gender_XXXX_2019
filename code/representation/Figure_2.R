@@ -18,9 +18,11 @@ ed_manu_text <- get_gen_prop_text(ed_manu_prop, 2, "gender") #calc label placeme
 Fig_2A <- ggplot(ed_manu_prop) + 
   geom_line(aes(x = year, y = proportion, color = gender))+
   coord_cartesian(ylim = c(0, 100))+
-  scale_color_manual(breaks = gen_levels, labels = NULL, values = gen_colors)+
-  annotate(geom = "text", x = 2017, y = ed_manu_text[1,2]+2, label = "Women")+
-  annotate(geom = "text", x = 2017, y = ed_manu_text[2,2]+5, label = "Men")+
+  scale_color_manual(breaks = gen_ed_levels, 
+                     labels = gen_ed_labels, 
+                     values = gen_ed_colors)+
+  #annotate(geom = "text", x = 2017, y = ed_manu_text[1,2]+2, label = "Women")+
+  #annotate(geom = "text", x = 2017, y = ed_manu_text[2,2]+5, label = "Men")+
   labs(x = "Year\n", y = "\nProportion of\nEditor Workload")+
   my_theme_horiz
 
@@ -78,15 +80,15 @@ ed_contact <- rev_resp %>%
   spread(key = status, value = n) %>% 
   mutate(percent_cont = get_percent(Contacted, (Contacted + `Not Contacted`)))
 
-reviewer_D <- ed_contact %>% 
-  ggplot()+
-  geom_col(aes(x = editor.gender, y = percent_cont,
-               fill = reviewer.gender), alpha = 0.65,
-           position = "dodge")+
-  scale_fill_manual(values = gen_colors)+
-  gen_x_replace+
-  labs(x = "Editor Gender", y = "\nPercent Contacted")+
-  my_theme_horiz
+#reviewer_D <- ed_contact %>% 
+#  ggplot()+
+#  geom_col(aes(x = editor.gender, y = percent_cont,
+#               fill = reviewer.gender), alpha = 0.65,
+#           position = "dodge")+
+#  scale_fill_manual(values = gen_colors)+
+#  gen_x_replace+
+#  labs(x = "Editor Gender", y = "\nPercent Contacted")+
+#  my_theme_horiz
 
 #reviewer_E response of reviewers by gender
 f_ed_resp <- rev_resp %>% 
@@ -115,29 +117,27 @@ m_ed_resp <- rev_resp %>%
 
 ed_resp <- rbind(f_ed_resp, m_ed_resp)
 
-reviewer_E <- ed_resp %>% 
+Fig_2C <- ed_resp %>% 
+  filter(Rev.Resp == "Accept") %>% 
   ggplot()+
   geom_col(aes(x = editor.gender, y = Percent,
                fill = reviewer.gender), 
-           position = "dodge", alpha = 0.65)+
-  facet_wrap(~ if_else(Rev.Resp == "No_Resp", "No Response", "Accept"))+
+           position = "dodge")+
+  coord_flip(ylim = c(0, 60))+
+  #facet_wrap(~ if_else(Rev.Resp == "No_Resp", "No Response", "Accept"))+
   scale_fill_manual(values = gen_colors, 
                     labels = gen_labels)+
-  labs(x = "Editor Gender", y = "\nPercent of Reviewers",
+  labs(x = "\nEditor", y = "\nPercent of Reviewers",
        fill = "Reviewer Gender")+
   gen_x_replace+
   my_theme_leg_horiz+
-  theme(legend.position = c(0.8, 0.8))
+  theme(legend.position = c(0.91,0.25))
 
 #generate full figure----
-plot_AB <- plot_grid(Fig_2A, Fig_2B,
-          labels = c('A', 'B'), label_size = 18)
+blank <- ggplot()
 
-plot_CDE <- plot_grid(reviewer_E, reviewer_D,
-          labels = c('C', 'D'), label_size = 18)
-
-plot_grid(plot_AB, plot_CDE, nrow = 2, 
-          rel_heights = c(1, 2))
+plot_AB <- plot_grid(Fig_2A, Fig_2B, Fig_2C, nrow = 3,
+          labels = c('A', 'B', 'C'), label_size = 18)
 
 ggsave("Figure_2.png", device = 'png', 
-     path = 'submission', width = 12, height = 9)
+     path = 'submission', width = 9, height = 9)
