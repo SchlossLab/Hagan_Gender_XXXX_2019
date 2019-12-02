@@ -22,16 +22,17 @@ ed_rej_subs_j <- ed_rejs %>%
   group_by(journal, US.inst.type, gender) %>% 
   summarise(ed.rejections = n())
 
-Figure_S6A <- left_join(ASM_subs_j, ed_rej_subs_j, 
+Fig_S6A_data <- left_join(ASM_subs_j, ed_rej_subs_j, 
           by = c("US.inst.type", "gender", "journal")) %>% 
   mutate(prop.rejected = get_percent(ed.rejections, total)) %>% 
   select(-total, -ed.rejections) %>% 
   spread(key = gender, value = prop.rejected) %>% 
-  mutate(performance = male - female) %>% 
-  ggplot()+
-  geom_col(aes(x = journal, y = performance, fill = performance))+
-  #scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(~US.inst.type)+
+  mutate(performance = male - female)
+  
+Figure_S6A <- Fig_S6A_data %>% 
+  ggplot(aes(x = journal, y = performance, fill = performance))+
+  geom_col()+
+  facet_wrap(~US.inst.type, scales = "free")+
   coord_flip()+
   gen_gradient+
   labs(x = "\n", 
@@ -59,16 +60,17 @@ acc_subs_j <- acc %>%
   group_by(journal, US.inst.type, gender) %>% 
   summarise(accepted = n())
 
-Figure_S6B <- left_join(ASM_subs_j, acc_subs_j, 
+Fig_S6B_data <- left_join(ASM_subs_j, acc_subs_j, 
           by = c("US.inst.type", "gender", "journal")) %>% 
   mutate(prop.accepted = get_percent(accepted, total)) %>% 
   select(-total, -accepted) %>% 
   spread(key = gender, value = prop.accepted) %>% 
-  mutate(performance = male - female) %>% 
-  ggplot()+
-  geom_col(aes(x = journal, y = performance, fill = performance))+
-  #scale_fill_manual(labels = gen_ed_labels, values = gen_ed_colors)+
-  facet_wrap(~US.inst.type)+
+  mutate(performance = male - female)
+
+Figure_S6B <- Fig_S6B_data %>% 
+  ggplot(aes(x = journal, y = performance, fill = performance))+
+  geom_col()+
+  facet_wrap(~US.inst.type, scales = "free")+
   coord_flip()+
   gen_gradient+
   labs(x = "\n", 
@@ -82,8 +84,8 @@ rev_rec_inst <- bias_data %>%
   filter(!is.na(US.inst.type)) %>% 
   select(grouped.random, gender, 
          US.inst.type, review.recommendation) %>% 
-  filter(review.recommendation %in% c("Revise only", "Reject", 
-                                      "Accept, no revision")) %>% 
+  filter(review.recommendation %in% c("Revise", "Reject", 
+                                      "Accept")) %>% 
   distinct()
 
 US_inst_totals <- rev_rec_inst %>% 
@@ -117,14 +119,14 @@ rev_rec_data <- bias_data %>%
   select(gender, journal, published, review.recommendation, 
          reviewer.gender, reviewer.random.id, random.manu.num, version.reviewed, 
          US.inst, US.inst.type) %>% distinct() %>% 
-    filter(review.recommendation %in% c("Revise only", "Reject", 
-                                        "Accept, no revision")) %>%
+    filter(review.recommendation %in% c("Revise", "Reject", 
+                                        "Accept")) %>%
   distinct()
 
 sub_inst_gen <- rev_rec_data %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
-  filter(review.recommendation != "Revise only") %>% 
+  filter(review.recommendation != "Revise") %>% 
   select(random.manu.num, US.inst.type, reviewer.gender,
          review.recommendation, gender) %>% 
   distinct() %>% 
@@ -134,7 +136,7 @@ sub_inst_gen <- rev_rec_data %>%
 summ_inst <- rev_rec_data %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
-  filter(review.recommendation != "Revise only") %>% 
+  filter(review.recommendation != "Revise") %>% 
   filter(reviewer.gender %in% c("female", "male")) %>% 
   select(random.manu.num, reviewer.gender, US.inst.type, review.recommendation, gender) %>% 
   distinct() %>% 
@@ -150,14 +152,14 @@ summ_inst <- rev_rec_data %>%
   mutate(overperform = male - female)
 
 Figure_S6C <- summ_inst %>% 
-  filter(review.recommendation == "Accept, no revision") %>% 
+  filter(review.recommendation == "Accept") %>% 
   ggplot(aes(x = US.inst.type, fill = overperform,
              y = overperform))+
   geom_col(position = "dodge")+
   scale_fill_gradient2(low = "#D55E00", mid='snow3', 
                        high = "#0072B2", space = "Lab")+
   coord_flip()+
-  facet_wrap(~gen_ed_facet(reviewer.gender), ncol = 1)+
+  facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1)+
   labs(x = "\n", 
        y = "Difference in Acceptance Recomendation\nby Reviewer Gender")+
   my_theme_horiz

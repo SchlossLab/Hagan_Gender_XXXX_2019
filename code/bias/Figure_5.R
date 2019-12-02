@@ -75,7 +75,7 @@ rev_rec_data <- bias_data %>%
   select(gender, journal, published, review.recommendation, 
          reviewer.gender, reviewer.random.id, random.manu.num, version.reviewed, 
          US.inst, US.inst.type) %>% distinct() %>% 
-  filter(review.recommendation %in% c("Revise only", "Reject", "Accept, no revision")) %>%
+  filter(review.recommendation %in% c("Revise", "Reject", "Accept")) %>%
   distinct()
 
 rev_gen <- rev_rec_data %>% 
@@ -141,8 +141,8 @@ reviewer_A <- rev_rec_data %>%
   summarise(n = n()) %>% as_tibble() %>% 
   spread(key = review.recommendation, value = n) %>% 
   mutate_if(is.numeric, 
-            funs(get_percent(., gender_totals$n))) %>%
-  gather(`Accept, no revision`:`Revise only`,
+            funs(get_percent(., gender_totals$n))) %>% 
+  gather(Reject:Accept,
          key = review.recommendation, value = percent) %>% 
   spread(key = gender, value = percent) %>%
   mutate(overperformance = male - female) %>% 

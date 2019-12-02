@@ -10,6 +10,8 @@ auth_types <- c("first", "middle", "last", "corresponding")
 #rejection rates by author type----
 rej_by_auth <- map_df(auth_types, function(x){
   
+  print(x)
+  
   get_auth_type(x, acc_rej_data) %>% 
     filter(role == "author") %>% 
     filter(!is.na(gender)) %>% 
