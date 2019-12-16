@@ -24,3 +24,16 @@ published_weights <- feat_weights %>% select(-Bias, -model) %>%
            trimws())
 
 med_auc_US <- round(median(auc$test_aucs), digits = 2)
+
+ranked_weights <- create_feature_rankings(feat_weights) %>% 
+  mutate(key = key %>% str_replace("\\.{3}", " & ") %>% 
+           str_replace("\\.female", "\\.women") %>% 
+           str_replace("\\.male", "\\.men") %>% 
+           str_replace_all("X.inst.gender.|X.US.inst.type.", "") %>% 
+           str_replace_all("US.gender.no.|US.inst.no", "Non-US ") %>% 
+           str_replace_all("(?<=US.)gender.yes|inst.yes", "") %>% 
+           str_replace_all("inst.gender.Other.", "Other US Inst ") %>% 
+           str_replace_all("\\.", " ") %>% 
+           str_to_title() %>% 
+           str_replace_all("Us", "US") %>% 
+           trimws())

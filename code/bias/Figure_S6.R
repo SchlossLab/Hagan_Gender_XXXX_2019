@@ -161,20 +161,14 @@ Figure_S6C <- summ_inst %>%
   coord_flip()+
   facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1)+
   labs(x = "\n", 
-       y = "Difference in Acceptance Recomendation\nby Reviewer Gender")+
+       y = "Difference in Acceptance Recommendation
+       by Reviewer Gender")+
   my_theme_horiz
 
 #S6D. important features for editorial rejection----
-Figure_S6D <- published_weights %>% 
-  filter(avg.weight > 0.2 | avg.weight < -0.2) %>%
-  ggplot(aes(x=reorder(clean_feat, -avg.weight), y=avg.weight, 
-             ymin=(avg.weight-sd.weight), ymax=(avg.weight+sd.weight))) +
-  geom_errorbar(width=0) +
-  geom_point(size=2, color="red") +
-  geom_hline(yintercept=0, color="gray") +
-  coord_flip(ylim=c(-2,2)) +
-  labs(x="\nFeature", y="Mean importance")+
-  my_theme_horiz
+Figure_S6D <- plot_feature_ranks(ranked_weights)+
+  labs(y = "Importance Rank", color = "Direction\nof Impact",
+       x = "\nFeature")
 
 #generate & save figure----
 plot_grid(Figure_S6A, Figure_S6B, Figure_S6C, Figure_S6D,

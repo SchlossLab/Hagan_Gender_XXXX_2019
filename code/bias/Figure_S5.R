@@ -55,9 +55,14 @@ accepted_versions <- map_dfr(manus, function(x){
     arrange(desc(grouped.vers)) %>% head(n = 1)
 })
 
+version_sum <- accepted_versions %>%
+  group_by(gender) %>% 
+  summarise(med_vers = median(num.versions),
+            IQR_vers = IQR(num.versions))
+
 #number of revisions before acceptance
 figure_S5C <- accepted_versions %>% 
-  ggplot(aes(x = gender, y = grouped.vers, fill = gender))+
+  ggplot(aes(x = gender, y = num.versions, fill = gender))+
   geom_boxplot()+
   facet_wrap(~journal)+
   scale_fill_manual(values = gen_colors)+

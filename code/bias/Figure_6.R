@@ -139,6 +139,10 @@ fig6c_ed_rej_subs <- fig6c_ed_rejs %>%
   group_by(US.inst.type, gender) %>% 
   summarise(ed.rejections = n())
 
+fig6c_edrej_sum_inst <- fig6c_ed_rej_subs %>% 
+  group_by(US.inst.type) %>% 
+  summarise(total = sum(ed.rejections))
+
 #calculate percentage point difference in editorial rejections
 fig6c_editorial_rej_per <- left_join(fig6c_ASM_subs, fig6c_ed_rej_subs, 
                                by = c("US.inst.type", "gender")) %>% 
@@ -147,7 +151,8 @@ fig6c_editorial_rej_per <- left_join(fig6c_ASM_subs, fig6c_ed_rej_subs,
   spread(key = gender, value = prop.ed.rej) %>% 
   mutate(performance = male - female,
          rate = "Editorial Rejection") %>% 
-  select(-male, -female) 
+  select(-male, -female) %>% 
+  left_join(., fig6c_edrej_sum_inst, by = "US.inst.type")
 
 #accepted---
 fig6c_acc <- bias_data %>% 
@@ -162,6 +167,10 @@ fig6c_acc_subs <- fig6c_acc %>%
   distinct() %>% 
   group_by(US.inst.type, gender) %>% summarise(accepted = n())
 
+fig6c_acc_sum_inst <- fig6c_acc_subs %>% 
+  group_by(US.inst.type) %>% 
+  summarise(total = sum(accepted))
+
 #calculate percentage point difference in acceptance
 fig6c_acc_per <- left_join(fig6c_ASM_subs, fig6c_acc_subs, 
                                by = c("US.inst.type", "gender")) %>% 
@@ -170,19 +179,22 @@ fig6c_acc_per <- left_join(fig6c_ASM_subs, fig6c_acc_subs,
   spread(key = gender, value = prop.acc) %>% 
   mutate(performance = male - female,
          rate = "Acceptance") %>% 
-  select(-male, -female) 
+  select(-male, -female) %>% 
+  left_join(., fig6c_acc_sum_inst, by = "US.inst.type")
 
-fig6c_inst_rates <- rbind(fig6c_editorial_rej_per, fig6c_acc_per)
+fig6c_inst_rates <- rbind(fig6c_editorial_rej_per, fig6c_acc_per) %>% 
+  as.data.frame() %>% 
+  mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
 
 #plot
 figure_6C <- fig6c_inst_rates %>% 
   ggplot()+
   geom_col(aes(x = US.inst.type, y = performance, fill = performance))+
   coord_flip()+
-  facet_wrap(~rate, nrow = 2)+
+  facet_wrap(~rate, nrow = 2, scales = "free_y")+
   gen_gradient+
   labs(x = "\n", 
-       y = "Difference in Decision")+
+       y = "Difference in Decision\n")+
   my_theme_horiz
 
 #D. acceptance by editor gender and institution type after 1st review----
@@ -224,23 +236,36 @@ fig6d_summ_inst <- fig6d_ed_dec_data %>%
   spread(key = gender, value = percent) %>% 
   mutate(overperform = male - female)
 
-#plot
-figure_6D <- fig6d_summ_inst %>% 
+fig6d_inst_total <- fig6d_sub_inst_gen %>% 
+  group_by(editor.gender, US.inst.type) %>% 
+  summarise(total = sum(total)) %>% 
+  left_join(., fig6d_summ_inst, 
+            by = c("editor.gender", "US.inst.type")) %>% 
+  as.data.frame() %>% 
   filter(EJP.decision == "Reject") %>% 
+  mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
+
+#plot
+figure_6D <- fig6d_inst_total %>% 
   ggplot(aes(x = US.inst.type, fill = overperform,
              y = overperform))+
-  geom_col(position = "dodge")+
+  geom_col()+
   gen_gradient+
   coord_flip()+
-  facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
+  facet_wrap(~gen_ed_facet(editor.gender), ncol = 1,
+             scales = "free_y")+
   labs(x = "\n", 
        y = "Difference in Decision")+
   my_theme_horiz
 
 #generate & save figure----
-plot_grid(figure_6A, figure_6B, figure_6C, figure_6D,
-          labels = c('A', 'B', 'C', 'D'), 
-          label_size = 18, ncol = 2)
+fig_6_row1 <- plot_grid(figure_6A, figure_6B,
+                        labels = c('A', 'B'), 
+                        label_size = 18, ncol = 2)
+
+plot_grid(fig_6_row1, figure_6C, figure_6D,
+          labels = c('', 'C', 'D'), 
+          label_size = 18, nrow = 3)
 
 ggsave("Figure_6.png", device = 'png', 
-       path = 'submission', width = 12, height = 9)
+       path = 'submission', width = 10, height = 12)
