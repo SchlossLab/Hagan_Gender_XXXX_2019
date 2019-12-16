@@ -60,7 +60,7 @@ source("../code/genderize/ASM_country_na.R")
 
 \vspace{40mm}
 
-Table S1. Sensitivity, specificity, and accuracy of genderize thresholds for data provided by Broderick and Casadevall [@broderick_gender_2019]. Bolded text denotes the accuracy of the threshold used in all further analyses. Also included are the percent of names not assigned a gender (percent unknown) at each threshold.
+Table S1. Sensitivity, specificity, and accuracy of genderize thresholds for data provided by Broderick and Casadevall [@broderick_gender_2019]. Bolded text denotes the accuracy of the threshold used in all further analyses. Also included are the percent of names not assigned a gender by the API (percent unknown) at each threshold.
 ```{r genderize_stats, results='asis', echo=FALSE, message=FALSE}  
 source("../code/genderize/Table_S1.R")
 supp_table_1 <- stats_summary %>% 

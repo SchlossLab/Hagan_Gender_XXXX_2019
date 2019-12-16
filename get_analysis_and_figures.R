@@ -10,6 +10,7 @@ rep_figures <- list.files(path = "code/representation",
 
 for(fig in rep_figures){
   source(fig)
+  print(fig)
 }
 
 source("code/representation/retention_alluvial.R") #alluvial summary data
@@ -25,6 +26,7 @@ bias_figures <- list.files(path = "code/bias", pattern = "Figure_*", full.names 
 
 for(fig in bias_figures){
   source(fig)
+  print(fig)
 }
 
 #genderize figure----

@@ -1,8 +1,12 @@
 #generate component graphs of the "author figure"
 
 #A. Author proportion from US inst types
-Fig_3A <- summ_US_stats %>% 
+Fig_3A_data <- summ_US_stats %>% 
   filter(role == "author") %>% 
+  left_join(., sum_inst_role, by = c("role", "US.inst.type")) %>% 
+  mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
+
+Fig_3A <- Fig_3A_data %>% 
   ggplot(aes(fill = gender, y = percent, x = US.inst.type, label = n))+
   geom_col(position = "dodge")+
   coord_flip()+
@@ -23,7 +27,8 @@ max_value <- get_ymax(all_authors_w_prop)
 
 #line plot of all journals combined by year
 Fig_3B <- gender_line_plot(all_authors_w_prop, max_value) + 
-  labs(x = "Year\n", y = "\nProportion of Authors", color = "Gender")
+  labs(x = "Year\n", y = "\nProportion of Authors", color = "Gender") +
+  my_theme_leg_horiz
 
 #C. Proportion of men/women first authors over time: submitted & published----
 Fig_3C <- plot_sub_v_pub_time("sub_first_auth", 

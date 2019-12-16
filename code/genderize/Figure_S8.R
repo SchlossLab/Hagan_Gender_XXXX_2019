@@ -1,6 +1,13 @@
 library(png)
 library(grid)
 
+#schematic----
+schematic <- readPNG("submission/genderize_method.png")
+
+sch_ger <- grid::rasterGrob(schematic, interpolate=TRUE)
+
+sch_plot <- ggdraw() + draw_grob(sch_ger)
+
 #equation----
 equation <- readPNG("submission/impact_equation.png")
 
@@ -76,11 +83,12 @@ plot_ASM_country_impact <- ASM_predictions_by_country %>%
   labs(x = "Publication Country", y = "Negative Impact on Overall Gender Prediction")+
   my_theme_horiz
 
-plot_grid(equ_plot, plot_ASM_country_impact, rel_heights = c(0.5, 2),
+plot_grid(equ_plot, plot_ASM_country_impact, 
+          rel_heights = c(0.5, 2),
           nrow = 2, labels = c('A', 'B'), label_size = 18)
 
 ggsave("Figure_S8.png", device = 'png', 
-       path = 'submission', width = 8, height = 10)
+       path = 'submission', width = 8, height = 12)
 
 #which countries have the most "unknown" gender names?
 #na_by_country <- na_obs %>%

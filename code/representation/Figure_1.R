@@ -1,18 +1,22 @@
 #Generate components of the figure summarizing editor stats
 
 #A. proportion of editors from US institutions by gender----
-Fig_1A <- summ_US_stats %>% 
+Fig_1A_data <- summ_US_stats %>% 
   filter(role == "editor") %>% 
-  ggplot(aes(fill = gender, y = percent, x = US.inst.type, label = n))+
+  left_join(., sum_inst_role, by = c("role", "US.inst.type")) %>% 
+  mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
+
+Figure_1A <- Fig_1A_data %>% 
+  ggplot(aes(fill = gender, y = percent, x = US.inst.type))+
   geom_col(position = "dodge")+
   coord_flip(ylim = c(0, 60))+
   scale_fill_manual(labels = gen_labels, values = gen_colors)+
   labs(x = "\n", y = "Percent of Editor Gender\n",
        fill = "Gender")+
-  geom_text(aes(y = percent + 1.5), 
-            position = position_dodge(width = 0.9), 
-            vjust = 0.7, size = 3)+
-  my_theme_leg_horiz+
+  #geom_text(aes(y = percent + 1.5), 
+  #          position = position_dodge(width = 0.9), 
+  #          vjust = 0.7, size = 3)+
+  my_theme_horiz+
   theme(legend.position = c(0.8, 0.4))
 
 #B. Proportion of editors (editors + senior.editors) at ASM over time by gender & manuscripts handled----
@@ -34,24 +38,29 @@ Fig_1B <- ggplot(ed_w_prop) +
   my_theme_horiz
 
 #C. US reviewers by institutions & gender----
-Fig_1C <- summ_US_stats %>% 
+Fig_1C_data <- summ_US_stats %>% 
   filter(role == "reviewer") %>% 
-  ggplot(aes(fill = gender, y = percent, x = US.inst.type, label = n))+
+  left_join(., sum_inst_role, by = c("role", "US.inst.type")) %>% 
+  mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
+  
+Figure_1C <- Fig_1C_data %>% 
+  ggplot(aes(fill = gender, y = percent, x = US.inst.type))+
   geom_col(position = "dodge")+
   coord_flip()+
   scale_fill_manual(labels = gen_labels, values = gen_colors)+
   labs(x = "\n", y = "Percent of Reviewer Gender", fill = "Gender")+
-  geom_text(aes(y = percent + 1.5), 
-            position = position_dodge(width = 0.9), 
-            vjust = 0.5, size = 2)+
+  #geom_text(aes(y = percent + 1.5), 
+  #          position = position_dodge(width = 0.9), 
+  #          vjust = 0.5, size = 2)+
   my_theme_leg_horiz+
   theme(legend.position = c(0.8, 0.4))
 
 #D. Proportion of Reviewers suggested each Year----
-Fig_1D <- plot_rev_time("reviewer_data") #add color?
+Fig_1D <- plot_rev_time("reviewer_data")+
+  my_theme_leg_horiz
 
 #generate full figures----
-plot_grid(Fig_1A, Fig_1B, Fig_1C, Fig_1D,
+plot_grid(Figure_1A, Fig_1B, Figure_1C, Fig_1D,
           labels = c('A', 'B', 'C', 'D'), label_size = 18,
           nrow = 2)
 #

@@ -1,3 +1,7 @@
+auth_data <- data %>% 
+  filter(role == "author") %>% 
+  select(random.manu.num, random.person.id, gender, num.authors) %>%
+  distinct()
 
 uniq.manu <- auth_data %>% pull(random.manu.num) %>% unique()
 
@@ -13,6 +17,13 @@ collab_data <- left_join(bias_data, author_ratio, by = c("random.manu.num", "num
   select(grouped.random, num.authors, prop.fem.auth, gender, journal) %>% 
   distinct() %>% 
   mutate(norm.fem = prop.fem.auth/num.authors)
+
+sing_auth_num <- collab_data %>% 
+  select(gender, grouped.random, num.authors) %>% 
+  distinct() %>% 
+  filter(num.authors == 1) %>% 
+  group_by(gender) %>% 
+  summarise(n = n())
 
 fem_by_auth_num <- collab_data %>% 
   select(gender, grouped.random, num.authors, prop.fem.auth) %>% 

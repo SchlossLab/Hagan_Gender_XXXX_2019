@@ -42,3 +42,6 @@ summ_US_stats$role <- fct_relevel(summ_US_stats$role, roles)
 
 summ_US_stats$US.inst.type <- fct_relevel(summ_US_stats$US.inst.type, 
                                           op_inst_list)
+
+sum_inst_role <- summ_US_stats %>% 
+  group_by(role, US.inst.type) %>% summarise(total = sum(n))

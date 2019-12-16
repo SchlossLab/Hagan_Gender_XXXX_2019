@@ -55,7 +55,8 @@ gen_ed_levels <- c("female", "male")
 
 gen_breaks <- c("NA", "male", "female")
 
-gen_labels <- c("Unknown", "Men", "Women")
+gen_labels <- c("none" = "Unknown", "male" = "Men",
+                "female" = "Women")
 
 gen_linetype <- c("solid", "dashed", "dotted")
 
@@ -194,7 +195,8 @@ plot_sub_v_pub_j_time <- function(temp_sub, temp_pub){
   plot <- j_authors_w_prop %>% 
     filter(gender == "male" | gender == "female") %>% 
     ggplot() + 
-    geom_line(aes(x = year, y = proportion, linetype = manu.type, color = gender))+
+    geom_line(aes(x = year, y = proportion, 
+                  linetype = manu.type, color = gender))+
     coord_cartesian(ylim = c(0, max_journ_value)) +
     scale_color_manual(values = gen_ed_colors, 
                        breaks = gen_ed_labels)+
@@ -287,5 +289,17 @@ plot_rev_time <- function(rev_df){
     labs(x = "Year", y = paste("\nProportion of\n", rev_type),
          color = "Gender")
   
+  return(plot)
+}
+
+plot_feature_ranks <- function(data){
+  # Plot from highest median ranked OTU to least (only top 5) and thir ranks that lay between 1-100
+  # Rank 1 is the highest rank
+  plot <- ggplot(data, aes(reorder(data$key, -data$rank, FUN = median), data$rank)) +
+    geom_point(aes(colour= factor(data$sign)), size=1.5) + # datapoints lighter color
+    scale_color_manual(values=c("#56B4E9","red3", "#999999")) +
+    stat_summary(fun.y = function(x) median(x), colour = 'black', geom = "point", size = 3) + # Median darker
+    coord_flip(ylim=c(0,15)) +
+    my_theme_leg_horiz
   return(plot)
 }

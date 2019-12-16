@@ -16,7 +16,7 @@ uniq_author_data <- data %>% filter(role == "author") %>%
 #break down uniq_auth_data by type of authorship 
 mid_auth <- get_auth_type("middle", uniq_author_data)
 
-corres_auth <- get_auth_type("corres", uniq_author_data)
+corres_auth <- get_auth_type("corresponding", uniq_author_data)
 
 first_auth <- get_auth_type("first", uniq_author_data)
 
@@ -40,7 +40,7 @@ journals <- pub_author_data %>% pull(journal) %>% unique()
 #break down pub_auth_data by type of authorship 
 pub_mid_auth <- get_auth_type("middle", pub_author_data)
 
-pub_corres_auth <- get_auth_type("corres", pub_author_data)
+pub_corres_auth <- get_auth_type("corresponding", pub_author_data)
 
 pub_first_auth <- get_auth_type("first", pub_author_data)
 
@@ -57,7 +57,7 @@ sub_author_data <- data %>%
 #break down sub_auth_data by type of authorship 
 sub_mid_auth <- get_auth_type("middle", sub_author_data)
 
-sub_corres_auth <- get_auth_type("corres", sub_author_data)
+sub_corres_auth <- get_auth_type("corresponding", sub_author_data)
 
 sub_first_auth <- get_auth_type("first", sub_author_data)
 

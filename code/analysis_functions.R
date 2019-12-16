@@ -22,7 +22,7 @@ get_auth_type <- function(x, df){
     x == "middle" ~ paste("author.last != 'TRUE' & author.seq != '1'"),
     x == "first" ~ paste("author.seq == '1'"),
     x == "last" ~ paste("author.last == 'TRUE'"),
-    x == "corres" ~ paste("author.corres == 'TRUE'")
+    x == "corresponding" ~ paste("author.corres == 'TRUE'")
   ) %>% rlang::parse_expr()
   
   #filter dataset
@@ -126,4 +126,51 @@ get_sub_pub_prop <- function(sub_df, pub_df, prop){
   c_authors_w_prop <- rbind(sub_c_authors_w_prop, pub_c_authors_w_prop) 
   
   return(c_authors_w_prop)
+}
+
+create_feature_rankings <- function(data){
+  
+  splits <- nrow(data)
+  
+  data$split <- rownames(data)
+  
+  ranked_data <- map_dfr(1:splits, function(x){
+    
+    weights <- data %>%
+      filter(split == x) %>% 
+      select(-Bias, -model, -split) %>%
+      gather(factor_key=TRUE) %>%
+      mutate(sign = case_when(value<0 ~ "negative",
+                              value>0 ~ "positive",
+                              value==0 ~ "zero"))
+    
+    weights$value <- abs(weights$value)
+    
+    ranks <- weights %>% 
+      arrange(desc(value)) %>%
+      mutate(rank = 1:nrow(weights)) %>%
+      mutate(value = case_when(sign=="negative" ~ value*-1,
+                               sign=="positive"~ value,
+                               sign=="zero" ~ value)) %>%
+      select(key, value, rank, sign)
+    
+    return(ranks)
+  })
+  
+  imp_first_10 <- ranked_data %>%
+    # 2. Group by the OTU name and compute median rank for each OTU
+    group_by(key) %>%
+    summarise(median_rank = median(rank)) %>%
+    # 3. Arrange from highest ranked 1, descending
+    arrange(median_rank) %>%
+    # 4. Grab only the highest ranked 20
+    head(n=10) %>%
+    select(key, median_rank)
+  
+  # Here we want to only grab the data (rank info from 100 datasplits) of only the top 20 median ranked OTUs
+  # The imp data will be returned for Figure 3 where we plot each rank info for each data-split of the 20 top OTUs
+  imp <- ranked_data %>%
+    filter(key %in% imp_first_10$key)
+  
+  return(imp)
 }
