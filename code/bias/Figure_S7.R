@@ -159,7 +159,7 @@ stats_WE_ed_rej <- summary(lm(S7_ed_rej$performance~S7_ed_rej$percent.W.editor))
 stats_WE_rev_rej <- summary(lm(S7_rev_rej$performance~S7_rev_rej$percent.W.editor))
 
 #do percent of w authors correlate with w editors
-stats_WEvWA <- summary(lm(cat_bias_data$percent.W.editor~Fig_S7_data$percent.W))
+stats_WEvWA <- summary(lm(cat_bias_data$percent.W.editor~cat_bias_data$percent.W))
 
 #plot Fig S7----
 Fig_S7_list <- map(cat_journ_list, function(x, y){
