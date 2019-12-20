@@ -116,6 +116,28 @@ c_authors_avg_prop <- get_sub_pub_prop("sub_corres_auth",
   group_by(manu.type, gender) %>% 
   summarise(avg = round(mean(proportion), digits = 2))
 
+#Distribution of manuscripts submitted by gender & inst type
+
+#percent women in US vs Non-US
+num_US_v_Non <- bias_data %>% 
+  select(gender, random.person.id, grouped.random, US.inst) %>% 
+  distinct() %>% 
+  group_by(US.inst, gender) %>% summarise(n = n()) %>% as_tibble()
+
+percent_gen_US_v_Non <- num_US_v_Non %>% 
+  spread(key = gender, value = n) %>% 
+  mutate(percent.W.sub = get_percent(female, (female+male)))
+
+#percent of submitted manuscripts by inst type
+num_inst_type <- bias_data %>% 
+  select(gender, random.person.id, grouped.random, US.inst.type) %>% 
+  distinct() %>% 
+  group_by(US.inst.type, gender) %>% summarise(n = n()) %>% as_tibble()
+
+percent_gen_inst_type <- num_inst_type %>% 
+  spread(key = gender, value = n) %>% 
+  mutate(percent.W.sub = get_percent(female, (female+male)))
+
 #authors:
 #min_perform <- acc_diff_auth_j %>% 
 #  arrange(.$dif_rel_rej) %>% 
