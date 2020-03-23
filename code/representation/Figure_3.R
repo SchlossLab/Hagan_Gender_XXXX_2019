@@ -7,7 +7,8 @@ Fig_3A_data <- summ_US_stats %>%
   mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
 
 Fig_3A <- Fig_3A_data %>% 
-  ggplot(aes(fill = gender, y = percent, x = US.inst.type, label = n))+
+  ggplot(aes(fill = gender, y = percent, 
+             x = fct_reorder(US.inst.type, desc(total)), label = n))+
   geom_col(position = "dodge")+
   coord_flip()+
   scale_fill_manual(labels = gen_labels, values = gen_colors)+
@@ -28,7 +29,7 @@ max_value <- get_ymax(all_authors_w_prop)
 #line plot of all journals combined by year
 Fig_3B <- gender_line_plot(all_authors_w_prop, max_value) + 
   labs(x = "Year\n", y = "\nProportion of Authors", color = "Gender") +
-  my_theme_leg_horiz
+  my_theme_horiz
 
 #C. Proportion of men/women first authors over time: submitted & published----
 Fig_3C <- plot_sub_v_pub_time("sub_first_auth", 

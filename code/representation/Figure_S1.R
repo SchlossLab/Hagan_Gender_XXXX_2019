@@ -37,8 +37,9 @@ Fig_S1 <- ggplot(ed_prop_j) +
                      values = gen_ed_colors)+
   scale_linetype_manual(breaks = c("proportion", "weighted_proportion"), labels = c("Individuals", "Manuscripts Handled"), values = c("solid", "dashed"))+
   labs(x = "Year", y = "\nPercent of Editors", 
-       linetype = "Type", color = "Gender")+
-  my_theme_leg
+       linetype = "Type:", color = "Gender:")+
+  my_theme_leg+
+  theme(legend.position="top")
 
 plot_grid(Fig_S1)
 

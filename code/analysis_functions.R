@@ -4,7 +4,7 @@ library(tidyverse)
 #calculate two decimal percentage given num & denom
 get_percent <- function(x, y){
   z <- (as.numeric(x)/as.numeric(y))*100
-  percent <- round(z, digits = 2)
+  percent <- round(z, digits = 1)
   return(percent)
 }
 

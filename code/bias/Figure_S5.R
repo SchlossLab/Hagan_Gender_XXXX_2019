@@ -60,18 +60,18 @@ version_sum <- accepted_versions %>%
   summarise(med_vers = median(num.versions),
             IQR_vers = IQR(num.versions))
 
-#number of revisions before acceptance
-figure_S5C <- accepted_versions %>% 
-  ggplot(aes(x = gender, y = num.versions, fill = gender))+
-  geom_boxplot()+
-  facet_wrap(~journal)+
-  scale_fill_manual(values = gen_colors)+
-  gen_x_replace +
-  labs(x = "Gender", y = "\nNumber of Versions")+
-  my_theme
+#number of revisions before acceptance -- data described in text
+#figure_S5C <- accepted_versions %>% 
+#  ggplot(aes(x = gender, y = num.versions, fill = gender))+
+#  geom_boxplot()+
+#  facet_wrap(~journal)+
+#  scale_fill_manual(values = gen_colors)+
+#  gen_x_replace +
+#  labs(x = "Gender", y = "\nNumber of Versions")+
+#  my_theme
 
-plot_grid(figure_S5A, figure_S5B, figure_S5C,
-          labels = c('A', 'B', 'C'), label_size = 18)
+plot_grid(figure_S5A, figure_S5B, ncol = 1,
+          labels = c('A', 'B'), label_size = 18)
 
 ggsave("Figure_S5.png", device = 'png', 
-       path = 'submission', width = 12, height = 12)
+       path = 'submission', width = 9, height = 12)

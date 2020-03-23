@@ -23,8 +23,8 @@ Fig_2A <- ggplot(ed_manu_prop) +
                      values = gen_ed_colors)+
   #annotate(geom = "text", x = 2017, y = ed_manu_text[1,2]+2, label = "Women")+
   #annotate(geom = "text", x = 2017, y = ed_manu_text[2,2]+5, label = "Men")+
-  labs(x = "Year\n", y = "\nProportion of\nEditor Workload")+
-  my_theme_horiz
+  labs(x = "Year\n", y = "\nProportion of\nEditor Workload", color = "Gender:")+
+  my_theme_horiz 
 
 #B. Number of papers reviewed by Gender----
 Fig_2B <- reviewer_data %>% 
@@ -127,17 +127,30 @@ Fig_2C <- ed_resp %>%
   #facet_wrap(~ if_else(Rev.Resp == "No_Resp", "No Response", "Accept"))+
   scale_fill_manual(values = gen_colors, 
                     labels = gen_labels)+
-  labs(x = "\nEditor", y = "\nPercent of Reviewers",
-       fill = "Reviewer Gender")+
+  labs(x = "\nEditor", y = "Percent of Reviewers")+
   gen_x_replace+
-  my_theme_leg_horiz+
-  theme(legend.position = c(0.91,0.25))
+  my_theme_horiz
+
+Fig2_leg <- ed_resp %>% 
+  ggplot()+
+  geom_col(aes(x = editor.gender, y = Percent,
+               fill = reviewer.gender), 
+           position = "dodge")+
+  scale_fill_manual(values = gen_colors, 
+                    labels = gen_labels)+
+  labs(fill = "Gender")+
+  theme(legend.position = "top")
 
 #generate full figure----
+Fig2_legend <- get_legend(Fig2_leg)
+
 blank <- ggplot()
 
-plot_AB <- plot_grid(Fig_2A, Fig_2B, Fig_2C, nrow = 3,
-          labels = c('A', 'B', 'C'), label_size = 18)
+plot_legend <- plot_grid(blank, Fig2_legend, blank, nrow = 1)
+
+plot_AB <- plot_grid(plot_legend, Fig_2A, Fig_2B, Fig_2C, nrow = 4,
+                     rel_heights = c(1, 4, 4, 4),
+          labels = c('', 'A', 'B', 'C'), label_size = 18)
 
 ggsave("Figure_2.png", device = 'png', 
      path = 'submission', width = 9, height = 9)

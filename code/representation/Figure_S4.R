@@ -46,9 +46,7 @@ fem_by_auth_num <- collab_data %>%
     prop.fem.auth >= .25 & prop.fem.auth <= .50  ~ "25-50%",
     prop.fem.auth >= .51 & prop.fem.auth <= .75  ~ "51-75%",
     TRUE ~ ">75%"
-  )) #%>% 
-  #group_by(auth.bin, gender, prop.fem.auth.bin) %>% 
-  #summarise(num.manu = sum(n)) 
+  )) 
 
 auth_bin_lev <- c("2-5 Authors", "6-10 Authors", "11-15 Authors",
                   "16-20 Authors", "21-30 Authors",
@@ -58,6 +56,19 @@ fem_bin_lev <- c("0", "<25%", "25-50%", "51-75%", ">75%")
 
 fem_by_auth_num$auth.bin <- fct_relevel(fem_by_auth_num$auth.bin, auth_bin_lev)  
 fem_by_auth_num$prop.fem.auth.bin <- fct_relevel(fem_by_auth_num$prop.fem.auth.bin, fem_bin_lev)  
+
+#create df to fill in missing values in plots -- manual approach to "complete" function
+missing_bins <- tibble(
+  gender = c("female"),
+  grouped.random = c(0),
+  num.authors = c(0),
+  prop.fem.auth = c(0),
+  auth.bin = c("2-5 Authors", "6-10 Authors", "11-15 Authors", "16-20 Authors", "21-30 Authors"),
+  prop.fem.auth.bin = c("0")
+)
+
+fem_by_auth_num <- fem_by_auth_num %>% 
+  rbind(., missing_bins)
 
 plot_fem_by_auth <- fem_by_auth_num %>% 
   ggplot()+

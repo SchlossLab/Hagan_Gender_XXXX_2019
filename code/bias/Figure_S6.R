@@ -32,7 +32,7 @@ Fig_S6A_data <- left_join(ASM_subs_j, ed_rej_subs_j,
 Figure_S6A <- Fig_S6A_data %>% 
   ggplot(aes(x = journal, y = performance, fill = performance))+
   geom_col()+
-  facet_wrap(~US.inst.type, scales = "free")+
+  facet_wrap(~US.inst.type, scales = "free", ncol = 2)+
   coord_flip()+
   gen_gradient+
   labs(x = "\n", 
@@ -70,7 +70,7 @@ Fig_S6B_data <- left_join(ASM_subs_j, acc_subs_j,
 Figure_S6B <- Fig_S6B_data %>% 
   ggplot(aes(x = journal, y = performance, fill = performance))+
   geom_col()+
-  facet_wrap(~US.inst.type, scales = "free")+
+  facet_wrap(~US.inst.type, scales = "free", ncol = 2)+
   coord_flip()+
   gen_gradient+
   labs(x = "\n", 
@@ -133,7 +133,7 @@ sub_inst_gen <- rev_rec_data %>%
   group_by(reviewer.gender, US.inst.type, gender) %>% 
   summarise(total = n())
 
-summ_inst <- rev_rec_data %>% 
+summ_inst_num <- rev_rec_data %>% 
   filter(US.inst == "yes") %>% 
   filter(!is.na(US.inst.type)) %>% 
   filter(review.recommendation != "Revise") %>% 
@@ -146,20 +146,32 @@ summ_inst <- rev_rec_data %>%
   left_join(., sub_inst_gen, by = c("reviewer.gender",
                                     "US.inst.type", 
                                     "gender")) %>% 
-  mutate(percent = get_percent(n, total)) %>% 
+  mutate(percent = get_percent(n, total))
+
+rev_inst_totals <- summ_inst_num %>% 
+  select(reviewer.gender, US.inst.type, gender, total) %>% distinct() %>% 
+  spread(gender, total) %>% 
+  mutate(total_sub = male + female) %>% select(-male, -female)
+
+summ_inst <- summ_inst_num %>% 
   select(-n, -total) %>% 
   spread(key = gender, value = percent) %>% 
-  mutate(overperform = male - female)
+  mutate(overperform = male - female) %>% 
+  select(-male, -female) %>% 
+  left_join(., rev_inst_totals, by = c("reviewer.gender", "US.inst.type")) %>% 
+  mutate(US.inst.type = paste0(US.inst.type, " (N=", total_sub, ")"))
 
 Figure_S6C <- summ_inst %>% 
   filter(review.recommendation == "Accept") %>% 
-  ggplot(aes(x = US.inst.type, fill = overperform,
+  ggplot(aes(x = fct_reorder(US.inst.type, desc(total_sub)), 
+             fill = overperform,
              y = overperform))+
   geom_col(position = "dodge")+
   scale_fill_gradient2(low = "#D55E00", mid='snow3', 
                        high = "#0072B2", space = "Lab")+
   coord_flip()+
-  facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1)+
+  facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1, 
+             scales = "free_y")+
   labs(x = "\n", 
        y = "Difference in Acceptance Recommendation
        by Reviewer Gender")+
@@ -171,10 +183,19 @@ Figure_S6D <- plot_feature_ranks(ranked_weights)+
        x = "\nFeature")
 
 #generate & save figure----
-plot_grid(Figure_S6A, Figure_S6B, Figure_S6C, Figure_S6D,
-          labels = c('A', 'B', 'C', 'D'),
+Fig_S6AB <- plot_grid(Figure_S6A, Figure_S6B,
+          labels = c('A', 'B'),
           label_size = 18,
+          ncol = 2)
+
+Fig_S6CD <- plot_grid(Figure_S6C, Figure_S6D,
+                      labels = c('C', 'D'),
+                      label_size = 18,
+                      ncol = 2)
+
+plot_grid(Fig_S6AB, Fig_S6CD,
+          rel_heights = c(2, 1),
           nrow = 2)
 
 ggsave("Figure_S6.png", device = 'png', 
-       path = 'submission', width = 16, height = 14)
+       path = 'submission', width = 14, height = 16)

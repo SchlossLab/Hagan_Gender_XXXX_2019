@@ -189,7 +189,7 @@ fig6c_inst_rates <- rbind(fig6c_editorial_rej_per, fig6c_acc_per) %>%
 #plot
 figure_6C <- fig6c_inst_rates %>% 
   ggplot()+
-  geom_col(aes(x = US.inst.type, y = performance, fill = performance))+
+  geom_col(aes(x = fct_reorder(US.inst.type, desc(total)), y = performance, fill = performance))+
   coord_flip()+
   facet_wrap(~rate, nrow = 2, scales = "free_y")+
   gen_gradient+
@@ -247,7 +247,7 @@ fig6d_inst_total <- fig6d_sub_inst_gen %>%
 
 #plot
 figure_6D <- fig6d_inst_total %>% 
-  ggplot(aes(x = US.inst.type, fill = overperform,
+  ggplot(aes(x = fct_reorder(US.inst.type, desc(total)), fill = overperform,
              y = overperform))+
   geom_col()+
   gen_gradient+

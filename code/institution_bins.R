@@ -172,8 +172,8 @@ low <- c("baptist health", "california state", "university of washington",
          "suny buffalo", "california polytechnic ", "xavier", "of new york") %>% 
   paste0(., collapse = "|")
 
-inst_list <- c("R1 Univ", "R2 Univ", "Low Research Univ", "Med School & Institutes", 
-               "Federal Research", "Industry Research", "Other", "Non-US Inst")
+inst_list <- c("R1 Univ", "Med School & Institutes", "Federal Research", "Industry Research", 
+               "R2 Univ", "Low Research Univ", "Other", "Non-US Inst")
 
 non_us_inst <- c("nanjing|china|huazhong|oxford|british columbia|toronto|queensland|alberta|melbourne|mcgill|fudan university|university of cambridge|shanghai jiao tong university|jilin university|jiangnan university|monash university|inserm|sichuan university|university of liverpool|university of nottingham|sichuan agricultural university|university of edinburgh|university of sydney|tsinghua university|university of birmingham|national taiwan university|university college london|mahidol university|helmholtz centre for infection research|chinese university of hong kong|wageningen university|university of otago|university of adelaide|london school of hygiene and tropical medicine|cardiff university|king's college london|commonwealth scientific and industrial research organisation|ufmg|tongji university|university of naples federico ii|university of vienna|university of oslo|university of warwick|australian national university|university of montreal|universidad|canada|munich|cambridge|xi'an|buenos aires|ryerson|moscow|epfl|james cook university|laval university|western university|riken|oxford university|la trobe university|university of pavia|king saud university|murdoch|canadian|cinvestav|european molecular biology laboratory|osnabrück|minas gerais|hannover|niigata|postech|bergen|borstel|tasmania|hangzhou|tzu chi |beirut|wollongong|rio grande do sul|innsbruck|peter maccallum|gustave roussy|hokkaido|western sydney|milano|chinese|cancer research uk|jinlin|charles darwin|wehi|austin health|al qura|witten/herdecke")
 

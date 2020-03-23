@@ -35,7 +35,17 @@ get_cat_bias_data <- function(cat_journ){
   
   #number of submissions by category
   cat_total <- cat_summary %>% 
-    group_by(category) %>% summarise(cat_N = sum(total))
+    group_by(category) %>% summarise(cat.N = sum(total))
+  
+  #acceptance rate by category
+  cat_accept <- cat_data %>% 
+    filter(EJP.decision == "Accept") %>% 
+    select(category, grouped.random) %>% distinct() %>% 
+    group_by(category) %>% 
+    summarise(n.acc = n()) %>% 
+    left_join(., cat_total, by = "category") %>% 
+    mutate(cat.acc.rate = get_percent(n.acc, cat.N)) %>% 
+    select(-cat.N)
   
   #number of submissions by gender
   gend_total <- cat_data %>% 
@@ -111,6 +121,7 @@ get_cat_bias_data <- function(cat_journ){
     left_join(., cat_total, by = "category") %>%
     left_join(., percent_W, by = "category") %>% 
     left_join(., cat_editors, by = "category") %>% 
+    left_join(., cat_accept, by = "category") %>% 
     as_tibble(.) %>% 
     mutate(journal = cat_journ)
   
@@ -122,10 +133,9 @@ plot_cat_bias <- function(data, cat_journ){
   plot <- data %>% 
     filter(journal == cat_journ) %>% 
     mutate(category = paste0(category, 
-                             " (N=", cat_N, "; %WA=", percent.W, 
-                             "; %WE=", percent.W.editor, ")")) %>% 
+                             " (N=", cat.N, ")")) %>% 
     ggplot() +
-    geom_col(aes(x = fct_reorder(category, performance), 
+    geom_col(aes(x = fct_reorder(category, desc(cat.N)), 
                  y = performance, fill = performance)) + 
     facet_wrap(~EJP.decision, #scales = "free_y", 
                ncol = 2)+
@@ -148,10 +158,20 @@ S7_ed_rej <- cat_bias_data %>%
 S7_rev_rej <- cat_bias_data %>% 
   filter(EJP.decision == "Reject after Review")
 
+acc_range <- cat_bias_data %>% select(category, journal, cat.acc.rate) %>% 
+  distinct() %>%  arrange(desc(cat.acc.rate))#range in acceptance rates by category
+
+cat_N_list <- cat_bias_data %>% select(category, journal, cat.N) %>% distinct() %>% arrange(desc(cat.N))
+
+avg_W_sub <- mean(S7_ed_rej$percent.W, na.rm = TRUE) %>% round(., digits = 1)
+
 #does percentage of women authors correlate with diff in perform
 stats_WA_ed_rej <- summary(lm(S7_ed_rej$performance~S7_ed_rej$percent.W))
 
 stats_WA_rev_rej <- summary(lm(S7_rev_rej$performance~S7_rev_rej$percent.W))
+
+#does percentage of women authors correlate with acceptance rates
+stats_WA_acc <- summary(lm(S7_ed_rej$cat.acc.rate~S7_ed_rej$percent.W))
 
 #does percent of women editors correlate with diff in performance
 stats_WE_ed_rej <- summary(lm(S7_ed_rej$performance~S7_ed_rej$percent.W.editor))
@@ -159,7 +179,21 @@ stats_WE_ed_rej <- summary(lm(S7_ed_rej$performance~S7_ed_rej$percent.W.editor))
 stats_WE_rev_rej <- summary(lm(S7_rev_rej$performance~S7_rev_rej$percent.W.editor))
 
 #do percent of w authors correlate with w editors
-stats_WEvWA <- summary(lm(cat_bias_data$percent.W.editor~cat_bias_data$percent.W))
+stats_WEvWA <- summary(lm(S7_ed_rej$percent.W.editor~S7_ed_rej$percent.W))
+
+#do the # of manuscripts in the category correlate with diff in performance
+num_ed_rej <- summary(lm(S7_ed_rej$performance~S7_ed_rej$cat.N))
+
+num_rev_rej <- summary(lm(S7_rev_rej$performance~S7_rev_rej$cat.N))
+
+#do the # of manuscripts in the category correlate with acceptance rates
+num_v_acc <- summary(lm(S7_ed_rej$cat.acc.rate~S7_ed_rej$cat.N))
+
+#do percent of W authors correlate with cat_N
+stats_numvWA <- summary(lm(S7_ed_rej$cat.N~S7_ed_rej$percent.W))
+
+#do percent of W editors correlate with cat_N
+stats_numvWE <- summary(lm(S7_ed_rej$cat.N~S7_ed_rej$percent.W.editor))
 
 #plot Fig S7----
 Fig_S7_list <- map(cat_journ_list, function(x, y){
@@ -168,6 +202,7 @@ Fig_S7_list <- map(cat_journ_list, function(x, y){
 
 plot_grid(plotlist = Fig_S7_list, 
                    labels = c('A', 'B', 'C', 'D', 'E'), 
+                  rel_heights = c(1.25, 1.25, 1, 1, 1),
                    label_size = 18, ncol = 1)
 
 ggsave("Figure_S7.png", device = 'png', 
