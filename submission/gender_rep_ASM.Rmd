@@ -13,7 +13,7 @@ bibliography: references.bib
 
 ```{r setup, eval=TRUE, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE, include=FALSE}
 library(knitr)
-library(kableExtra)
+#library(kableExtra)
 library(markdown)
 library(rmarkdown)
 library(formattable)
@@ -193,10 +193,10 @@ Table 1. Analysis of sub-discipline participation by women corresponding authors
 
 table_1 <- S7_ed_rej %>% 
   select(journal, category, cat.N, cat.acc.rate, percent.W.editor, percent.W) %>% 
-  knitr::kable(., format = "markdown", table.attr = "style = \"color: black;\"", 
+  knitr::kable(., format = "markdown", #table.attr = "style = \"color: black;\"", 
                digits = 1, col.names = c("Journal", "Category", "N", "% Accepted", "% Women Editors", "% Women Authors"), escape = F) %>%
-  collapse_rows() %>% 
-  kable_styling()
+  kableExtra::collapse_rows() %>% 
+  kableExtra::kable_styling()
 
 table_1
 ```
