@@ -18,17 +18,20 @@
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
 \IfFileExists{microtype.sty}{%
-\usepackage{microtype}
+\usepackage[]{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage[margin=1.0in]{geometry}
-\usepackage{hyperref}
-\hypersetup{unicode=true,
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
             pdftitle={Who are ASM Journals? A Gender-based Analysis},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1.0in]{geometry}
 \usepackage{longtable,booktabs}
+% Fix footnotes in tables (requires footnote package)
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{long table}}{}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -58,30 +61,11 @@
 \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
-%%% Use protect on footnotes to avoid problems with footnotes in titles
-\let\rmarkdownfootnote\footnote%
-\def\footnote{\protect\rmarkdownfootnote}
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
 
-%%% Change title format to be more compact
-\usepackage{titling}
-
-% Create subtitle command for use in maketitle
-\newcommand{\subtitle}[1]{
-  \posttitle{
-    \begin{center}\large#1\end{center}
-    }
-}
-
-\setlength{\droptitle}{-2em}
-
-  \title{\textbf{Who are ASM Journals? A Gender-based Analysis}}
-    \pretitle{\vspace{\droptitle}\centering\huge}
-  \posttitle{\par}
-    \author{}
-    \preauthor{}\postauthor{}
-    \date{}
-    \predate{}\postdate{}
-  
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -112,6 +96,10 @@
 
 \usepackage{pdfpages}
 \floatplacement{figure}{H} % Keep the figure up top of the page
+
+\title{\textbf{Who are ASM Journals? A Gender-based Analysis}}
+\author{}
+\date{\vspace{-2.5em}}
 
 \begin{document}
 \maketitle
@@ -153,19 +141,19 @@ field and no studies to-date seem to have investigated academic
 publishing in the field of microbiology. Using manuscripts submitted
 between January 2012 and August 2018 to the 15 journals published by the
 American Society for Microbiology (ASM), we describe the representation
-of women at ASM journals and the outcomes of their manuscripts. We find
-that senior women authors at ASM journals are underrepresented compared
-to global and society estimates of microbiology researchers.
-Additionally, manuscripts submitted by corresponding authors that were
-women received more negative outcomes (e.g., editorial rejections,
-reviewer recommendations, and decisions after review) than those
-submitted by men. These negative outcomes were somewhat mediated by
-whether or not the corresponding author was based in the US or not, and
-by the institution for US-based authors. Nonetheless, the pattern for
-women corresponding authors to receive more negative outcomes on their
-submitted manuscripts indicates a pattern of gender-influenced editorial
-decisions. We conclude with suggestions to improve the representation
-of, and decrease bias against, women.
+of women at ASM journals and the outcomes of their manuscripts. Senior
+women authors at ASM journals were underrepresented compared to global
+and society estimates of microbiology researchers. Additionally,
+manuscripts submitted by corresponding authors that were women received
+more negative outcomes (e.g., editorial rejections, reviewer
+recommendations, and decisions after review) than those submitted by
+men. These negative outcomes were somewhat mediated by whether or not
+the corresponding author was based in the US, and by the institution for
+US-based authors. Nonetheless, the pattern for women corresponding
+authors to receive more negative outcomes on their submitted manuscripts
+indicated a pattern of gender-influenced editorial decisions. We
+conclude with suggestions to improve the representation of and decrease
+bias against women.
 
 \subsection{Importance}\label{importance}
 
@@ -201,17 +189,17 @@ increased visibility as a researcher. Scientific societies also
 frequently publish the most reputable journals in their field,
 facilitating the peer review process to vet new research submissions
 (10). Recently, scientific societies and publishers have begun examining
-internal submissions data to evaluate representation of, and bias
-against, women in their peer review processes. The American Geological
-Union found that while the acceptance rate of women-authored
-publications was greater than publications authored by men, women
-submitted fewer manuscripts than men and were used as reviewers only
-20\% of the time (11), a factor influenced by the gender of the editor
-(12). Several studies have concluded that there is no significant bias
-against papers authored by women (12--17). Recent reports of manuscript
-outcomes at publishers for ecology and evolution, physics, and chemistry
-journals have found that women-authored papers are less likely to have
-positive peer reviews and outcomes (18--21).
+internal submissions data to evaluate representation of and bias against
+women in their peer review processes. The American Geological Union
+found that while the acceptance rate of women-authored publications was
+greater than publications authored by men, women submitted fewer
+manuscripts than men and were used as reviewers only 20\% of the time
+(11), a factor influenced by the gender of the editor (12). Several
+studies have concluded that there is no significant bias against papers
+authored by women (12--17). Recent reports of manuscript outcomes at
+publishers for ecology and evolution, physics, and chemistry journals
+have found that women-authored papers are less likely to have positive
+peer reviews and outcomes (18--21).
 
 The representation of women scientists and gender attitudes differ by
 scientific field and no studies to-date have investigated academic
@@ -233,30 +221,33 @@ Microbiology Reviews} (CMR), \emph{Eukaryotic Cell} (EC),
 Virology} (JVI), \emph{mBio}, \emph{Microbiology and Molecular Biology
 Reviews} (MMBR), \emph{Genome Announcements} (GA, now \emph{Microbiology
 Resource Annoucements}), \emph{Molecular and Cellular Biology} (MCB),
-\emph{mSphere}, and \emph{mSystems}. The goal of this research study was
-to describe the population of ASM journals through the gender-based
-representation of authors, reviewers, and editors and the associated
-peer review outcomes.
+\emph{mSphere}, and \emph{mSystems}. Two journals, EC and CVI, were
+retired during the period under study and three journals, GA/MRA, MMBR,
+and CMR, were excluded from the analysis due to their relatively low
+number of submissions. The goal of this research study was to describe
+the population of ASM journals through the gender-based representation
+of authors, reviewers, and editors and the associated peer review
+outcomes.
 
 \subsection{Results}\label{results}
 
 Over 100,000 manuscript records were obtained for the period between
 January 2012 and August 2018 (Fig. 1). Each of these were evaluated by
-editors and/or reviewers, leading to multiple possible outcomes.
-Manuscripts may be immediately rejected by editors instead of being sent
-to peer review, often due to issues of scope or quality. These were
-defined as editorial rejections and identified as manuscripts rejected
-without review. Alternately, editors send many manuscripts out for
-review by two or more experts in the field from a list of potential
-reviewers suggested by the authors and/or editors. Reviewers give
-feedback to the authors and editor, who decides whether the manuscript
-in question should be accepted, rejected, or sent back for revision. At
-ASM journals, manuscripts with suggested revisions that are expected to
-take more than 30 days are rejected, but generally encouraged to
-resubmit. If resubmitted, the authors are asked to note the previous
-(related) manuscript and the re-submission is assigned a new manuscript
-number. Multiple related manuscripts were tracked together by generating
-a unique grouped manuscript number based on the recorded related
+editors and/or reviewers, leading to multiple possible outcomes. AT ASM
+journals, manuscripts may be immediately rejected by editors instead of
+being sent to peer review, often due to issues of scope or quality.
+These were defined as editorial rejections and identified as manuscripts
+rejected without review. Alternately, editors send a majority of
+manuscripts out for review by two or more experts in the field from a
+list of potential reviewers suggested by the authors and/or editors.
+Reviewers give feedback to the authors and editor, who decides whether
+the manuscript in question should be accepted, rejected, or sent back
+for revision. Manuscripts with suggested revisions that are expected to
+take more than 30 days to address are rejected, but generally encouraged
+to resubmit. If resubmitted, the authors are asked to note the previous
+manuscript and the re-submission is assigned a new manuscript number.
+Multiple related manuscripts were tracked together by generating a
+unique grouped manuscript number based on the recorded related
 manuscript numbers. This grouped manuscript number served dual purposes
 of tracking a single manuscript through multiple rejections and avoiding
 duplicate counts of authors for a single manuscript. After eliminating
@@ -285,21 +276,20 @@ shown in many of the plots depicting representation of the population.
 These individuals were not included in the comparison of manuscript
 outcomes.
 
-\textbf{Men dominate as gatekeepers and senior authors.} We first
+\textbf{Men dominated as gatekeepers and senior authors.} We first
 evaluated the representation of men and women who were gatekeepers
 during the study period. Each journal is led by an editor-in-chief (EIC)
 who manages journal scope and quality standards through a board of
 editors with field expertise that, in turn, handle the peer review
-process. There were 17 EICs, 17.6\% of which were women. Two journals,
-EC and CVI were retired during the period under study. Four years before
-retirement, the leadership of CVI transferred from a man EIC to a woman,
+process. There were 17 EICs, 17.6\% of which were women. Four years
+before retirement, the EIC of CVI transferred from a man to a woman,
 while JVI has had a woman as EIC since 2012. The total number of editors
 at all ASM journals combined over the duration of our study (senior
 editors and editors pooled) was 1015, 28.8\% of which were women.
 
 Over 40\% of both men and women editors were from US-based R1
 institutions, defined as doctoral-granting universities with very high
-research activity. Non-US institutions, and U.S. medical schools or
+research activity. Non-US institutions and U.S. medical schools or
 research institutions supplyed the next largest proportions of editors
 (Fig. 2A)(22). Since 2012, there was a slow trend toward equivalent
 gender representation among editors (Fig. 2B). The trends for each
@@ -329,8 +319,8 @@ representation, with corresponding decreases in the workload of men. In
 the years preceding its retirement, the representation of women at CVI
 increased, decreasing the gap in editorial workload. However,
 representation and relative workloads for men and women editors at JVI
-have held steady over time, while the proportionate workload for women
-at \emph{mBio} has increased.
+held steady over time, while the proportionate workload for women at
+\emph{mBio} has increased.
 
 The median number of manuscripts reviewed by men, women, and unknown
 individuals was 2, for each group. Half of those in the men, women, or
@@ -378,14 +368,14 @@ dashed). The proportions of their published papers were nearly identical
 at 33.1\% for men and 33.8\% for women. The proportion of submitted
 manuscripts with men corresponding authors remained steady at an average
 of 41.6\% and the proportion with women corresponding authors was at
-23.4\% (Fig. 4D, dashed). Both men and women corresponding authors had a
-greater proportion of papers published than manuscripts submitted.
-Accordingly, manuscripts with corresponding authors of unknown gender
-were rejected at a higher rate than their submission. The difference
-between submitted manuscripts and published papers was 8.2\% where men
-were corresponding authors, but only 0.9\% where women were
-corresponding authors. This trend was similar for middle and last
-authors (Fig. S3).
+23.4\% (Fig. 4D, dashed); the proportion for unknown gendered authors
+declined. Both men and women corresponding authors had a greater
+proportion of papers published than manuscripts submitted. Accordingly,
+manuscripts with corresponding authors of unknown gender were rejected
+at a higher rate than their submission. The difference between submitted
+manuscripts and published papers was 8.2\% when men were corresponding
+authors, but only 0.9\% when women were corresponding authors. This
+trend was similar for middle and last authors (Fig. S3).
 
 Of 38594 multi-author manuscripts submitted by men corresponding
 authors, 23.5\% had zero women authors. In contrast, 7253 (36.3\%) of
@@ -396,26 +386,26 @@ Additionally, the proportion of women authors decreased as the number of
 authors increased (Fig. S4). Men submitted 225 single-authored
 manuscripts while women submitted 69 single-authored manuscripts.
 
-Using the metadata described, we hypothesized that we would be able to
-predict the inferred gender of the corresponding author. We trained a
-logistic regression model to predict the inferred gender of the
-corresponding author using the following variables: whether the
-corresponding author's institution was in the U.S., the total number of
-authors, the proportion of authors that were women, whether the paper
-was published, the gender of senior editors and editors, the number of
-revisions, and whether the manuscript was editorially rejected at any
-point. We measured the model's performance using the area under the
-receiver operating characteristic curve (AUROC). The AUROC value is a
-predictive performance metric that ranges from 0.0, where the model's
-predictions are completely wrong, to 1.0, where the model perfectly
-distinguishes between outcomes. A value of 0.5 indicates the model did
-not perform better than random. The median AUROC value of our model to
-predict the corresponding author's inferred gender was 0.7. The variable
-with the largest weight (i.e., the most predictive value), in our model
-was the proportion of women authors. These results indicate that
-manuscript submission data was capable of predicting the inferred gender
-of the corresponding author, but that prediction was primarily driven by
-the percentage of authors that were inferred to be women.
+We hypothesized that we would be able to predict the inferred gender of
+the corresponding author. We trained a logistic regression model to
+predict the inferred gender of the corresponding author using the
+following variables: whether the corresponding author's institution was
+in the U.S., the total number of authors, the proportion of authors that
+were women, whether the paper was published, the gender of senior
+editors and editors, the number of revisions, and whether the manuscript
+was editorially rejected at any point. We measured the model's
+performance using the area under the receiver operating characteristic
+curve (AUROC). The AUROC value is a predictive performance metric that
+ranges from 0.0, where the model's predictions are completely wrong, to
+1.0, where the model perfectly distinguishes between outcomes. A value
+of 0.5 indicates the model did not perform better than random. The
+median AUROC value of our model to predict the corresponding author's
+inferred gender was 0.7. The variable with the largest weight (i.e., the
+most predictive value), in our model was the proportion of women
+authors. These results indicate that manuscript submission data was
+capable of predicting the inferred gender of the corresponding author,
+but that prediction was primarily driven by the percentage of authors
+that were inferred to be women.
 
 As described above, first authors were slightly more likely to be women
 (30.7\%W vs 29.1\%M), but corresponding authors were significantly more
@@ -444,19 +434,18 @@ author stage (first, middle, corresponding, and last). Middle authors
 were rejected at equivalent rates for men and women (a 0 percentage
 point difference across all journals). However, manuscripts with senior
 women authors were rejected more frequently than those authored by men
-with -1.64 and -0.92 percentage point differences for corresponding and
-last authors, respectively (Fig. 5A, vertical line). There were several
-instances where the overall trend of overperformance by men was repeated
-at the journal level (e.g., JB, \emph{mSytesms}, \emph{mBio}). The
-greatest differences were observed when comparing the outcome of
-corresponding authors by gender, so we used this sub-population to
-further examine the difference in manuscript acceptance and rejection
-rates between men and women.
+with -1.6 and -0.9 percentage point differences for corresponding and
+last authors, respectively (Fig. 5A, vertical line). The overall trend
+of overperformance by men was most pronounced at JB, \emph{mSystems},
+\emph{mBio}, and \emph{mSphere}. The greatest differences were observed
+when comparing the outcome of corresponding authors by gender, so we
+used this sub-population to further examine the difference in manuscript
+acceptance and rejection rates between men and women.
 
 We next compared the rejection rates for men and women corresponding
-authors after two bottlenecks, initial review by the editor and the
+authors after two review points, initial review by the editor and the
 first round of peer review. Manuscripts authored by women were
-editorially rejected as much as 12 percentage points more often than
+editorially rejected by as much as 12 percentage points more often than
 those authored by men (Fig. 5B). The difference at all ASM journals
 combined was -3.8 percentage points (vertical line). MCB and \emph{mBio}
 had the most extreme percentage point differences. Manuscripts authored
@@ -468,7 +457,8 @@ rejection and revision decisions after review were -5.6 and 5.6
 percentage points, respectively (Fig. 5C, vertical lines). JB, AAC, and
 MCB had the most extreme differences for rejection and revision
 decisions. Percentage point differences were not correlated with journal
-prestige as measured by impact factors (R\({^2}\) = -0.022, P = 0.787).
+prestige as measured by 2018 impact factors (R\({^2}\) = -0.022, P =
+0.787).
 
 In addition to manuscript decisions, other disparate outcomes may occur
 during the peer review process (24). To determine whether accepted
@@ -487,7 +477,7 @@ To understand how a gatekeeper's (editor/reviewer) gender influenced
 decisions (e.g., Fig. 5C), we grouped editor decisions and reviewer
 suggestions according to the gatekeeper's gender. Both men and women
 editors rejected proportionally more women-authored papers, however the
-difference in decisions were more extreme for men-edited manuscripts
+difference in decisions were slightly larger for men-edited manuscripts
 (Fig. 6A). Reviewers were more likely to suggest rejection for
 women-authored manuscripts as compared to men, although a minimal
 difference in revise recommendations was observed (Fig. 6B). Both men
@@ -496,14 +486,14 @@ manuscripts although men recommended acceptance and revision more often
 for men-authored manuscripts than women did (Fig. 6C).
 
 To evaluate if gender played a role in manuscript editorial decisions,
-we trained a L2-regularized logistic regression model to predict whether
-a manuscript was reviewed (i.e.~editorially rejected or not). We used
-the inferred genders of the senior editor, editor, and corresponding
-author, as well as the proportion of authors that were women as
-variables to train the model. The median AUROC value was 0.61, which
-indicated that editorial decisions were not random, however, the AUROC
-value was relatively low indicating that there are factors other than
-those included in our model that influence editorial decisions.
+we trained a logistic regression model to predict whether a manuscript
+was reviewed (i.e.~editorially rejected or not). We used the inferred
+genders of the senior editor, editor, and corresponding author, as well
+as the proportion of authors that were women as variables to train the
+model. The median AUROC value was 0.61, which indicated that editorial
+decisions were not random, however, the AUROC value was relatively low
+indicating that there are factors other than those included in our model
+that influence editorial decisions.
 
 \textbf{Multiple factors contribute to the overperformance of men.} The
 association between gender and manuscript decision could be attributed
@@ -513,14 +503,14 @@ instance, a recent evaluation of peer-review outcomes at \emph{eLife}
 found evidence of preference for research submitted by authors from a
 gatekeeper's own country or region (18). Other studies have documented
 prestige bias, where men are over-represented in more prestigious (i.e.,
-more respected and competent) programs (25). It is therefore possible,
+more respected and selective) programs (25). It is therefore possible,
 that what seems to be gender bias could be geographic or prestige bias
 interacting with the increased proportion of women submitting from
 outside the US or at lower prestige institutions (e.g., the highest rate
 of submissions from women were at low research institutions, 37\%; Fig.
 4A).
 
-To quantify how these factors affect manuscript decisions, we next
+To quantify how these factors affected manuscript decisions, we next
 looked at the outcome of manuscripts submitted only by corresponding
 authors at US institutions, because these institutions represented the
 majority of manuscripts and could be classified by the Carnegie
@@ -554,11 +544,11 @@ difference in acceptance rates by institution and gender mirrored that
 of editorial rejections for some journals, where submissions from men
 outperformed submissions from women. For instance, manuscripts submitted
 by men from medical schools or institutes were accepted up to 20
-percentage points more than those submitted by women (Fig. S6B).
+percentage points more often than those submitted by women (Fig. S6B).
 
 To evaluate if these factors affect manuscript decisions, we trained a
-L2-regularized regression model to predict if a manuscript was
-editorially rejected or not, using the variables: origin (US vs non),
+logisitic regression model to predict whether a manuscript was
+editorially rejected, using the variables: origin (US vs non),
 institution (US institution type), number of authors, proportion of
 authors that were women, and the inferred genders of both gatekeepers
 and corresponding authors. The model had a median AUROC value of 0.67,
@@ -593,21 +583,19 @@ analyzed in this study across 55 categories.
 The number of submissions in each category ranged from 1 (FDA Approval
 at AAC) to 2952 (Bacteriology at JCM) while the acceptance rates varied
 from 29.4\% (Chemistry:Biosynthesis at AAC) to 71.3\% (Structure and
-Assembly at JVI) (Table 1). We argud that the number of submissions to
+Assembly at JVI) (Table 1). We argued that the number of submissions to
 each category could help indicate core versus periphery subfields,
 (i.e., core subfields would have more submissions than periphery
 subfields) and based on the literature to-date, we expected that
 periphery subfields might have a higher participation of women. Women
-submitted on average 35.3\% of the manuscripts to each category. Fifteen
-of the categories had submissions from more than 40\% women, and at
-least 20\% of submissions to each category was from women (Table 1).
-There was not a correlation between the proportion of women authors and
-the number of submissions (R\({^2}\) = -0.0177, P = 0.779) to each
-category. Nor was there a correlation between the proportion of women
-authors and the category acceptance rate (R\({^2}\) = 0.041, P = 0.078).
-These data suggest that there is not a relationship between the
-participation of women and either the number of submissions or the
-acceptance rate of categories in our dataset.
+submitted on average 35.3\% of the manuscripts to each category, ranging
+from 20\% to 86\% (Table 1). There was not a correlation between the
+proportion of women authors and the number of submissions (R\({^2}\) =
+-0.0177, P = 0.779) to each category. Nor was there a correlation
+between the proportion of women authors and the category acceptance rate
+(R\({^2}\) = 0.041, P = 0.078). These data suggest that there was not a
+relationship between the participation of women and either the number of
+submissions or the acceptance rate of categories in our dataset.
 
 We next looked at the differences of performance for men and women in
 each category at two decision points: editorial rejection and rejection
@@ -656,8 +644,8 @@ infer a gender (Figs. 2 and 4). Women and men editors had proportionate
 workloads across all ASM journals combined, but those workloads were
 disproportionate at the journal level and the overburdened gender varied
 according to the journal (Figs. 3 and S1). Additionally, manuscripts
-submitted by corresponding authors that were women, received more
-negative outcomes (e.g., editorial rejections), than those submitted by
+submitted by corresponding authors that were women received more
+negative outcomes (e.g., editorial rejections) than those submitted by
 men (Figs. 5 and 6). These negative outcomes were somewhat mediated by
 whether the corresponding author was based in the US, the type of
 institution for US-based authors, and the research category (Figs. 7 and
@@ -709,7 +697,7 @@ decreases their perceived competency, which could result in research
 typecasting and lower manuscript handling responsibilities. However, our
 data could not confirm this phenomenon at ASM journals. Another
 possibility is the increased proportion of potential reviewers that
-either do not accept, or do not respond to, requests to review from
+either did not accept, or did not respond to, requests to review from
 women editors. This increases the proportion of reviewers that women
 editors must contact, adding additional time and work to their editorial
 burdens, thus making them seem less efficient (i.e., less capable) than
@@ -764,25 +752,25 @@ Whether academic research journals support women has been the topic of
 many papers, which note the lack of women authors publishing relative to
 men in high impact journals (42--48). However, submissions data is
 required to determine if the lack of representation is due to low
-submissions or bias during peer review. We have shown that there is a
-disparity in submissions from senior women in microbiology compared to
-men, but this does not fully account for the difference in publications
-by men and women corresponding authors at ASM journals (Fig. 4). When
-examining manuscript outcomes, we found a consistent trend favoring
-positive outcomes for manuscripts submitted by corresponding authors
-that were men (Fig. 5). Manuscripts submitted by corresponding authors
-who were women were editorially rejected at greater rates, and
-gatekeepers of both genders favored rejection for manuscripts authored
-by women. Neither geographic (i.e., US or not), institution type, nor
-sub-discipline can fully account for the observed gender-based bias
-(Fig. 6, Fig. 7, Fig. S6, Fig. S7). Instead, the presence of bias
-favoring men over women from U.S. R1 institutions and medical schools
-and institutes suggests that the bias persists, even in environments
-with generally excellent resources and infrastructure for research.
-Science and the peer review system select for decisions that are often
-based on the assumption that scientists are objective, impartial
-experts. As a result, scientists who believe themselves immune to bias
-are making decisions that inherently rely on biases to speed the
+submissions or bias during peer review. Using such data, we have shown
+that there is a disparity in submissions from senior women in
+microbiology compared to men, but this does not fully account for the
+difference in publications by men and women corresponding authors at ASM
+journals (Fig. 4). When examining manuscript outcomes, we found a
+consistent trend favoring positive outcomes for manuscripts submitted by
+corresponding authors that were men (Fig. 5). Manuscripts submitted by
+corresponding authors who were women were editorially rejected at
+greater rates and gatekeepers of both genders favored rejection for
+manuscripts authored by women. Neither geographic (i.e., US or not),
+institution type, nor sub-discipline could fully account for the
+observed gender-based bias (Fig. 6, Fig. 7, Fig. S6, Fig. S7). Instead,
+the presence of bias favoring men over women from U.S. R1 institutions
+and medical schools and institutes suggests that the bias persists, even
+in environments with generally excellent resources and infrastructure
+for research. Science and the peer review system select for decisions
+that are often based on the assumption that scientists are objective,
+impartial experts. As a result, scientists who believe themselves immune
+to bias are making decisions that inherently rely on biases to speed the
 process. The types of biases at play and their potential roles in peer
 review are well documented (49, 50). For instance, previous studies show
 that a greater burden of proof is required for women to achieve similar
@@ -852,9 +840,9 @@ decisions made by editors and editors-in-chief. This non-discrimination
 clause would be backed by a specific protocol for the reporting of, and
 response to, instances of discrimination and harassment. Second, society
 journals should begin collecting additional data from authors and
-gatekeepers (e.g., race, ethnicity, gender identity, and disabilities).
-Such author data should not be readily available to journal gatekeepers,
-but instead kept in a dis-aggregated manner that allows for public
+gatekeepers such as race, ethnicity, gender identity, and disabilities.
+This data should not be readily available to journal gatekeepers, but
+instead kept in a dis-aggregated manner that allows for public
 presentation and tracking the success of inclusive measures to maintain
 accountability. Third, society journals can implement mechanisms to
 explicitly provide support for women and other minority groups, reward
@@ -892,16 +880,16 @@ evaluation and enhance the evaluation process for both the evaluator and
 the evaluatee (62--65). We argue that rubrics could be implemented in
 the peer review process to focus reviewer comments, clarify editorial
 decisions, and improve the author experience. Such rubrics should
-increase the emphasis on \textbf{solid} research, as opposed to novel or
+increase the emphasis on solid research, as opposed to novel or
 ``impactful'' research, the latter of which is a highly subjective
-measure (66, 67). This might also change the overall attitude toward
-replicatitive research and negative results, thus bolstering the field
-through reproduciblity. We also argue that reconsidering journal scope
-and expanding honorary editorial boards might help address structural
-barriers of bias against women (and other minorities) in peer review.
-Expanding journal scope and adding more handling editors would improve
-the breadth of research published, thus providing a home for more
-non-traditional and underserved research fields (the case at
+measure (66, 67). This might also change the overall negative attitude
+toward replicatitive research and negative results, thus bolstering the
+field through reproduciblity. We also argue that reconsidering journal
+scope and expanding honorary editorial boards might help address
+structural barriers of bias against women (and other minorities) in peer
+review. Expanding journal scope and adding more handling editors would
+improve the breadth of research published, thus providing a home for
+more non-traditional and underserved research fields (the case at
 \emph{mSphere} with an increased pool of editors). Implementing these
 steps to decrease bias---review rubrics, increased focus on solid
 research, expansion of journal scopes and editorial boards---will also
@@ -2213,7 +2201,7 @@ revise (242) or acceptance (1094) decisions without review.
 
 \newpage
 
-\includegraphics{Figure_1.png} \textbf{Figure 2. Gendered representation
+\includegraphics{Figure_2.png} \textbf{Figure 2. Gendered representation
 among gatekeepers.} Proportion of editors from (A) institution types and
 (B) over time. Editors and senior editors are pooled together.
 Proportion of reviewers from (C) institution types and (D) over time.
@@ -2223,7 +2211,7 @@ gender add to 100\% per year.
 
 \newpage
 
-\includegraphics{Figure_2.png} \textbf{Figure 3. Gatekeeper workload and
+\includegraphics{Figure_3.png} \textbf{Figure 3. Gatekeeper workload and
 response to requests to review.} (A) Proportion of manuscript workloads
 by men and women editors, editorial rejections excluded. (B) Box plot
 comparison of all manuscripts, by reviewer gender. (C) The percent of
@@ -2232,7 +2220,7 @@ according to the editor's gender.
 
 \newpage
 
-\includegraphics{Figure_3.png} \textbf{Figure 4. Author representation
+\includegraphics{Figure_4.png} \textbf{Figure 4. Author representation
 by gender.} The proportion of (A) men and women senior authors from each
 institution type, (B) men, women, and unknown authors from 2012 - 2018.
 Each individual was counted once per calendar year. The proportion of
@@ -2241,7 +2229,7 @@ submitted manuscripts (dashed line) and published papers (solid line).
 
 \newpage
 
-\includegraphics{Figure_4.png} \textbf{Figure 5. Difference in
+\includegraphics{Figure_5.png} \textbf{Figure 5. Difference in
 manuscript outcomes by author gender.} (A) The percent of manuscripts
 rejected by author gender and type (e.g., corresponding, first, last,
 middle) at any stage across all journals where 0 indicates equal rates
@@ -2254,7 +2242,7 @@ difference, or parity.
 
 \newpage
 
-\includegraphics{Figure_5.png} \textbf{Figure 6. Difference in decisions
+\includegraphics{Figure_6.png} \textbf{Figure 6. Difference in decisions
 or recomendations according to the gatekeeper gender.} (A) Effect of
 editor gender on the difference in decisions following review. (B)
 Difference in percentage points for review recommendations and (C) how
@@ -2262,7 +2250,7 @@ that is affected by reviewer gender. (A-C) All journals combined.
 
 \newpage
 
-\includegraphics{Figure_6.png} \textbf{Figure 7. Impact of origin and
+\includegraphics{Figure_7.png} \textbf{Figure 7. Impact of origin and
 U.S. institution type on manuscript decisions by gender.} Difference in
 percentage points for (A) editorial rejections and (B) following first
 review of manuscripts submitted by US-based corresponding authors.
@@ -2326,6 +2314,5 @@ negative bias by genderize algorithm. C indicates a country. (B) The
 negative impact of each country on the overall gender inference of the
 full data-set. Number to the right of each column is the total number of
 names associated with that country.
-
 
 \end{document}

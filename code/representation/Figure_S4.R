@@ -77,7 +77,7 @@ plot_fem_by_auth <- fem_by_auth_num %>%
   scale_fill_manual(values = gen_ed_colors, labels = gen_ed_labels)+
   facet_wrap(~auth.bin, scales = "free_y")+
   labs(x = "Proportion of Women Authors", 
-       y = "Number of Manuscripts (log10 scale)",
+       y = expression(Number~of~Manuscripts~(log[10]~scale)),
        fill = "Corresponding\nAuthor Gender")+
   my_theme_leg+
   theme(legend.position = c(0.8, 0.1))

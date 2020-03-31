@@ -22,6 +22,14 @@ n_US_stats <- inst_stats_data %>%
   left_join(., gender_n, by = c("role", "gender")) %>% 
   spread(key = US.inst.type, value = n)
 
+n2_US_stats <- inst_stats_data %>% 
+  group_by(role, gender, US.inst.type) %>% 
+  summarise(n = n()) %>% 
+  spread(key = gender, value = n, fill = 0) %>% 
+  mutate(sum_inst = female+male+none) %>% 
+  mutate_at(vars("female", "male", "none"), funs(get_percent(., sum_inst))) %>% 
+  gather(female:none, key = gender, value = percent) 
+
 percent_US_stats <- n_US_stats %>% 
   mutate_at(vars(`R1 Univ`:`Non-US Inst`), 
          list(~ get_percent(., total))

@@ -1,156 +1,58 @@
-#generate figures to summarize reviewer data
+#Generate components of the figure summarizing editor stats
 
-#A. Number of papers handled by gender -- a weighted proportion
-ed_manu_prop <- map_df(years, function(x){
-  
-  editor_data %>% filter(year == x) %>% #restrict to single year
-    select(gender, grouped.random, year, random.person.id) %>% 
-    distinct() %>% 
-    group_by(gender, random.person.id, grouped.random) %>% summarise(n = n()) %>% #calculate number of each gender in that year
-    group_by(gender, random.person.id) %>% summarise(n = sum(n)) %>% 
-    group_by(gender) %>% summarise(weighted_n = sum(n)) %>%
-    mutate(proportion = get_percent(weighted_n, sum(weighted_n))) %>% #add column calculating the proportions for the year, requires analysis_functions.R
-    cbind(year = x, .) #add year 
-})
+#A. proportion of editors from US institutions by gender----
+Fig_2A_data <- n2_US_stats %>% 
+  filter(role == "editor") %>% 
+  left_join(., sum_inst_role, by = c("role", "US.inst.type")) %>% 
+  mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")")) 
 
-ed_manu_text <- get_gen_prop_text(ed_manu_prop, 2, "gender") #calc label placement
+Figure_2A <- Fig_2A_data %>% 
+  ggplot(aes(fill = gender, y = percent, x = fct_reorder(US.inst.type, desc(total))))+
+  geom_col()+
+  coord_flip()+
+  scale_fill_manual(labels = gen_labels, values = gen_colors, drop = FALSE)+
+  labs(x = "\n", y = "Percent of Editor Gender\n",
+       fill = "Gender")+
+  my_theme_leg_horiz
 
-Fig_2A <- ggplot(ed_manu_prop) + 
+#B. Proportion of editors (editors + senior.editors) at ASM over time by gender & manuscripts handled----
+
+#proportion of individuals each year
+ed_w_prop <- map_dfr(years, function(x){
+  get_prop_by_yr(x, editor_data, "gender", "All")
+}) 
+
+ed_prop_text <- get_gen_prop_text(ed_w_prop, 2, "gender") #calc label placement
+
+Fig_2B <- ggplot(ed_w_prop) + 
   geom_line(aes(x = year, y = proportion, color = gender))+
   coord_cartesian(ylim = c(0, 100))+
-  scale_color_manual(breaks = gen_ed_levels, 
-                     labels = gen_ed_labels, 
-                     values = gen_ed_colors)+
-  #annotate(geom = "text", x = 2017, y = ed_manu_text[1,2]+2, label = "Women")+
-  #annotate(geom = "text", x = 2017, y = ed_manu_text[2,2]+5, label = "Men")+
-  labs(x = "Year\n", y = "\nProportion of\nEditor Workload", color = "Gender:")+
-  my_theme_horiz 
-
-#B. Number of papers reviewed by Gender----
-Fig_2B <- reviewer_data %>% 
-  distinct() %>% #doesn't have the manuscript ids
-  group_by(random.person.id, gender) %>% 
-  summarise(n = n()) %>% 
-  ggplot()+
-  geom_boxplot(aes(x = gender, group = gender, y = n, fill = gender))+
-  scale_y_log10()+
-  #coord_cartesian(ylim = c(0, 8))+
-  coord_flip()+
-  scale_x_discrete(labels = gen_labels)+
-  scale_fill_manual(values = gen_colors)+
-  labs(x = "\nReviewer Gender", y = "Number of Manuscripts Reviewed\n")+
-  my_theme_horiz  #figure out how to add n of individuals
-
-#Does reviewer acceptance depend on gender of editor/reviewer? -- need potential reviewer dataset
-people <- people_data %>% select(-role, -contains("auth"), 
-                                 -grouped.random, -random.manu.num) %>%
-  distinct() %>% 
-  mutate(gender = fct_explicit_na(gender, na_level = "none"))
-
-editor_dat <- data %>% filter(role == "editor") %>% 
-  mutate(year = year(submitted.date)) %>% 
-  select(year, random.manu.num, gender, journal) %>% 
-  filter(!is.na(year)) %>% 
-  rename("editor.gender" = "gender") %>% 
-  distinct()
-
-authors <- people_data %>% filter(role == "editor") %>% 
-  select(random.manu.num, gender) %>%
-  rename("editor.gender" = "gender") %>% distinct() 
-
-rev_resp <- read_csv("data/2018_rev_resp_ready.csv") %>% 
-  left_join(., people, by = "random.person.id") %>% 
-  rename("reviewer.gender" = "gender") %>% 
-  left_join(., editor_dat, by = "random.manu.num") %>% 
-  filter(!is.na(random.person.id)) %>% 
-  filter(editor.gender != "none") %>% 
-  filter(status != "Withdrawn") %>% 
-  select(-suggested.include, -suggested.exclude, -title) %>% 
-  mutate(status = fct_collapse(status, 
-                               "No Response" = c("No Response", "Not Needed", "Contacted"),
-                               "Not Contacted" = c("Not Contacted", "Not Used")))
-
-#reviewer_D percent of reviewers contacted by editor gender----
-ed_contact <- rev_resp %>% 
-  mutate(status = fct_collapse(status, 
-                               "Contacted" = c("No Response", "Not Needed", "Contacted", "Accepted", "Declined"),
-                               "Not Contacted" = c("Not Contacted", "Not Used"))) %>% 
-  group_by(editor.gender, reviewer.gender, status) %>%
-  summarise(n = n()) %>% 
-  spread(key = status, value = n) %>% 
-  mutate(percent_cont = get_percent(Contacted, (Contacted + `Not Contacted`)))
-
-#reviewer_D <- ed_contact %>% 
-#  ggplot()+
-#  geom_col(aes(x = editor.gender, y = percent_cont,
-#               fill = reviewer.gender), alpha = 0.65,
-#           position = "dodge")+
-#  scale_fill_manual(values = gen_colors)+
-#  gen_x_replace+
-#  labs(x = "Editor Gender", y = "\nPercent Contacted")+
-#  my_theme_horiz
-
-#reviewer_E response of reviewers by gender
-f_ed_resp <- rev_resp %>% 
-  filter(status != "Not Contacted") %>% 
-  filter(editor.gender == "female") %>% 
-  group_by(status, reviewer.gender) %>% 
-  summarise(n = n()) %>% 
-  spread(key = status, value = n) %>% 
-  mutate(No_Resp = get_percent(`No Response`, (Accepted + `No Response` + Declined)),
-         Accept = get_percent(Accepted, (Accepted + `No Response` + Declined))) %>% 
-  mutate(editor.gender = "female") %>% 
-  select(-Accepted, -`No Response`, -Declined) %>% 
-  gather(No_Resp:Accept, value = Percent, key = Rev.Resp)
-
-m_ed_resp <- rev_resp %>% 
-  filter(status != "Not Contacted") %>% 
-  filter(editor.gender == "male") %>% 
-  group_by(status, reviewer.gender) %>% 
-  summarise(n = n()) %>% 
-  spread(key = status, value = n) %>% 
-  mutate(No_Resp = get_percent(`No Response`, (Accepted + `No Response` + Declined)),
-         Accept = get_percent(Accepted, (Accepted + `No Response` + Declined))) %>% 
-  mutate(editor.gender = "male") %>% 
-  select(-Accepted, -`No Response`, -Declined) %>% 
-  gather(No_Resp:Accept, value = Percent, key = Rev.Resp)
-
-ed_resp <- rbind(f_ed_resp, m_ed_resp)
-
-Fig_2C <- ed_resp %>% 
-  filter(Rev.Resp == "Accept") %>% 
-  ggplot()+
-  geom_col(aes(x = editor.gender, y = Percent,
-               fill = reviewer.gender), 
-           position = "dodge")+
-  coord_flip(ylim = c(0, 60))+
-  #facet_wrap(~ if_else(Rev.Resp == "No_Resp", "No Response", "Accept"))+
-  scale_fill_manual(values = gen_colors, 
-                    labels = gen_labels)+
-  labs(x = "\nEditor", y = "Percent of Reviewers")+
-  gen_x_replace+
+  scale_color_manual(breaks = gen_levels, labels = NULL, values = gen_colors)+
+  labs(x = "Year", y = "\nProportion of Editors")+
   my_theme_horiz
 
-Fig2_leg <- ed_resp %>% 
-  ggplot()+
-  geom_col(aes(x = editor.gender, y = Percent,
-               fill = reviewer.gender), 
-           position = "dodge")+
-  scale_fill_manual(values = gen_colors, 
-                    labels = gen_labels)+
-  labs(fill = "Gender")+
-  theme(legend.position = "top")
+#C. US reviewers by institutions & gender----
+Fig_2C_data <- n2_US_stats %>% 
+  filter(role == "reviewer") %>% 
+  left_join(., sum_inst_role, by = c("role", "US.inst.type")) %>% 
+  mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
+  
+Figure_2C <- Fig_2C_data %>% 
+  ggplot(aes(fill = gender, y = percent, x = fct_reorder(US.inst.type, desc(total))))+
+  geom_col()+
+  coord_flip()+
+  scale_fill_manual(labels = gen_labels, values = gen_colors)+
+  labs(x = "\n", y = "Percent of Reviewer Gender")+
+  my_theme_horiz
 
-#generate full figure----
-Fig2_legend <- get_legend(Fig2_leg)
+#D. Proportion of Reviewers suggested each Year----
+Fig_2D <- plot_rev_time("reviewer_data")+
+  my_theme_horiz
 
-blank <- ggplot()
-
-plot_legend <- plot_grid(blank, Fig2_legend, blank, nrow = 1)
-
-plot_AB <- plot_grid(plot_legend, Fig_2A, Fig_2B, Fig_2C, nrow = 4,
-                     rel_heights = c(1, 4, 4, 4),
-          labels = c('', 'A', 'B', 'C'), label_size = 18)
-
+#generate full figures----
+plot_grid(Figure_2A, Fig_2B, Figure_2C, Fig_2D,
+          labels = c('A', 'B', 'C', 'D'), label_size = 18,
+          nrow = 2)
+#
 ggsave("Figure_2.png", device = 'png', 
-     path = 'submission', width = 9, height = 9)
+       path = 'submission', width = 12, height = 6)
