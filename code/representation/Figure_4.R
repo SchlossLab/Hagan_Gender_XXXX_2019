@@ -7,7 +7,8 @@ Fig_4A_data <- n2_US_stats %>%
   mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
 
 Fig_4A <- Fig_4A_data %>% 
-  ggplot(aes(fill = gender, y = percent, 
+  ggplot(aes(fill = factor(gender, levels = c("female", "none", "male")),
+             y = percent, 
              x = fct_reorder(US.inst.type, desc(total))))+
   geom_col()+
   coord_flip()+

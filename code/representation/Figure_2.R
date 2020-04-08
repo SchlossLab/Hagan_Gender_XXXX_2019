@@ -36,12 +36,14 @@ Fig_2C_data <- n2_US_stats %>%
   filter(role == "reviewer") %>% 
   left_join(., sum_inst_role, by = c("role", "US.inst.type")) %>% 
   mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
-  
+
 Figure_2C <- Fig_2C_data %>% 
-  ggplot(aes(fill = gender, y = percent, x = fct_reorder(US.inst.type, desc(total))))+
+  ggplot(aes(fill = factor(gender, levels = c("female", "none", "male")),
+             y = percent, x = fct_reorder(US.inst.type, desc(total))))+
   geom_col()+
   coord_flip()+
-  scale_fill_manual(labels = gen_labels, values = gen_colors)+
+  scale_fill_manual(labels = gen_labels, 
+                    values = gen_colors)+
   labs(x = "\n", y = "Percent of Reviewer Gender")+
   my_theme_horiz
 
