@@ -53,7 +53,7 @@ figure_7A <- fig7_ed_rejections %>% select(-n, -total) %>%
   coord_flip()+
   gen_gradient+
   geom_hline(data = fig7_ASM_ed_rej, aes(yintercept = performance))+
-  annotate(geom = "text", x = 12, y = -2.5, label = "All Journals")+
+  annotate(geom = "text", x = 12, y = -4, label = "All Journals")+
   #geom_text(aes(x = journal, y = 0.75, label = n))+
   labs(x = "\n", 
        y = "Difference in Editorial Rejections\n")+
@@ -261,6 +261,7 @@ figure_7D <- fig7d_inst_total %>%
 #generate & save figure----
 fig_7_row1 <- plot_grid(figure_7A, figure_7B,
                         labels = c('A', 'B'), 
+                        rel_widths = c(1, 2),
                         label_size = 18, ncol = 2)
 
 plot_grid(fig_7_row1, figure_7C, figure_7D,

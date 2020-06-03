@@ -3,7 +3,7 @@
 #setup----
 acc_rej_data <- data %>% 
   filter(grouped.vers == 1) %>% 
-  filter(EJP.decision == "Accept" | EJP.decision == "Reject") 
+  filter(EJP.decision == "Accept" | EJP.decision == "Reject" | EJP.decision == "Revise") 
 
 auth_types <- c("first", "middle", "last", "corresponding")
 
@@ -18,14 +18,14 @@ rej_by_auth <- map_df(auth_types, function(x){
     select(gender, EJP.decision, grouped.random) %>% distinct() %>% 
     group_by(gender, EJP.decision) %>% summarise(n = n()) %>% 
     spread(key = EJP.decision, value = n) %>% 
-    mutate(prop_rej = round((Reject/(Reject + Accept))*100, digits = 2)) %>% 
+    mutate(prop_rej = round((Reject/(Reject + Accept + Revise))*100, digits = 2)) %>% 
     mutate(., auth.type = x) #%>% 
     #select(-Reject, -Accept) %>% 
 })
 
 #cross ASM rejection rate by author type
 ASM_rej_rate <- rej_by_auth %>% 
-  select(-Reject, -Accept) %>% 
+  select(-Reject, -Accept, -Revise) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female)
 
@@ -40,8 +40,8 @@ rej_by_journ <- map_df(auth_types, function(x){
     group_by(journal, gender, EJP.decision) %>% 
     summarise(n = n()) %>% 
     spread(key = EJP.decision, value = n) %>% 
-    mutate(prop_rej = round((Reject/(Reject + Accept))*100, digits = 2)) %>% 
-    select(-Reject, -Accept) %>% 
+    mutate(prop_rej = round((Reject/(Reject + Accept + Revise))*100, digits = 2)) %>% 
+    select(-Reject, -Accept, -Revise) %>% 
     spread(key = gender, value = prop_rej) %>% 
     mutate(difference = male - female) %>% 
     mutate(., auth.type = x)
@@ -57,7 +57,7 @@ journ_rej_rates <- map_df(journals, function(x){
   group_by(EJP.decision) %>% 
   summarise(n = n()) %>% 
   spread(key = EJP.decision, value = n) %>%
-  mutate(prop_rej = round((Reject/(Reject + Accept))*100, digits = 2)) %>% 
+  mutate(prop_rej = round((Reject/(Reject + Accept + Revise))*100, digits = 2)) %>% 
   mutate(., journal = x)
 })
 
