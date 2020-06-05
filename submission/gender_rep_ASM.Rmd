@@ -26,7 +26,7 @@ load("../submission/gender_analysis.RData")
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 options(kableExtra.latex.load_packages = FALSE)
 options(kableExtra.auto_format = FALSE)
-options(knitr.table.format = "latex")
+options(knitr.table.format = "markdown")
 
 ```
 
@@ -109,7 +109,7 @@ source("../code/bias/log_reg_gend_rej.R") #logistic regression auc
 ```
 **Manuscripts submitted by women have more negative outcomes than those submitted by men.** To better understand the differences between published and submitted proportions for men and women authors (Fig. 4CD, Fig. S3), we compared the rejection rates of men and women at each author stage (first, middle, corresponding, and last). For the following analyses, only manuscripts authored by a man or woman were included. In addition, these analyses were conducted on all available manuscripts, not a statistical sampling. As a result, statistical tests are only present, and were only required, for correlative analyses.
 
-Middle authors were rejected at equivalent rates for men and women (a `r round(ASM_rej_rate[4,5], digits = 2)` percentage point difference across all journals). However, manuscripts with senior women authors were rejected more frequently than those authored by men with `r round(ASM_rej_rate[1,5], digits = 1)` and `r format(round(ASM_rej_rate[3,5], digits = 1), nsmall = 1)` percentage point differences for corresponding and last authors, respectively (Fig. 5A, vertical line). The overall trend of overperformance by men was most pronounced at MCB, JB, IAI and AAC. The greatest differences were observed when comparing the outcome of corresponding authors by gender, so we used this sub-population to further examine the difference in manuscript acceptance and rejection rates between men and women.
+Middle authors were rejected at equivalent rates for men and women (a `r round(ASM_rej_rate[4,5], digits = 2)` percentage point difference across all journals). However, manuscripts with senior women authors were rejected more frequently than those authored by men with `r round(ASM_rej_rate[1,5], digits = 1)` and `r sprintf("%.1f", round(ASM_rej_rate[3,5], digits = 1))` percentage point differences for corresponding and last authors, respectively (Fig. 5A, vertical line). The overall trend of overperformance by men was most pronounced at MCB, JB, IAI and AAC. The greatest differences were observed when comparing the outcome of corresponding authors by gender, so we used this sub-population to further examine the difference in manuscript acceptance and rejection rates between men and women.
 
 We next compared the rejection rates for men and women corresponding authors after two review points, initial review by the editor and the first round of peer review. Manuscripts authored by women were editorially rejected by as much as 12 percentage points more often than those authored by men (Fig. 5B). The difference at all ASM journals combined was `r fig4_ASM_ed_rej[[1,4]]` percentage points (vertical line). MCB and _mBio_ had the most extreme percentage point differences. Manuscripts authored by men and women were equally likely to be accepted after the first round of review (Fig. 5C, right panel). However, women-authored papers were rejected (left panel) more often  while men-authored papers were more often given revision (center panel) decisions. The differences for rejection and revision decisions after review were `r fig4_ASM_dec[[1,4]]` and `r fig4_ASM_dec[2,4]` percentage points, respectively (Fig. 5C, vertical lines). JB, AAC, and MCB had the most extreme differences for rejection and revision decisions. Percentage point differences were not correlated with journal prestige as measured by 2018 impact factors (R${^2}$ = -0.022, P = 0.787). 
 
@@ -195,7 +195,7 @@ Table 1. Analysis of sub-discipline participation by women corresponding authors
 
 table_1 <- S7_ed_rej %>% 
   select(journal, category, cat.N, cat.acc.rate, percent.W.editor, percent.W) %>% 
-  knitr::kable(., format = "markdown", #table.attr = "style = \"color: black;\"", 
+  knitr::kable(., #format = "html", #table.attr = "style = \"color: black;\"", 
                digits = 1, col.names = c("Journal", "Category", "N", "% Accepted", "% Women Editors", "% Women Authors"), escape = F) %>%
   kableExtra::collapse_rows() %>% 
   kableExtra::kable_styling()
