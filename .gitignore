@@ -9,7 +9,7 @@ results/
 *.html
 submission/*.html
 *.jpg
-*.png
 *.log
 submission/*.RData
 submission/coauthor_comments/
+submission/category_figures/
