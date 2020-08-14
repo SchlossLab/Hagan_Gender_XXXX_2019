@@ -84,6 +84,19 @@ ed_rejections_B <- summary_gen_ed %>%
        fill = "Percentage Point\nDifference")+
   my_theme_leg_horiz
 
+ed_rejections_legend <- summary_gen_ed %>% 
+  ggplot(aes(x = EJP.decision, 
+             y = overperformance, fill = overperformance))+
+  geom_col(position = "dodge")+
+  gen_gradient+
+  coord_flip()+
+  facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
+  labs(x = "\n", 
+       y = "Difference Following Review by Editor Gender\n",
+       fill = "Percentage Point\nDifference")+
+  my_theme_leg_horiz+
+  theme(legend.position = "top")
+
 ####Reviewers----
 
 #reviewer data
@@ -189,10 +202,13 @@ reviewer_A <- reviewer_A_data %>%
        y = "Difference in Review Recommendation")+
   my_theme_horiz
 
+#make full figure----
 blank <- ggplot()
 
-plot_A <- plot_grid(ed_rejections_B, blank, labels = c('A'), 
-                    label_size = 18, rel_widths = c(2,1))
+Fig_6_ledg <- get_legend(ed_rejections_legend)
+
+plot_A <- plot_grid(ed_rejections_B, Fig_6_ledg, blank, labels = c('A'), 
+                    label_size = 18, rel_widths = c(2,1,1))
 
 plot_BC <- plot_grid(reviewer_A, reviewer_C, labels = c('B', 'C'), label_size = 18)
 

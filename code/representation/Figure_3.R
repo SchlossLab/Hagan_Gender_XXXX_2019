@@ -33,12 +33,12 @@ Fig_3B <- reviewer_data %>%
   summarise(n = n()) %>% 
   ggplot()+
   geom_boxplot(aes(x = gender, group = gender, y = n, fill = gender))+
-  scale_y_log10()+
+  scale_y_log10(breaks = c(1, 2, 3, 4, 5, 10, 100))+
   #coord_cartesian(ylim = c(0, 8))+
   coord_flip()+
   scale_x_discrete(labels = gen_labels)+
   scale_fill_manual(values = gen_colors)+
-  labs(x = "\nReviewer Gender", y = "Number of Manuscripts Reviewed\n")+
+  labs(x = "\nReviewer Gender", y = "Number of Manuscripts Reviewed\nLog(10) Scale\n")+
   my_theme_horiz  #figure out how to add n of individuals
 
 #Does reviewer acceptance depend on gender of editor/reviewer? -- need potential reviewer dataset

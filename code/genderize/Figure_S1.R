@@ -87,7 +87,7 @@ plot_grid(equ_plot, plot_ASM_country_impact,
           rel_heights = c(0.5, 2),
           nrow = 2, labels = c('A', 'B'), label_size = 18)
 
-ggsave("Figure_S8.png", device = 'png', 
+ggsave("Figure_S1.png", device = 'png', 
        path = 'submission', width = 8, height = 12)
 
 #which countries have the most "unknown" gender names?

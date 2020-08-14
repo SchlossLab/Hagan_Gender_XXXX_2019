@@ -27,7 +27,7 @@ n2_US_stats <- inst_stats_data %>%
   summarise(n = n()) %>% 
   spread(key = gender, value = n, fill = 0) %>% 
   mutate(sum_inst = female+male+none) %>% 
-  mutate_at(vars("female", "male", "none"), funs(get_percent(., sum_inst))) %>% 
+  mutate_at(vars("female", "male", "none"), list(~get_percent(., sum_inst))) %>% 
   gather(female:none, key = gender, value = percent) 
 
 percent_US_stats <- n_US_stats %>% 

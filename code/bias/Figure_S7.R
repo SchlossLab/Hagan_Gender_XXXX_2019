@@ -140,7 +140,7 @@ plot_cat_bias <- function(data, cat_journ){
     facet_wrap(~EJP.decision, #scales = "free_y", 
                ncol = 2)+
     coord_flip()+
-    gen_gradient+
+    gen_gradient_40+
     labs(x = "\n", 
          y = paste("Difference at ", cat_journ, "\n"))+
     my_theme_horiz
@@ -200,10 +200,28 @@ Fig_S7_list <- map(cat_journ_list, function(x, y){
   plot_cat_bias(cat_bias_data, x)
   })
 
-plot_grid(plotlist = Fig_S7_list, 
+Fig_S7_legend_plot <- Fig_S6B_data %>% 
+  ggplot(aes(x = journal, y = performance, fill = performance))+
+  geom_col()+
+  facet_wrap(~US.inst.type, scales = "free", ncol = 2)+
+  coord_flip()+
+  gen_gradient_40+
+  labs(x = "\n", 
+       y = "Difference in Acceptance Rates\n", 
+       fill = "% Points\nDifference")+
+  my_theme_horiz+
+  theme(legend.position = "top")
+
+Fig_S7_legend <- get_legend(Fig_S7_legend_plot)
+
+Fig_S7_plots <- plot_grid(plotlist = Fig_S7_list, 
                    labels = c('A', 'B', 'C', 'D', 'E'), 
                   rel_heights = c(1.25, 1.25, 1, 1, 1),
                    label_size = 18, ncol = 1)
+
+plot_grid(Fig_S7_legend, Fig_S7_plots,
+          rel_heights = c(0.05, 1),
+          nrow = 2)
 
 ggsave("Figure_S7.png", device = 'png', 
        path = 'submission', width = 12, height = 15)

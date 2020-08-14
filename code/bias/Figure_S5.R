@@ -17,11 +17,13 @@ figure_S5A <- accepted_data %>%
   ggplot(aes(x = days.pending, fill = gender))+
   geom_density(alpha = 0.5)+
   coord_cartesian(xlim = c(0, 200))+
-  scale_fill_manual(values = gen_colors)+
+  scale_fill_manual(values = gen_colors, 
+                    labels = gen_labels)+
   facet_wrap(~journal)+
   labs(x = "Days from 'Submission' to\n'Ready for Publication' Dates\n",
-       y = "\nDensity")+
-  my_theme
+       y = "\nDensity", fill = "Gender")+
+  my_theme_leg+
+  theme(legend.position = "top")
 
 #Do papers authored by women take longer to get accepted than those authored by men?----
 manu_summary <- map_df(manus, function(x){
@@ -70,6 +72,7 @@ version_sum <- accepted_versions %>%
 #  labs(x = "Gender", y = "\nNumber of Versions")+
 #  my_theme
 
+#plot figure-----
 plot_grid(figure_S5A, figure_S5B, ncol = 1,
           labels = c('A', 'B'), label_size = 18)
 

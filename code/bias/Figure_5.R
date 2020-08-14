@@ -72,7 +72,7 @@ figure_5A <- rej_by_journ %>%
        fill = "% Points\nDifference")+
   my_theme_leg_horiz
 
-#B. Do women recieve proportionally more editorial rejections than men?----
+#B. Do women receive proportionally more editorial rejections than men?----
 fig5_ed_rejs <- bias_data %>% 
   filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
   select(grouped.random, gender, 

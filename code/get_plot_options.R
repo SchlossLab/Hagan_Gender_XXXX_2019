@@ -45,8 +45,11 @@ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7") #black
 
 #gradient for comparing "performance"
-gen_gradient <- scale_fill_gradient2(low = "#D55E00", mid='snow3', 
+gen_gradient <- scale_fill_gradient2(limits = c(-10,10), midpoint = 0, low = "#D55E00", mid='snow3', 
                                        high = "#0072B2", space = "Lab")
+
+gen_gradient_40 <- scale_fill_gradient2(limits = c(-45,45), midpoint = 0, low = "#D55E00", mid='snow3', 
+                                     high = "#0072B2", space = "Lab")
 
 #settings----
 gen_levels <- c("none", "male", "female")
@@ -298,7 +301,7 @@ plot_feature_ranks <- function(data){
   plot <- ggplot(data, aes(reorder(data$key, -data$rank, FUN = median), data$rank)) +
     geom_point(aes(colour= factor(data$sign)), size=1.5) + # datapoints lighter color
     scale_color_manual(values=c("#56B4E9","red3", "#999999")) +
-    stat_summary(fun.y = function(x) median(x), colour = 'black', geom = "point", size = 3) + # Median darker
+    stat_summary(fun = function(x) median(x), colour = 'black', geom = "point", size = 3) + # Median darker
     coord_flip(ylim=c(0,15)) +
     my_theme_leg_horiz
   return(plot)

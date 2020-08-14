@@ -51,10 +51,3 @@ Figure_2C <- Fig_2C_data %>%
 Fig_2D <- plot_rev_time("reviewer_data")+
   my_theme_horiz
 
-#generate full figures----
-plot_grid(Figure_2A, Fig_2B, Figure_2C, Fig_2D,
-          labels = c('A', 'B', 'C', 'D'), label_size = 18,
-          nrow = 2)
-#
-ggsave("Figure_2.png", device = 'png', 
-       path = 'submission', width = 12, height = 6)

@@ -259,14 +259,21 @@ figure_7D <- fig7d_inst_total %>%
   my_theme_horiz
 
 #generate & save figure----
+Fig7_legend <- get_legend(ed_rejections_legend)
+
+blank <- ggplot()
+
+plot_legend <- plot_grid(blank, Fig7_legend, blank, nrow = 1)
+
 fig_7_row1 <- plot_grid(figure_7A, figure_7B,
                         labels = c('A', 'B'), 
-                        rel_widths = c(1, 2),
+                        rel_widths = c(1.5, 2),
                         label_size = 18, ncol = 2)
 
-plot_grid(fig_7_row1, figure_7C, figure_7D,
-          labels = c('', 'C', 'D'), 
-          label_size = 18, nrow = 3)
+plot_grid(plot_legend, fig_7_row1, figure_7C, figure_7D,
+          labels = c('','', 'C', 'D'), 
+          rel_heights = c(0.25, 1, 1, 1),
+          label_size = 18, nrow = 4)
 
 ggsave("Figure_7.png", device = 'png', 
-       path = 'submission', width = 10, height = 12)
+       path = 'submission', width = 11, height = 12)

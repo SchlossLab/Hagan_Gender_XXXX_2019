@@ -34,10 +34,12 @@ Figure_S6A <- Fig_S6A_data %>%
   geom_col()+
   facet_wrap(~US.inst.type, scales = "free", ncol = 2)+
   coord_flip()+
-  gen_gradient+
-  labs(x = "\n", 
-       y = "Difference in Editorial Rejections\n")+
-  my_theme_horiz
+  gen_gradient_40+
+  labs(x = "\n",
+       y = "Difference in Editorial Rejections\n",
+       fill = "% Points\nDifference")+
+  my_theme_horiz+
+  theme(legend.position = c(0.8,0.1))
 
 #S6B. Difference in accepted rates by journal & inst type----
 acc <- bias_data %>% 
@@ -72,12 +74,14 @@ Figure_S6B <- Fig_S6B_data %>%
   geom_col()+
   facet_wrap(~US.inst.type, scales = "free", ncol = 2)+
   coord_flip()+
-  gen_gradient+
+  gen_gradient_40+
   labs(x = "\n", 
-       y = "Difference in Acceptance Rates\n")+
-  my_theme_horiz
+       y = "Difference in Acceptance Rates\n", 
+       fill = "% Points\nDifference")+
+  my_theme_horiz+
+  theme(legend.position = c(0.8,0.1))
 
-#FormerS6C. Difference in review recommendation by institution type----
+#Former S6C. Difference in review recommendation by institution type----
 rev_rec_inst <- bias_data %>% 
   filter(!is.na(review.recommendation)) %>% 
   filter(US.inst == "yes") %>% 
@@ -167,15 +171,15 @@ Figure_S6C <- summ_inst %>%
              fill = overperform,
              y = overperform))+
   geom_col(position = "dodge")+
-  scale_fill_gradient2(low = "#D55E00", mid='snow3', 
-                       high = "#0072B2", space = "Lab")+
+  gen_gradient+
   coord_flip()+
   facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1, 
              scales = "free_y")+
   labs(x = "\n", 
        y = "Difference in Acceptance Recommendation
-       by Reviewer Gender")+
-  my_theme_horiz
+       by Reviewer Gender", fill = "% Points\nDifference")+
+  my_theme_leg_horiz+
+  theme(legend.position = "left")
 
 #S6D. important features for editorial rejection----
 Figure_S6D <- plot_feature_ranks(ranked_weights)+
