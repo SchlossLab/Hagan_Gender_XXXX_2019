@@ -38,7 +38,7 @@ Fig_3B <- reviewer_data %>%
   coord_flip()+
   scale_x_discrete(labels = gen_labels)+
   scale_fill_manual(values = gen_colors)+
-  labs(x = "\nReviewer Gender", y = "Number of Manuscripts Reviewed\nLog(10) Scale\n")+
+  labs(x = "\nReviewer Gender", y = expression(bold(Number~of~Manuscripts~Reviewed~(log[10]~scale))))+
   my_theme_horiz  #figure out how to add n of individuals
 
 #Does reviewer acceptance depend on gender of editor/reviewer? -- need potential reviewer dataset

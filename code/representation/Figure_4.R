@@ -13,7 +13,7 @@ Fig_4A <- Fig_4A_data %>%
   geom_col()+
   coord_flip()+
   scale_fill_manual(labels = gen_labels, values = gen_colors)+
-  labs(x = "\n", y = "Percent of Gender\n",
+  labs(x = "\n", y = "Percent of Senior Authors\n",
        fill = "Gender")+
   my_theme_leg_horiz
 

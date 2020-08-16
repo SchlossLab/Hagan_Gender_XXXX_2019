@@ -11,14 +11,16 @@ gender_role <- data %>% filter(gender != "none") %>%
     role == "senior.editor" ~ "editor",
     TRUE ~ role
   )) %>% 
+  select(random.person.id, gender, role) %>% 
   distinct() %>% 
   group_by(random.person.id, gender, role) %>% 
   summarise(n =n()) %>% 
   spread(., key = role, value = n) %>% 
   mutate_if(is.integer, recode_role) %>%
-  filter(`junior author` == "yes") %>%
+  filter(`junior author` == "yes") %>% 
   gather(., key = role, value = status, -c(random.person.id, gender)) %>% 
-  mutate(role = factor(role, levels = role_levels))
+  mutate(role = factor(role, levels = role_levels)) %>% 
+  filter(!is.na(role))
 
 alluv_df <- map_df(role_levels, function(x){
   gender_role %>% filter(role == x)})

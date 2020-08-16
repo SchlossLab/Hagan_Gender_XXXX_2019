@@ -3,7 +3,9 @@ library(tidyverse)
 
 feat_weights <- read_csv("../data/combined_all_imp_features_pred_auth_gen.csv") 
 
-prop_fem_auc <- read_csv("../data/combined_best_hp_results_pred_auth_gend.csv") %>% 
+test_auc <- read_csv("../data/combined_best_hp_results_pred_auth_gend.csv")
+
+prop_fem_auc <- test_auc %>% 
   pull(test_aucs) %>% median(abs(.)) %>% round(., digits = 2)
 
 prop_fem_median <- feat_weights %>% 

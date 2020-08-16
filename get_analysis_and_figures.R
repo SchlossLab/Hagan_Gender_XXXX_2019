@@ -30,7 +30,7 @@ for(fig in bias_figures){
 }
 
 #genderize figure----
-source("code/genderize/Figure_S8.R")
+source("code/genderize/Figure_S1.R")
 
 #save Rdata output----
 save.image(file = "submission/gender_analysis.RData")

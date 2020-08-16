@@ -306,3 +306,14 @@ plot_feature_ranks <- function(data){
     my_theme_leg_horiz
   return(plot)
 }
+
+#plot feature weights
+feature_box_plot <- function(df){
+  plot <- ggplot(df)+
+    geom_boxplot(aes(x = clean_feat, y = weight))+
+    coord_flip()+
+    labs(x = "\nLogistic Regression Variables", y = "Weight (Predictive Value)")+
+    my_theme_horiz
+  
+  return(plot)
+}
