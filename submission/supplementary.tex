@@ -18,18 +18,21 @@
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
 \IfFileExists{microtype.sty}{%
-\usepackage[]{microtype}
+\usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
-\usepackage[unicode=true]{hyperref}
-\hypersetup{
+\usepackage[margin=1.0in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
             pdftitle={Supplementary Text},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
-\usepackage[margin=1.0in]{geometry}
-\usepackage{graphicx,grffile}
+\usepackage{graphicx}
+% grffile has become a legacy package: https://ctan.org/pkg/grffile
+\IfFileExists{grffile.sty}{%
+\usepackage{grffile}
+}{}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -58,11 +61,30 @@
 \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
-% set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
 
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Supplementary Text}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -90,6 +112,7 @@
 \setlength{\parskip}{1em}
 
 \usepackage{lineno}
+\usepackage{iftex}
 
 \usepackage{pdfpages}
 \floatplacement{figure}{H} % Keep the figure up top of the page
@@ -108,14 +131,10 @@
 \usepackage{makecell}
 \usepackage{xcolor}
 
-\title{Supplementary Text}
-\author{}
-\date{\vspace{-2.5em}}
-
 \begin{document}
 \maketitle
 
-\textbf{Validation of gender inferrence.} We first validated the
+\textbf{Validation of gender inference.} We first validated the
 genderize.io algorithm using a set of 3265 names whose gender had been
 hand-coded based on appearance (1). The names were supplied to the
 genderize algorithm both with and without the accompanying country data.
@@ -144,8 +163,8 @@ threshold increases, with slight trade offs between sensitivity and
 specificity. For the purposes of our analysis, we opted to use the
 pmod0.85 threshold for our analysis (Table S1, in bold).
 
-\textbf{Impact of geographic bias} To understand the extent of
-geographic bias in our gender assignment against regions and languages
+\textbf{Impact of geographic bias.} To understand the extent of
+geographic bias in our gender inferrment against regions and languages
 with gender-less naming conventions or that lack social media for
 incorporation into the genderize algorithm, we compared the number of
 names inferred without associated country data to when country data was
@@ -160,14 +179,14 @@ towards the overall percentage of names whose genders were not inferred
 un-inferred for each country and the overall percentage, multiplied by
 the proportion of observations from that country to the total
 observations and finally divided by the overall percentage of
-un-inferred names (Fig. S8A). The top five countries with the greatest
+un-inferred names (Fig. S1A). The top five countries with the greatest
 impact on un-inferred names, and thus the countries receiving the most
 negative bias from genderize were Canada, China, Ireland, Belgium, and
 Sweden. These data suggest that there is likely some bias against
 countries with gender-neutral naming conventions (e.g., China), and
 indicates the stringency with which the algorithm applies gender to
 names that are accompanied by country data. For instance, strongly
-gendered names such as Peter and Pedro were not assigned gender when
+gendered names such as Peter and Pedro were not inferred a gender when
 associated with Canada.
 
 We next applied the genderize algorithm at the pmod0.85 threshold to our
@@ -175,7 +194,7 @@ journals data set and tested its validity on a small portion. All first
 names collected from our data set were submitted to genderize both with
 and without country data and only those with a pmod equivalent to or
 greater than 0.85 were retained. Next, the inferred genders were
-assigned to individuals as described previously (Fig. S7). Given the
+assigned to individuals as described in the methods. Given the
 relatively small number of editors and senior editors in our data set,
 the presenting gender (man/woman) of editors and senior editors in our
 data set was hand-validated using Google where possible. Of the 1072
@@ -188,20 +207,20 @@ the United States, China, Japan, France, and Germany. The countries with
 the highest proportion of un-inferred genders were Burundi, Chad,
 Kingman Reef, North Korea, and Maldives, where the maximum number of
 names supplied ranged from 1 to 4. Proportionally, fewer names in our
-full data set were assigned gender than in our validation data set (40\%
+full data set were inferred gender than in our validation data set (40\%
 un-inferred versus 27.1\% un-inferred, respectively). Since adjusting
 the workflow to infer the gender of names both with and without country
 data, the countries receiving the most negative bias from genderize were
-China, Japan, South Korea, India, and Taiwan (Fig. S8B). These data
+China, Japan, South Korea, India, and Taiwan (Fig. S1B). These data
 indicate what we previously inferred, that the genderize algorithm has
 bias against countries with gender-neutral naming conventions.
 
-\vspace{40mm}
+\vspace{20mm}
 
 Table S1. Sensitivity, specificity, and accuracy of genderize thresholds
 for data provided by Broderick and Casadevall (1). Bolded text denotes
 the accuracy of the threshold used in all further analyses. Also
-included are the percent of names not assigned a gender by the API
+included are the percent of names not inferred a gender by the API
 (percent unknown) at each threshold.
 
 \begin{table}[H]
@@ -226,22 +245,23 @@ Percent Unknown & 11.2000 & 22.6000 & \cellcolor{white}{34.6} & 33.5000 & 40.300
 \end{table}
 
 \hypertarget{refs}{}
-\hypertarget{ref-broderick_gender_2019}{}
+\leavevmode\hypertarget{ref-broderick_gender_2019}{}%
 1. \textbf{Broderick NA}, \textbf{Casadevall A}. 2019. Gender
 inequalities among authors who contributed equally. eLife
 \textbf{8}:e36399.
 doi:\href{https://doi.org/10.7554/eLife.36399}{10.7554/eLife.36399}.
 
-\hypertarget{ref-edwards_gender_2018}{}
+\leavevmode\hypertarget{ref-edwards_gender_2018}{}%
 2. \textbf{Edwards HA}, \textbf{Schroeder J}, \textbf{Dugdale HL}. 2018.
 Gender differences in authorships are not associated with publication
 bias in an evolutionary journal. PLOS ONE \textbf{13}:e0201725.
 doi:\href{https://doi.org/10.1371/journal.pone.0201725}{10.1371/journal.pone.0201725}.
 
-\hypertarget{ref-holman_gender_2018}{}
+\leavevmode\hypertarget{ref-holman_gender_2018}{}%
 3. \textbf{Holman L}, \textbf{Stuart-Fox D}, \textbf{Hauser CE}. 2018.
 The gender gap in science: How long until women are equally represented?
 PLOS Biology \textbf{16}:20.
 doi:\href{https://doi.org/10.1371/journal.\%20pbio.2004956}{10.1371/journal. pbio.2004956}.
+
 
 \end{document}

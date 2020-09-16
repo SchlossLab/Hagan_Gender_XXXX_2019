@@ -48,7 +48,7 @@ get_summary_stats <- function(input_df){
   }
   
   stats_df <- map_dfc(all_dfs, get_stats_df) %>% 
-    rename(., "v1" = "value", "v2" = "value1", "v3" = "value2") #create df of all summary stats
+    rename(., "v1" = "value...1", "v2" = "value...2", "v3" = "value...3") #create df of all summary stats
   
   #colnames(stats_df) <- c("1", "2", "3")
   

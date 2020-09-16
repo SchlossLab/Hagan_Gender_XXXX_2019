@@ -82,7 +82,7 @@ ed_rejections_B <- summary_gen_ed %>%
   labs(x = "\n", 
        y = "Difference Following Review by Editor Gender\n",
        fill = "Percentage Point\nDifference")+
-  my_theme_leg_horiz
+  my_theme_horiz
 
 ed_rejections_legend <- summary_gen_ed %>% 
   ggplot(aes(x = EJP.decision, 
@@ -207,12 +207,12 @@ blank <- ggplot()
 
 Fig_6_ledg <- get_legend(ed_rejections_legend)
 
-plot_A <- plot_grid(ed_rejections_B, Fig_6_ledg, blank, labels = c('A'), 
-                    label_size = 18, rel_widths = c(2,1,1))
+plot_A <- plot_grid(ed_rejections_B, Fig_6_ledg, labels = c('A'), 
+                    label_size = 18, nrow = 1, rel_widths = c(2,1))
 
 plot_BC <- plot_grid(reviewer_A, reviewer_C, labels = c('B', 'C'), label_size = 18)
 
 plot_grid(plot_A, plot_BC, nrow = 2)
 
 ggsave("Figure_6.png", device = 'png', 
-       path = 'submission', width = 12, height = 7)
+       path = 'submission', width = 8, height = 7)

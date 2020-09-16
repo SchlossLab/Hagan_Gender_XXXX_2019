@@ -246,7 +246,9 @@ plot_sub_v_pub_time <- function(temp_sub, temp_pub, text){
                   color = gender), size = 0.75)+
     coord_cartesian(ylim = c(0, max_value))+
     scale_color_manual(values = gen_ed_colors, 
-                       breaks = gen_ed_labels)
+                       breaks = gen_ed_levels,
+                       labels = gen_ed_labels,
+                       guide = FALSE)
   
   plot <- if(text == "TRUE"){
     plot +
@@ -312,7 +314,7 @@ feature_box_plot <- function(df){
   plot <- ggplot(df)+
     geom_boxplot(aes(x = clean_feat, y = weight))+
     coord_flip()+
-    labs(x = "\nLogistic Regression Variables", y = "Weight (Predictive Value)")+
+    labs(x = "\nLogistic Regression Variables", y = "Weight (Absolute value)")+
     my_theme_horiz
   
   return(plot)

@@ -1,4 +1,4 @@
-library(tidyverse)
+#library(tidyverse)
 library(caret) #package for generating confusion matrices
 
 #function to convert male/female into binary (1/0)

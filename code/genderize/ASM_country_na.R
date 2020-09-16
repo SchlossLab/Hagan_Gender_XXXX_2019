@@ -1,4 +1,4 @@
-library(tidyverse)
+#library(tidyverse)
 
 #full b_c dataset w. country data
 ASM_country_impact_data <- people %>% 

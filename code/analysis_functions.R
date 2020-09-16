@@ -1,5 +1,5 @@
 library(rlang) #required for list_to_sent()
-library(tidyverse)
+#library(tidyverse)
 
 #calculate two decimal percentage given num & denom
 get_percent <- function(x, y){

@@ -1,80 +1,83 @@
-acc_data <- bias_data %>% 
-  select(published, version, grouped.random, random.manu.num, gender, 
-         EJP.decision, contains("days"), journal, grouped.vers,
-         num.versions, days.to.review) %>% 
-  filter(published == "yes") %>% 
-  filter(grouped.vers == 1) %>% 
-  distinct()
+##gather auc values & plot----
 
-manus <- acc_data %>% pull(grouped.random) %>% unique()
+prop_fem_ml <- read_csv("data/combined_best_hp_results_pred_auth_gend.csv") %>% 
+  select(test_aucs) %>% 
+  rename(A = "test_aucs")
 
-accepted_data <- acc_data %>% 
-  select(-num.versions, -days.to.review) %>% 
-  distinct()
+rej_rate_ml <- read_csv("data/combined_best_hp_results_pred_rej_gend.csv") %>% 
+  select(test_aucs) %>%
+  rename(B = "test_aucs")
 
-#days from submission to production
-figure_S5A <- accepted_data %>% 
-  ggplot(aes(x = days.pending, fill = gender))+
-  geom_density(alpha = 0.5)+
-  coord_cartesian(xlim = c(0, 200))+
-  scale_fill_manual(values = gen_colors, 
-                    labels = gen_labels)+
-  facet_wrap(~journal)+
-  labs(x = "Days from 'Submission' to\n'Ready for Publication' Dates\n",
-       y = "\nDensity", fill = "Gender")+
-  my_theme_leg+
-  theme(legend.position = "top")
+US_rej_ml <- read_csv("data/combined_best_hp_results_US_rej.csv") %>% 
+  select(test_aucs) %>%
+  rename(C = "test_aucs")
 
-#Do papers authored by women take longer to get accepted than those authored by men?----
-manu_summary <- map_df(manus, function(x){
-  acc_data %>% filter(grouped.random == x) %>% 
-    select(version, random.manu.num, days.to.decision) %>% 
-    distinct() %>% 
-    group_by(random.manu.num) %>% 
-    summarise(total.decision = sum(days.to.decision)) %>% 
-    mutate(grouped.random = x)
-})
+all_aucs <- cbind(prop_fem_ml, rej_rate_ml, US_rej_ml) %>% 
+  gather(key = test, value = auc)
 
-acc_data <- acc_data %>% 
-  left_join(., manu_summary, by = c("grouped.random", "random.manu.num"))
-
-figure_S5B <- acc_data %>% 
-  select(gender, grouped.random, total.decision, journal) %>% distinct() %>% 
-  filter(total.decision >= 0 & total.decision <= 200) %>% 
+plot_aucs <- all_aucs %>% 
   ggplot()+
-  geom_density(aes(x = total.decision, fill = gender), alpha = 0.5)+
-  facet_wrap(~journal)+
-  scale_fill_manual(values = gen_colors)+
-  labs(x = "Days in Peer Review System\n", 
-       y = "\nDensity")+
-  my_theme
+  geom_boxplot(aes(y = auc))+
+  facet_wrap(~test)+
+  labs(y = "AUC")+
+  scale_y_continuous(limits = c(0.5, 1.0))+
+  my_theme+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x = element_blank())
 
-#versions for accepted outcomes----
+#gather weights----
 
-accepted_versions <- map_dfr(manus, function(x){
-  acc_data %>%  
-    filter(grouped.random == x) %>% 
-    arrange(desc(grouped.vers)) %>% head(n = 1)
-})
+prop_fem_feat <- read_csv("data/combined_all_imp_features_pred_auth_gen.csv") %>% 
+  select(-Bias, -model) %>% 
+  gather(key = feature, value = weight) %>% 
+  mutate(test = "prop_fem")
 
-version_sum <- accepted_versions %>%
-  group_by(gender) %>% 
-  summarise(med_vers = median(num.versions),
-            IQR_vers = IQR(num.versions))
+rej_rate_feat <- read_csv("data/combined_all_imp_features_pred_rej_gend.csv") %>% 
+  select(-Bias, -model) %>% 
+  gather(key = feature, value = weight) %>% 
+  mutate(test = "ed_rej_all")
 
-#number of revisions before acceptance -- data described in text
-#figure_S5C <- accepted_versions %>% 
-#  ggplot(aes(x = gender, y = num.versions, fill = gender))+
-#  geom_boxplot()+
-#  facet_wrap(~journal)+
-#  scale_fill_manual(values = gen_colors)+
-#  gen_x_replace +
-#  labs(x = "Gender", y = "\nNumber of Versions")+
-#  my_theme
+#US_rej_feat <- read_csv("../data/combined_all_imp_features_US_rej.csv") %>% 
+#  select(-Bias, -model) %>% 
+#  gather(key = feature, value = weight) %>% 
+#  mutate(test = "US_rej")
 
-#plot figure-----
-plot_grid(figure_S5A, figure_S5B, ncol = 1,
-          labels = c('A', 'B'), label_size = 18)
+all_feats <- rbind(prop_fem_feat, rej_rate_feat, US_rej_feat) %>% 
+  mutate(weight = abs(weight), 
+         clean_feat = feature %>% str_replace("\\.{3}", " & ") %>% 
+           str_replace("\\.female", "\\.women") %>% 
+           str_replace("\\.male", "\\.men") %>% 
+           str_replace_all("X.inst.gender.|X.US.inst.type.", "") %>% 
+           str_replace_all("US.gender.no.|US.inst.no", "Non-US ") %>% 
+           str_replace_all("(?<=US.)gender.yes|inst.yes", "") %>% 
+           str_replace_all("inst.gender.Other.", "Other US Inst ") %>% 
+           str_replace_all("\\.", " ") %>% 
+           str_to_title() %>% 
+           str_replace_all("Us", "US") %>% 
+           trimws())
+
+fem_feat_plot <-all_feats %>% 
+  filter(test == "prop_fem") %>% 
+  feature_box_plot(.)
+
+rej_rate_feat_plot <- all_feats %>% 
+  filter(test == "ed_rej_all") %>% 
+  feature_box_plot(.)
+
+##this plot isn't needed b/c fig S6
+#US_rej_feat_plot <- all_feats %>% 
+#  filter(test == "US_rej") %>% 
+#  feature_box_plot(.)
+
+###plot figure----
+
+Fig_AB <- plot_grid(plot_aucs, rej_rate_feat_plot, 
+                    labels = c('A', 'B'), rel_widths = c(.8, 1),
+                    label_size = 18, nrow = 1)
+
+plot_grid(Fig_AB, fem_feat_plot, 
+          labels = c('', 'C'), rel_heights = c(0.5, 1),
+          label_size = 18, nrow = 2)
 
 ggsave("Figure_S5.png", device = 'png', 
-       path = 'submission', width = 9, height = 12)
+       path = 'submission', width = 9, height = 9)

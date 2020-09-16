@@ -43,7 +43,8 @@ rej_rate_feat <- read_csv("../data/combined_all_imp_features_pred_rej_gend.csv")
 #  mutate(test = "US_rej")
 
 all_feats <- rbind(prop_fem_feat, rej_rate_feat, US_rej_feat) %>% 
-  mutate(clean_feat = feature %>% str_replace("\\.{3}", " & ") %>% 
+  mutate(weights = abs(weights), 
+         clean_feat = feature %>% str_replace("\\.{3}", " & ") %>% 
            str_replace("\\.female", "\\.women") %>% 
            str_replace("\\.male", "\\.men") %>% 
            str_replace_all("X.inst.gender.|X.US.inst.type.", "") %>% 

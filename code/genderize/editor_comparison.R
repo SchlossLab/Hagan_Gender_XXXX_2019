@@ -1,4 +1,4 @@
-library(caret) #package for generating confusion matrices
+#library(caret) #package for generating confusion matrices
 
 #function to convert male/female into binary (1/0)
 convert_gender <- function(x){

@@ -1,205 +1,80 @@
-#Does the institution of the corresponding author matter? Supplementary
-#S6A. difference in editorial rejection by journal & inst type----
-ed_rejs <- bias_data %>% 
-  filter(published == "no") %>% 
-  filter(EJP.decision == "Reject" & is.na(days.to.review)) %>% 
-  select(-days.to.review, -contains("version")) %>% 
-  distinct() 
-
-#editorial rejections by journal--
-ASM_subs_j <- bias_data %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>% 
-  select(journal, gender, grouped.random, US.inst.type) %>% 
-  distinct() %>% 
-  group_by(journal, US.inst.type, gender) %>% summarise(total = n()) 
-
-ed_rej_subs_j <- ed_rejs %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>% 
-  select(journal, gender, grouped.random, US.inst.type) %>% 
-  distinct() %>% 
-  group_by(journal, US.inst.type, gender) %>% 
-  summarise(ed.rejections = n())
-
-Fig_S6A_data <- left_join(ASM_subs_j, ed_rej_subs_j, 
-          by = c("US.inst.type", "gender", "journal")) %>% 
-  mutate(prop.rejected = get_percent(ed.rejections, total)) %>% 
-  select(-total, -ed.rejections) %>% 
-  spread(key = gender, value = prop.rejected) %>% 
-  mutate(performance = male - female)
-  
-Figure_S6A <- Fig_S6A_data %>% 
-  ggplot(aes(x = journal, y = performance, fill = performance))+
-  geom_col()+
-  facet_wrap(~US.inst.type, scales = "free", ncol = 2)+
-  coord_flip()+
-  gen_gradient_40+
-  labs(x = "\n",
-       y = "Difference in Editorial Rejections\n",
-       fill = "% Points\nDifference")+
-  my_theme_horiz+
-  theme(legend.position = c(0.8,0.1))
-
-#S6B. Difference in accepted rates by journal & inst type----
-acc <- bias_data %>% 
-  filter(EJP.decision == "Accept") %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>%
-  select(-days.to.review, contains("version")) %>% 
+acc_data <- bias_data %>% 
+  select(published, version, grouped.random, random.manu.num, gender, 
+         EJP.decision, contains("days"), journal, grouped.vers,
+         num.versions, days.to.review) %>% 
+  filter(published == "yes") %>% 
+  filter(grouped.vers == 1) %>% 
   distinct()
 
-ASM_subs_j <- bias_data %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>% 
-  select(journal, gender, grouped.random, US.inst.type) %>% 
-  distinct() %>% 
-  group_by(journal, US.inst.type, gender) %>% summarise(total = n()) 
+manus <- acc_data %>% pull(grouped.random) %>% unique()
 
-acc_subs_j <- acc %>% 
-  select(journal, gender, grouped.random, US.inst.type) %>% 
-  distinct() %>% 
-  group_by(journal, US.inst.type, gender) %>% 
-  summarise(accepted = n())
-
-Fig_S6B_data <- left_join(ASM_subs_j, acc_subs_j, 
-          by = c("US.inst.type", "gender", "journal")) %>% 
-  mutate(prop.accepted = get_percent(accepted, total)) %>% 
-  select(-total, -accepted) %>% 
-  spread(key = gender, value = prop.accepted) %>% 
-  mutate(performance = male - female)
-
-Figure_S6B <- Fig_S6B_data %>% 
-  ggplot(aes(x = journal, y = performance, fill = performance))+
-  geom_col()+
-  facet_wrap(~US.inst.type, scales = "free", ncol = 2)+
-  coord_flip()+
-  gen_gradient_40+
-  labs(x = "\n", 
-       y = "Difference in Acceptance Rates\n", 
-       fill = "% Points\nDifference")+
-  my_theme_horiz+
-  theme(legend.position = c(0.8,0.1))
-
-#Former S6C. Difference in review recommendation by institution type----
-rev_rec_inst <- bias_data %>% 
-  filter(!is.na(review.recommendation)) %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>% 
-  select(grouped.random, gender, 
-         US.inst.type, review.recommendation) %>% 
-  filter(review.recommendation %in% c("Revise", "Reject", 
-                                      "Accept")) %>% 
+accepted_data <- acc_data %>% 
+  select(-num.versions, -days.to.review) %>% 
   distinct()
 
-US_inst_totals <- rev_rec_inst %>% 
-  group_by(US.inst.type, gender) %>% 
-  summarise(n = n())
+#days from submission to production
+figure_S6A <- accepted_data %>% 
+  ggplot(aes(x = days.pending, fill = gender))+
+  geom_density(alpha = 0.5)+
+  coord_cartesian(xlim = c(0, 200))+
+  scale_fill_manual(values = gen_colors, 
+                    labels = gen_labels)+
+  facet_wrap(~journal)+
+  labs(x = "Days from 'Submission' to\n'Ready for Publication' Dates\n",
+       y = "\nDensity", fill = "Gender")+
+  my_theme_leg+
+  theme(legend.position = "top")
 
-#Figure_S6C <- rev_rec_inst %>%   
-#  group_by(US.inst.type, review.recommendation, gender) %>% 
-#  summarise(n = n()) %>% as_tibble() %>% 
-#  spread(key = review.recommendation, value = n) %>% 
-#  mutate_if(is.numeric, 
-#            funs(get_percent(., US_inst_totals$n))) %>%
-#  gather(`Accept, no revision`:`Revise only`,
-#         key = review.recommendation, value = percent) %>% 
-#  spread(key = gender, value = percent) %>% 
-#  mutate(overperformance = male - female) %>%
-#  ggplot(aes(x = US.inst.type, 
-#             y = overperformance, fill = overperformance))+
-#  geom_col(position = "dodge")+
-#  facet_wrap(~review.recommendation, ncol = 1)+
-#  gen_gradient+
-#  coord_flip()+
-#  labs(x = "\nInstitution Type", 
-#       y = "Difference in Review Recommendation")+
-#  my_theme_horiz
+#Do papers authored by women take longer to get accepted than those authored by men?----
+manu_summary <- map_df(manus, function(x){
+  acc_data %>% filter(grouped.random == x) %>% 
+    select(version, random.manu.num, days.to.decision) %>% 
+    distinct() %>% 
+    group_by(random.manu.num) %>% 
+    summarise(total.decision = sum(days.to.decision)) %>% 
+    mutate(grouped.random = x)
+})
 
-#S6C. difference in acceptance recommendation by reviewer gender----
-rev_rec_data <- bias_data %>% 
-  filter(version.reviewed == 0) %>% 
-  filter(version == 0) %>% 
-  select(gender, journal, published, review.recommendation, 
-         reviewer.gender, reviewer.random.id, random.manu.num, version.reviewed, 
-         US.inst, US.inst.type) %>% distinct() %>% 
-    filter(review.recommendation %in% c("Revise", "Reject", 
-                                        "Accept")) %>%
-  distinct()
+acc_data <- acc_data %>% 
+  left_join(., manu_summary, by = c("grouped.random", "random.manu.num"))
 
-sub_inst_gen <- rev_rec_data %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>% 
-  filter(review.recommendation != "Revise") %>% 
-  select(random.manu.num, US.inst.type, reviewer.gender,
-         review.recommendation, gender) %>% 
-  distinct() %>% 
-  group_by(reviewer.gender, US.inst.type, gender) %>% 
-  summarise(total = n())
+figure_S6B <- acc_data %>% 
+  select(gender, grouped.random, total.decision, journal) %>% distinct() %>% 
+  filter(total.decision >= 0 & total.decision <= 200) %>% 
+  ggplot()+
+  geom_density(aes(x = total.decision, fill = gender), alpha = 0.5)+
+  facet_wrap(~journal)+
+  scale_fill_manual(values = gen_colors)+
+  labs(x = "Days in Peer Review System\n", 
+       y = "\nDensity")+
+  my_theme
 
-summ_inst_num <- rev_rec_data %>% 
-  filter(US.inst == "yes") %>% 
-  filter(!is.na(US.inst.type)) %>% 
-  filter(review.recommendation != "Revise") %>% 
-  filter(reviewer.gender %in% c("female", "male")) %>% 
-  select(random.manu.num, reviewer.gender, US.inst.type, review.recommendation, gender) %>% 
-  distinct() %>% 
-  group_by(reviewer.gender, US.inst.type, gender, 
-           review.recommendation) %>% 
-  summarise(n = n()) %>% as_tibble() %>% 
-  left_join(., sub_inst_gen, by = c("reviewer.gender",
-                                    "US.inst.type", 
-                                    "gender")) %>% 
-  mutate(percent = get_percent(n, total))
+#versions for accepted outcomes----
 
-rev_inst_totals <- summ_inst_num %>% 
-  select(reviewer.gender, US.inst.type, gender, total) %>% distinct() %>% 
-  spread(gender, total) %>% 
-  mutate(total_sub = male + female) %>% select(-male, -female)
+accepted_versions <- map_dfr(manus, function(x){
+  acc_data %>%  
+    filter(grouped.random == x) %>% 
+    arrange(desc(grouped.vers)) %>% head(n = 1)
+})
 
-summ_inst <- summ_inst_num %>% 
-  select(-n, -total) %>% 
-  spread(key = gender, value = percent) %>% 
-  mutate(overperform = male - female) %>% 
-  select(-male, -female) %>% 
-  left_join(., rev_inst_totals, by = c("reviewer.gender", "US.inst.type")) %>% 
-  mutate(US.inst.type = paste0(US.inst.type, " (N=", total_sub, ")"))
+version_sum <- accepted_versions %>%
+  group_by(gender) %>% 
+  summarise(med_vers = median(num.versions),
+            IQR_vers = IQR(num.versions))
 
-Figure_S6C <- summ_inst %>% 
-  filter(review.recommendation == "Accept") %>% 
-  ggplot(aes(x = fct_reorder(US.inst.type, desc(total_sub)), 
-             fill = overperform,
-             y = overperform))+
-  geom_col(position = "dodge")+
-  gen_gradient+
-  coord_flip()+
-  facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1, 
-             scales = "free_y")+
-  labs(x = "\n", 
-       y = "Difference in Acceptance Recommendation
-       by Reviewer Gender", fill = "% Points\nDifference")+
-  my_theme_leg_horiz+
-  theme(legend.position = "left")
+#number of revisions before acceptance -- data described in text
+#figure_S6C <- accepted_versions %>% 
+#  ggplot(aes(x = gender, y = num.versions, fill = gender))+
+#  geom_boxplot()+
+#  facet_wrap(~journal)+
+#  scale_fill_manual(values = gen_colors)+
+#  gen_x_replace +
+#  labs(x = "Gender", y = "\nNumber of Versions")+
+#  my_theme
 
-#S6D. important features for editorial rejection----
-Figure_S6D <- plot_feature_ranks(ranked_weights)+
-  labs(y = "Importance Rank", color = "Direction\nof Impact",
-       x = "\nFeature")
-
-#generate & save figure----
-Fig_S6AB <- plot_grid(Figure_S6A, Figure_S6B,
-          labels = c('A', 'B'),
-          label_size = 18,
-          ncol = 2)
-
-Fig_S6CD <- plot_grid(Figure_S6C, Figure_S6D,
-                      labels = c('C', 'D'),
-                      label_size = 18,
-                      ncol = 2)
-
-plot_grid(Fig_S6AB, Fig_S6CD,
-          rel_heights = c(2, 1),
-          nrow = 2)
+#plot figure-----
+plot_grid(figure_S6A, figure_S6B, ncol = 1,
+          labels = c('A', 'B'), label_size = 18)
 
 ggsave("Figure_S6.png", device = 'png', 
-       path = 'submission', width = 14, height = 16)
+       path = 'submission', width = 9, height = 12)

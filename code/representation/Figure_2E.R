@@ -42,12 +42,16 @@ Fig_2E <- ggplot(ed_prop_j) +
   theme(legend.position="top")
 
 #generate figure 2----
-Fig_2abcd <- plot_grid(Figure_2A, Fig_2B, Figure_2C, Fig_2D,
-          labels = c('A', 'B', 'C', 'D'), label_size = 18,
-          nrow = 2)
+Fig_2ab <- plot_grid(Figure_2A, Fig_2B, 
+          labels = c('A', 'B'), label_size = 18,
+          nrow = 1)
 
-plot_grid(Fig_2abcd, Fig_2E, labels = c('', 'E'), label_size = 18,
-          nrow = 2)
+Fig_2de <- plot_grid(Figure_2C, Fig_2D,
+                       labels = c('D', 'E'), label_size = 18,
+                       nrow = 1)
+
+plot_grid(Fig_2ab, Fig_2E, Fig_2de, labels = c('', 'C', ''), label_size = 18,
+          nrow = 3, rel_heights = c(1, 1.5, 1))
 
 ggsave("Figure_2.png", device = 'png', 
        path = 'submission', width = 12, height = 12)
