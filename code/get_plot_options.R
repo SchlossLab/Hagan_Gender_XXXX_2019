@@ -45,7 +45,7 @@ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7") #black
 
 #gradient for comparing "performance"
-gen_gradient <- scale_fill_gradient2(limits = c(-10,10), midpoint = 0, low = "#D55E00", mid='snow3', 
+gen_gradient <- scale_fill_gradient2(limits = c(-15,15), midpoint = 0, low = "#D55E00", mid='snow3', 
                                        high = "#0072B2", space = "Lab")
 
 gen_gradient_40 <- scale_fill_gradient2(limits = c(-45,45), midpoint = 0, low = "#D55E00", mid='snow3', 
