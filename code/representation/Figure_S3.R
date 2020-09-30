@@ -13,5 +13,5 @@ Fig_S3B <- plot_sub_v_pub_time("sub_last_auth", "pub_last_auth", TRUE)+
 plot_grid(Fig_S3A, Fig_S3B, labels = c('A', 'B'), 
                   label_size = 18, nrow = 2)
 
-ggsave("Figure_S3.png", device = 'png', 
-       path = 'submission', width = 8, height = 6)
+ggsave("Figure_S3.tiff", device = 'tiff', units = "in", scale = 1.5,
+       path = 'submission', width = 6, height = 4)

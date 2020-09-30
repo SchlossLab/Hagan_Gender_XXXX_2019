@@ -223,5 +223,5 @@ plot_grid(Fig_S8_legend, Fig_S8_plots,
           rel_heights = c(0.05, 1),
           nrow = 2)
 
-ggsave("Figure_S8.png", device = 'png', 
-       path = 'submission', width = 12, height = 15)
+ggsave("Figure_S8.tiff", device = 'tiff', units = "in", scale = 2,
+       path = 'submission', width = 6.8, height = 8)

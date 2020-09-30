@@ -70,7 +70,7 @@ missing_bins <- tibble(
 fem_by_auth_num <- fem_by_auth_num %>% 
   rbind(., missing_bins)
 
-plot_fem_by_auth <- fem_by_auth_num %>% 
+fem_by_auth_num %>% 
   ggplot()+
   geom_bar(aes(fill = gender, x = prop.fem.auth.bin), position = "dodge")+
   scale_y_log10()+
@@ -82,5 +82,5 @@ plot_fem_by_auth <- fem_by_auth_num %>%
   my_theme_leg+
   theme(legend.position = c(0.8, 0.1))
 
-ggsave("Figure_S4.png", device = 'png', 
-       path = 'submission', width = 8, height = 8)
+ggsave("Figure_S4.tiff", device = 'tiff', units = "in", scale = 1.25,
+       path = 'submission', width = 6, height = 6)

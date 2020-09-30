@@ -12,6 +12,19 @@ accepted_data <- acc_data %>%
   select(-num.versions, -days.to.review) %>% 
   distinct()
 
+accepted_summary <-accepted_data %>% 
+  group_by(journal, gender) %>% 
+  summarise(avg.pending = mean(days.pending, na.rm = TRUE), 
+            med.pending = median(days.pending, na.rm = TRUE), min.pending = min(days.pending, na.rm = TRUE),
+            max.pending = max(days.pending, na.rm = TRUE)) 
+
+accepted_avg <- accepted_summary %>% 
+  select(journal, gender, avg.pending) %>% 
+  spread(key = gender, value = avg.pending) %>% 
+  mutate(avg.diff = round(female - male)) %>% 
+  select(-female, -male) %>% 
+  arrange(desc(avg.diff))
+
 #days from submission to production
 figure_S6A <- accepted_data %>% 
   ggplot(aes(x = days.pending, fill = gender))+
@@ -37,6 +50,19 @@ manu_summary <- map_df(manus, function(x){
 
 acc_data <- acc_data %>% 
   left_join(., manu_summary, by = c("grouped.random", "random.manu.num"))
+
+decision_summary <- acc_data %>% 
+  group_by(journal, gender) %>% 
+  summarise(avg.decision = mean(total.decision, na.rm = TRUE), 
+            med.decision = median(total.decision, na.rm = TRUE), min.decision = min(total.decision, na.rm = TRUE),
+            max.decision = max(total.decision, na.rm = TRUE)) 
+
+avg_decision <- decision_summary %>% 
+  select(journal, gender, avg.decision) %>% 
+  spread(key = gender, value = avg.decision) %>% 
+  mutate(diff.decision = round(female - male)) %>% 
+  select(-male, -female) %>% 
+  arrange(desc(diff.decision))
 
 figure_S6B <- acc_data %>% 
   select(gender, grouped.random, total.decision, journal) %>% distinct() %>% 
@@ -76,5 +102,5 @@ version_sum <- accepted_versions %>%
 plot_grid(figure_S6A, figure_S6B, ncol = 1,
           labels = c('A', 'B'), label_size = 18)
 
-ggsave("Figure_S6.png", device = 'png', 
-       path = 'submission', width = 9, height = 12)
+ggsave("Figure_S6.tiff", device = 'tiff', units = "in", scale = 1,
+       path = 'submission', width = 6, height = 9)

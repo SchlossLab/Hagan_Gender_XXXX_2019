@@ -214,5 +214,5 @@ plot_BC <- plot_grid(reviewer_A, reviewer_C, labels = c('B', 'C'), label_size = 
 
 plot_grid(plot_A, plot_BC, nrow = 2)
 
-ggsave("Figure_6.png", device = 'png', 
-       path = 'submission', width = 8, height = 7)
+ggsave("Figure_6.tiff", device = 'tiff', units = "in", scale = 2,
+       path = 'submission', width = 5, height = 3.5)

@@ -187,5 +187,5 @@ row2 <- plot_grid(figure_5B, figure_5C,
 
 plot_grid(figure_5A, row2, labels = 'A', label_size = 18, nrow = 2)
 
-ggsave("Figure_5.png", device = 'png', 
-       path = 'submission', width = 9, height = 6)
+ggsave("Figure_5.tiff", device = 'tiff', units = "in", scale = 1.75,
+       path = 'submission', width = 6, height = 4)

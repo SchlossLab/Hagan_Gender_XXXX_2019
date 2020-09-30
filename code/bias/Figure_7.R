@@ -261,7 +261,7 @@ figure_7D <- fig7d_inst_total %>%
 #generate & save figure----
 Fig7_legend <- get_legend(ed_rejections_legend)
 
-blank <- ggplot()
+blank <- ggplot()+theme_void()
 
 plot_legend <- plot_grid(blank, Fig7_legend, blank, nrow = 1)
 
@@ -275,5 +275,5 @@ plot_grid(plot_legend, fig_7_row1, figure_7C, figure_7D,
           rel_heights = c(0.25, 1, 1, 1),
           label_size = 18, nrow = 4)
 
-ggsave("Figure_7.png", device = 'png', 
-       path = 'submission', width = 11, height = 12)
+ggsave("Figure_7.tiff", device = 'tiff', units = "in", scale = 1.75,
+       path = 'submission', width = 6.8, height = 9)

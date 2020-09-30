@@ -79,5 +79,5 @@ plot_grid(Fig_AB, fem_feat_plot,
           labels = c('', 'C'), rel_heights = c(0.5, 1),
           label_size = 18, nrow = 2)
 
-ggsave("Figure_S5.png", device = 'png', 
-       path = 'submission', width = 9, height = 9)
+ggsave("Figure_S5.tiff", device = 'tiff', units = "in", scale = 1.7, 
+       path = 'submission', width = 5, height = 6)

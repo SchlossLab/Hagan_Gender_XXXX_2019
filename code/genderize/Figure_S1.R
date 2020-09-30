@@ -80,15 +80,16 @@ plot_ASM_country_impact <- ASM_predictions_by_country %>%
   geom_col()+
   geom_text(aes(label = total), vjust = .5, hjust = -.15)+
   coord_flip(ylim = c(0.0, 0.25))+
-  labs(x = "Publication Country", y = "Negative Impact on Overall Gender Prediction")+
+  labs(x = "Publication Country", y = "Negative Impact on 
+       Overall Gender Prediction")+
   my_theme_horiz
 
 plot_grid(equ_plot, plot_ASM_country_impact, 
           rel_heights = c(0.5, 2),
           nrow = 2, labels = c('A', 'B'), label_size = 18)
 
-ggsave("Figure_S1.png", device = 'png', 
-       path = 'submission', width = 8, height = 12)
+ggsave("Figure_S1.tiff", device = 'tiff', units = "in", scale = 1,
+       path = 'submission', width = 6.8, height = 9)
 
 #which countries have the most "unknown" gender names?
 #na_by_country <- na_obs %>%

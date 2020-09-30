@@ -176,7 +176,8 @@ Figure_S7C <- summ_inst %>%
   facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1, 
              scales = "free_y")+
   labs(x = "\n", 
-       y = "Difference in Acceptance Recommendation
+       y = "Difference in Acceptance
+       Recommendation
        by Reviewer Gender", fill = "% Points\nDifference")+
   my_theme_leg_horiz+
   theme(legend.position = "left")
@@ -201,5 +202,5 @@ plot_grid(Fig_S7AB, Fig_S7CD,
           rel_heights = c(2, 1),
           nrow = 2)
 
-ggsave("Figure_S7.png", device = 'png', 
-       path = 'submission', width = 14, height = 16)
+ggsave("Figure_S7.tiff", device = 'tiff', units = "in", scale = 2,
+       path = 'submission', width = 6.8, height = 8)

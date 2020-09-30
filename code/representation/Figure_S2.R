@@ -22,5 +22,5 @@ plot_grid(Fig_S2A, Fig_S2B,
           rel_heights = c(1, 1.5), 
           ncol = 1)
 
-ggsave("Figure_S2.png", device = 'png', 
-       path = 'submission', width = 9, height = 8)
+ggsave("Figure_S2.tiff", device = 'tiff', units = "in", scale = 1.25,
+       path = 'submission', width = 6.8, height = 5)

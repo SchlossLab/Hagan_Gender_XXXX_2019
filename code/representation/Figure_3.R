@@ -144,7 +144,7 @@ Fig3_leg <- ed_resp %>%
 #generate full figure----
 Fig3_legend <- get_legend(Fig3_leg)
 
-blank <- ggplot()
+blank <- ggplot()+theme_void()
 
 plot_legend <- plot_grid(blank, Fig3_legend, blank, nrow = 1)
 
@@ -152,5 +152,5 @@ plot_AB <- plot_grid(plot_legend, Fig_3A, Fig_3B, Fig_3C, nrow = 4,
                      rel_heights = c(1, 4, 4, 4),
           labels = c('', 'A', 'B', 'C'), label_size = 18)
 
-ggsave("Figure_3.png", device = 'png', 
-     path = 'submission', width = 9, height = 9)
+ggsave("Figure_3.tiff", device = 'tiff', units = "in", scale = 1.75,
+     path = 'submission', width = 4, height = 4)
