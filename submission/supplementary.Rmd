@@ -3,12 +3,13 @@ title: "Supplementary Text"
 bibliography: references.bib
 csl: mbio.csl
 output:
+  word_document: default
+  html_document:
+    df_print: paged
   pdf_document:
     includes:
       in_header: header.tex
     keep_tex: yes
-  html_document:
-    df_print: paged
 geometry: margin=1.0in
 fontsize: 11pt
 always_allow_html: yes
