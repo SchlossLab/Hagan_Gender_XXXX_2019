@@ -130,6 +130,8 @@ get_cat_bias_data <- function(cat_journ){
 
 plot_cat_bias <- function(data, cat_journ){
   
+  plot_breaks <- pretty(data$performance, n = 16)
+  
   plot <- data %>% 
     filter(journal == cat_journ) %>% 
     mutate(category = paste0(category, 
@@ -141,8 +143,11 @@ plot_cat_bias <- function(data, cat_journ){
                ncol = 2)+
     coord_flip()+
     gen_gradient_40+
+    scale_y_continuous(breaks = plot_breaks,
+                       labels = abs(plot_breaks))+
     labs(x = "\n", 
-         y = paste("Difference at ", cat_journ, "\n"))+
+         y = paste("Difference at ", cat_journ),
+         caption = "Men <--- Favored Gender ---> Women\n")+
     my_theme_horiz
   
   return(plot)
@@ -196,6 +201,8 @@ stats_numvWA <- summary(lm(S8_ed_rej$cat.N~S8_ed_rej$percent.W))
 stats_numvWE <- summary(lm(S8_ed_rej$cat.N~S8_ed_rej$percent.W.editor))
 
 #plot Fig S8----
+Fig_S8_breaks <- pretty(Fig_S6B_data$performance, n = 9)
+
 Fig_S8_list <- map(cat_journ_list, function(x, y){
   plot_cat_bias(cat_bias_data, x)
   })

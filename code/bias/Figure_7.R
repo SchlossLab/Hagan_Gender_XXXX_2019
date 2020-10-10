@@ -43,20 +43,27 @@ fig7_ed_reject_n <- fig7_ed_rejections %>%
   mutate(n = male + female) %>% 
   select(-male, -female)
 
-figure_7A <- fig7_ed_rejections %>% select(-n, -total) %>% 
+figure_7A_data <- fig7_ed_rejections %>% select(-n, -total) %>% 
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) %>% 
-  left_join(., fig7_ed_reject_n, by = "journal") %>% 
-  ggplot() +
+  left_join(., fig7_ed_reject_n, by = "journal")
+
+plot_breaks <- pretty(figure_7A_data$performance, n = 7)  
+  
+figure_7A <- figure_7A_data %>%   
+    ggplot() +
   geom_col(aes(x = fct_reorder(journal, performance), 
                y = performance, fill = performance)) + 
   coord_flip()+
   gen_gradient+
   geom_hline(data = fig7_ASM_ed_rej, aes(yintercept = performance))+
+  scale_y_continuous(breaks = plot_breaks,
+                     labels = abs(plot_breaks))+
   annotate(geom = "text", x = 12, y = -4, label = "All Journals")+
   #geom_text(aes(x = journal, y = 0.75, label = n))+
   labs(x = "\n", 
-       y = "Difference in Editorial Rejections\n")+
+       y = "Difference in Editorial Rejections",
+       caption = "Men <--- Favored Gender ---> Women\n")+
   my_theme_horiz
 
 #B. decisions following review for U.S. only----
@@ -92,7 +99,7 @@ US_journal_dec_summary <- US_j_ed_dec_data %>%
   group_by(journal, EJP.decision) %>% 
   summarise(n = n())
 
-figure_7B <- US_j_ed_dec_data %>% 
+figure_7B_data <- US_j_ed_dec_data %>% 
   group_by(journal, gender, EJP.decision) %>% 
   summarise(n = n()) %>% 
   left_join(., US_journal_summary, 
@@ -103,17 +110,23 @@ figure_7B <- US_j_ed_dec_data %>%
   spread(key = gender, value = prop_rej) %>% 
   mutate(performance = male - female) %>% 
   left_join(., US_journal_dec_summary, 
-            by = c("journal", "EJP.decision")) %>% 
+            by = c("journal", "EJP.decision"))
+
+plot_breaks <- pretty(figure_7B_data$performance, n = 7)
+
+figure_7B <- figure_7B_data %>% 
   ggplot() +
   geom_col(aes(x = fct_reorder(journal, performance), 
                y = performance, fill = performance)) + 
   facet_wrap(~EJP.decision)+
+  scale_y_continuous(breaks = plot_breaks,
+                     labels = abs(plot_breaks))+
   coord_flip()+
   gen_gradient+
   geom_hline(data = US_j_dec, aes(yintercept = performance))+
   #geom_text(aes(x = journal, y = 1.5, label = n))+
   labs(x = "\n", 
-       y = "Difference in Decision after First Review\n")+
+       y = "Difference in Decision after First Review\n\n")+
   my_theme_horiz
 
 #C. acceptance & editorial rejection rates by U.S. insitution----
@@ -184,17 +197,22 @@ fig7c_acc_per <- left_join(fig7c_ASM_subs, fig7c_acc_subs,
 
 fig7c_inst_rates <- rbind(fig7c_editorial_rej_per, fig7c_acc_per) %>% 
   as.data.frame() %>% 
-  mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
+  mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"),
+         rate = as.factor(rate))
 
 #plot
+plot_breaks <- pretty(fig7c_inst_rates$performance, n = 16)
+
 figure_7C <- fig7c_inst_rates %>% 
-  ggplot()+
-  geom_col(aes(x = fct_reorder(US.inst.type, desc(total)), y = performance, fill = performance))+
+  ggplot(aes(x = fct_reorder(US.inst.type, desc(total)), 
+                                          y = performance, fill = performance))+
+  geom_col()+
   coord_flip()+
-  facet_wrap(~rate, nrow = 2, scales = "free_y")+
+  facet_wrap(~rate, scales = "free_y", nrow = 2)+
+  scale_y_continuous(breaks = plot_breaks,
+                     labels = abs(plot_breaks))+
   gen_gradient+
-  labs(x = "\n", 
-       y = "Difference in Decision\n")+
+  labs(x = "\n", y = "Difference in Decision\n")+
   my_theme_horiz
 
 #D. acceptance by editor gender and institution type after 1st review----
@@ -246,16 +264,21 @@ fig7d_inst_total <- fig7d_sub_inst_gen %>%
   mutate(US.inst.type = paste0(US.inst.type, " (N=", total, ")"))
 
 #plot
+plot_breaks <- pretty(fig7d_inst_total$overperform, n = 16)
+
 figure_7D <- fig7d_inst_total %>% 
   ggplot(aes(x = fct_reorder(US.inst.type, desc(total)), fill = overperform,
              y = overperform))+
   geom_col()+
   gen_gradient+
+  scale_y_continuous(breaks = plot_breaks,
+                     labels = abs(plot_breaks))+
   coord_flip()+
   facet_wrap(~gen_ed_facet(editor.gender), ncol = 1,
              scales = "free_y")+
   labs(x = "\n", 
-       y = "Difference in Decision")+
+       y = "Difference in Rejection Decision",
+       caption = "Men <--- Favored Gender ---> Women\n")+
   my_theme_horiz
 
 #generate & save figure----

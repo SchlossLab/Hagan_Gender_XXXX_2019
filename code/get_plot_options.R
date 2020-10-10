@@ -5,28 +5,37 @@ library(cowplot)
 
 #preferred themes----
 my_theme <- theme_classic() + 
-  theme(legend.position = "none", axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"), 
+  theme(legend.position = "none", axis.text=element_text(size=12), 
+        axis.title=element_text(size=14,face="bold"), 
         plot.title = element_text(size=16,face="bold"), 
-        axis.text.x = element_text(angle = 45, hjust = 1))
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.caption=element_text(size=12, hjust=.5),
+        plot.subtitle = element_text(size = 12, hjust = .5))
 
 my_theme_horiz <- theme_classic() + 
   theme(legend.position = "none", axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"), 
-        plot.title = element_text(size=16,face="bold"))
+        plot.title = element_text(size=16,face="bold"),
+        plot.caption = element_text(size=12, hjust=.5),
+        plot.subtitle = element_text(size = 12, hjust = .5))
 
 my_theme_leg <- theme_classic() + 
   theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"), 
         plot.title = element_text(size=16,face="bold"), 
-        axis.text.x = element_text(angle = 45, hjust = 1))
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.caption=element_text(size=12, hjust=.5),
+        plot.subtitle = element_text(size = 12, hjust = .5))
 
 my_theme_leg_left <- theme_classic() + 
   theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"), 
         plot.title = element_text(size=16,face="bold"), 
         axis.text.x = element_text(angle = 45, hjust = 1),
-        legend.position = "left")
+        legend.position = "left", plot.caption=element_text(size=12, hjust=.5),
+        plot.subtitle = element_text(size = 12, hjust = .5))
 
 my_theme_leg_horiz <- theme_classic() + 
   theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"), 
-        plot.title = element_text(size=16,face="bold"))
+        plot.title = element_text(size=16,face="bold"),
+        plot.subtitle = element_text(size = 12, hjust = .5))
 
 #adding proportion/count labels to barchart
 prop_lab_low <- geom_text(aes(label = scales::percent((..count..)/sum(..count..)), y= ((..count..)/sum(..count..))), stat = "count", vjust = 1)
@@ -45,11 +54,17 @@ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7") #black
 
 #gradient for comparing "performance"
-gen_gradient <- scale_fill_gradient2(limits = c(-15,15), midpoint = 0, low = "#D55E00", mid='snow3', 
-                                       high = "#0072B2", space = "Lab")
 
-gen_gradient_40 <- scale_fill_gradient2(limits = c(-45,45), midpoint = 0, low = "#D55E00", mid='snow3', 
-                                     high = "#0072B2", space = "Lab")
+break_list_15 <- pretty(-15:15)
+
+gen_gradient <- scale_fill_gradient2(limits = c(-15,15), midpoint = 0, low = "#D55E00", mid='snow3', 
+                                       high = "#0072B2", space = "Lab", labels = abs(break_list_15),
+                                     breaks = break_list_15)
+
+break_list_40 <- pretty(-40:40)
+
+gen_gradient_40 <- scale_fill_gradient2(limits = c(-45,45), midpoint = 0, low = '#D55E00', mid='snow3', 
+                                        high = '#0072B2', space = 'Lab', labels = abs(break_list_40), breaks = break_list_40)
 
 #settings----
 gen_levels <- c("none", "male", "female")

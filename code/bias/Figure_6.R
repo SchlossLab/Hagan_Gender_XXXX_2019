@@ -72,16 +72,20 @@ men_ed <- ed_dec_data %>%
 summary_gen_ed <- rbind(fem_ed, men_ed)
 
 #plot differences in editor decisions by gender (6A)
+plot_breaks <- pretty(summary_gen_ed$overperformance, n = 7)
+
 ed_rejections_B <- summary_gen_ed %>% 
   ggplot(aes(x = EJP.decision, 
              y = overperformance, fill = overperformance))+
   geom_col(position = "dodge")+
   gen_gradient+
+  scale_y_continuous(breaks = plot_breaks,
+                     labels = abs(plot_breaks))+
   coord_flip()+
   facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
   labs(x = "\n", 
        y = "Difference Following Review by Editor Gender\n",
-       fill = "Percentage Point\nDifference")+
+       fill = "Percentage Point\nDifference\n")+
   my_theme_horiz
 
 ed_rejections_legend <- summary_gen_ed %>% 
@@ -92,7 +96,7 @@ ed_rejections_legend <- summary_gen_ed %>%
   coord_flip()+
   facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
   labs(x = "\n", 
-       y = "Difference Following Review by Editor Gender\n",
+       y = "Difference Following Review by Editor Gender",
        fill = "Percentage Point\nDifference")+
   my_theme_leg_horiz+
   theme(legend.position = "top")
@@ -156,13 +160,17 @@ men_rev <- rev_rec_data %>%
 
 summary_gen_rev <- rbind(fem_rev, men_rev)
 
-#Plot reviewer recomendation outcomes by reviewer gender
+#Plot reviewer recommendation outcomes by reviewer gender
+plot_breaks <- pretty(summary_gen_rev$overperformance, n = 7)
+
 reviewer_C <- summary_gen_rev %>% 
   ggplot(aes(x = review.recommendation, 
              y = overperformance, fill = overperformance))+
   geom_col(position = "dodge")+
   gen_gradient+
   coord_flip()+
+  scale_y_continuous(breaks = plot_breaks,
+                     labels = abs(plot_breaks))+
   facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1)+
   labs(x = "\n", 
        y = "Difference in Review\nRecommendation")+
@@ -192,12 +200,16 @@ reviewer_A_data <- rev_rec_data %>%
 reviewer_A_data$review.recommendation <- fct_relevel(reviewer_A_data$review.recommendation, decisions)
 
 #plot impact of author gender on review suggestions (B)
+plot_breaks <- pretty(reviewer_A_data$overperformance, n = 7)
+
 reviewer_A <- reviewer_A_data %>% 
   ggplot(aes(x = review.recommendation, 
              y = overperformance, fill = overperformance))+
   geom_col(position = "dodge")+
   gen_gradient+
   coord_flip()+
+  scale_y_continuous(breaks = plot_breaks,
+                     labels = abs(plot_breaks))+
   labs(x = "\n", 
        y = "Difference in Review Recommendation")+
   my_theme_horiz

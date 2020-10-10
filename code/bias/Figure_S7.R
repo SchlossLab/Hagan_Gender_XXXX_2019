@@ -28,16 +28,21 @@ Fig_S7A_data <- left_join(ASM_subs_j, ed_rej_subs_j,
   select(-total, -ed.rejections) %>% 
   spread(key = gender, value = prop.rejected) %>% 
   mutate(performance = male - female)
-  
+
+break_list <- pretty(Fig_S7A_data$performance, n = 7)
+
 Figure_S7A <- Fig_S7A_data %>% 
   ggplot(aes(x = journal, y = performance, fill = performance))+
   geom_col()+
   facet_wrap(~US.inst.type, scales = "free", ncol = 2)+
   coord_flip()+
   gen_gradient_40+
+  scale_y_continuous(breaks = break_list,
+                     labels = abs(break_list))+
   labs(x = "\n",
-       y = "Difference in Editorial Rejections\n",
-       fill = "% Points\nDifference")+
+       y = "Difference in Editorial Rejections",
+       fill = "% Points\nDifference",
+       caption = "Men <--- Favored Gender ---> Women\n")+
   my_theme_horiz+
   theme(legend.position = c(0.8,0.1))
 
@@ -69,15 +74,20 @@ Fig_S7B_data <- left_join(ASM_subs_j, acc_subs_j,
   spread(key = gender, value = prop.accepted) %>% 
   mutate(performance = male - female)
 
+break_list <- pretty(Fig_S7B_data$performance, n = 7)
+
 Figure_S7B <- Fig_S7B_data %>% 
   ggplot(aes(x = journal, y = performance, fill = performance))+
   geom_col()+
   facet_wrap(~US.inst.type, scales = "free", ncol = 2)+
   coord_flip()+
   gen_gradient_40+
+  scale_y_continuous(breaks = break_list,
+                     labels = abs(break_list))+
   labs(x = "\n", 
-       y = "Difference in Acceptance Rates\n", 
-       fill = "% Points\nDifference")+
+       y = "Difference in Acceptance Rates", 
+       fill = "% Points\nDifference",
+       caption = "Women <--- Favored Gender ---> Men\n")+
   my_theme_horiz+
   theme(legend.position = c(0.8,0.1))
 
@@ -165,6 +175,8 @@ summ_inst <- summ_inst_num %>%
   left_join(., rev_inst_totals, by = c("reviewer.gender", "US.inst.type")) %>% 
   mutate(US.inst.type = paste0(US.inst.type, " (N=", total_sub, ")"))
 
+break_list <- pretty(summ_inst$overperform, n = 7)
+
 Figure_S7C <- summ_inst %>% 
   filter(review.recommendation == "Accept") %>% 
   ggplot(aes(x = fct_reorder(US.inst.type, desc(total_sub)), 
@@ -175,10 +187,13 @@ Figure_S7C <- summ_inst %>%
   coord_flip()+
   facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1, 
              scales = "free_y")+
+  scale_y_continuous(breaks = break_list,
+                     labels = abs(break_list))+
   labs(x = "\n", 
        y = "Difference in Acceptance
        Recommendation
-       by Reviewer Gender", fill = "% Points\nDifference")+
+       by Reviewer Gender", fill = "% Points\nDifference",
+       caption = "Women <--- Favored Gender ---> Men")+
   my_theme_leg_horiz+
   theme(legend.position = "left")
 
