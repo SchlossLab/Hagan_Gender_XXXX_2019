@@ -147,7 +147,7 @@ plot_cat_bias <- function(data, cat_journ){
                        labels = abs(plot_breaks))+
     labs(x = "\n", 
          y = paste("Difference at ", cat_journ),
-         caption = "Men <--- Favored Gender ---> Women\n")+
+         caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
     my_theme_horiz
   
   return(plot)

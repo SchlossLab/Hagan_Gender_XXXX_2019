@@ -63,7 +63,7 @@ figure_7A <- figure_7A_data %>%
   #geom_text(aes(x = journal, y = 0.75, label = n))+
   labs(x = "\n", 
        y = "Difference in Editorial Rejections",
-       caption = "Men <--- Favored Gender ---> Women\n")+
+       caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
   my_theme_horiz
 
 #B. decisions following review for U.S. only----
@@ -278,7 +278,7 @@ figure_7D <- fig7d_inst_total %>%
              scales = "free_y")+
   labs(x = "\n", 
        y = "Difference in Rejection Decision",
-       caption = "Men <--- Favored Gender ---> Women\n")+
+       caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
   my_theme_horiz
 
 #generate & save figure----

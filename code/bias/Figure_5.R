@@ -74,7 +74,7 @@ figure_5A <- rej_by_journ %>%
                      labels = abs(plot_breaks))+
   labs(x = "\n", y = "Difference in Percent Rejection",
        fill = "% Points\nDifference",
-       caption = "Men <--- Favored Gender ---> Women\n")+
+       caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
   my_theme_leg_horiz+
   theme(plot.caption=element_text(size=12, hjust=.5))
 
@@ -138,7 +138,7 @@ figure_5B <- figure_5B_data %>%
   #geom_text(aes(x = journal, y = 0.75, label = n))+
   labs(x = "\n", 
        y = "Difference in Editorial Rejections",
-       caption = "Men <--- Favored Gender ---> Women\n")+
+       caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
   my_theme_horiz
 
 #C. break decisions after review down by journal----

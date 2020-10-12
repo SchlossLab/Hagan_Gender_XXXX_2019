@@ -42,7 +42,7 @@ Figure_S7A <- Fig_S7A_data %>%
   labs(x = "\n",
        y = "Difference in Editorial Rejections",
        fill = "% Points\nDifference",
-       caption = "Men <--- Favored Gender ---> Women\n")+
+       caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
   my_theme_horiz+
   theme(legend.position = c(0.8,0.1))
 
@@ -87,7 +87,7 @@ Figure_S7B <- Fig_S7B_data %>%
   labs(x = "\n", 
        y = "Difference in Acceptance Rates", 
        fill = "% Points\nDifference",
-       caption = "Women <--- Favored Gender ---> Men\n")+
+       caption = expression("Women" %<-% "Favored Gender" %->% "Men"))+
   my_theme_horiz+
   theme(legend.position = c(0.8,0.1))
 
@@ -193,7 +193,7 @@ Figure_S7C <- summ_inst %>%
        y = "Difference in Acceptance
        Recommendation
        by Reviewer Gender", fill = "% Points\nDifference",
-       caption = "Women <--- Favored Gender ---> Men")+
+       caption = expression("Women" %<-% "Favored Gender" %->% "Men"))+
   my_theme_leg_horiz+
   theme(legend.position = "left")
 
