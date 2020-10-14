@@ -83,4 +83,4 @@ fem_by_auth_num %>%
   theme(legend.position = c(0.8, 0.1))
 
 ggsave("Figure_S4.tiff", device = 'tiff', units = "in", scale = 1.25,
-       path = 'submission', width = 6, height = 6)
+       path = 'submission', width = 6, height = 6, compression = "lzw")

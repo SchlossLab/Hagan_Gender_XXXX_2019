@@ -84,7 +84,8 @@ ed_rejections_B <- summary_gen_ed %>%
   coord_flip()+
   facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
   labs(x = "\n", 
-       y = "Difference Following Review by Editor Gender\n",
+       y = "Difference Following Review by Editor Gender",
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"),
        fill = "Percentage Point\nDifference\n")+
   my_theme_horiz
 
@@ -97,7 +98,8 @@ ed_rejections_legend <- summary_gen_ed %>%
   facet_wrap(~gen_ed_facet(editor.gender), ncol = 1)+
   labs(x = "\n", 
        y = "Difference Following Review by Editor Gender",
-       fill = "Percentage Point\nDifference")+
+       fill = "Percentage Point\nDifference",
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_leg_horiz+
   theme(legend.position = "top")
 
@@ -173,7 +175,8 @@ reviewer_C <- summary_gen_rev %>%
                      labels = abs(plot_breaks))+
   facet_wrap(~gen_rev_facet(reviewer.gender), ncol = 1)+
   labs(x = "\n", 
-       y = "Difference in Review\nRecommendation")+
+       y = "Difference in Review\nRecommendation",
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_horiz
 
 #Are papers authored by women ranked differently by reviewers?
@@ -211,7 +214,8 @@ reviewer_A <- reviewer_A_data %>%
   scale_y_continuous(breaks = plot_breaks,
                      labels = abs(plot_breaks))+
   labs(x = "\n", 
-       y = "Difference in Review Recommendation")+
+       y = "Difference in Review Recommendation",
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_horiz
 
 #make full figure----
@@ -227,4 +231,4 @@ plot_BC <- plot_grid(reviewer_A, reviewer_C, labels = c('B', 'C'), label_size = 
 plot_grid(plot_A, plot_BC, nrow = 2)
 
 ggsave("Figure_6.tiff", device = 'tiff', units = "in", scale = 2,
-       path = 'submission', width = 5, height = 3.5)
+       path = 'submission', width = 5, height = 3.5, compression = "lzw")

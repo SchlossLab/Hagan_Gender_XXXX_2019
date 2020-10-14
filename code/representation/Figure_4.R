@@ -52,4 +52,4 @@ row_2 <- plot_grid(Fig_4B, Fig_4C, Fig_4D,
 plot_grid(row_1, row_2, nrow = 2, rel_heights = c(1, 2))
 
 ggsave("Figure_4.tiff", device = 'tiff', units = "in", scale = 1.5, 
-       path = 'submission', width = 6, height = 8)
+       path = 'submission', width = 6, height = 8, compression = "lzw")

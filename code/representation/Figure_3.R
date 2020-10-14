@@ -153,4 +153,4 @@ plot_AB <- plot_grid(plot_legend, Fig_3A, Fig_3B, Fig_3C, nrow = 4,
           labels = c('', 'A', 'B', 'C'), label_size = 18)
 
 ggsave("Figure_3.tiff", device = 'tiff', units = "in", scale = 1.75,
-     path = 'submission', width = 4, height = 4)
+     path = 'submission', width = 4, height = 4, compression = "lzw")

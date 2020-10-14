@@ -54,6 +54,6 @@ plot_grid(Fig_2ab, Fig_2E, Fig_2de, labels = c('', 'C', ''), label_size = 18,
           nrow = 3, rel_heights = c(1, 1.5, 1))
 
 ggsave("Figure_2.tiff", device = 'tiff', units = "in", scale = 1.75,
-       path = 'submission', width = 6.8, height = 6.8)
+       path = 'submission', width = 6.8, height = 6.8, compression = "lzw")
 
 

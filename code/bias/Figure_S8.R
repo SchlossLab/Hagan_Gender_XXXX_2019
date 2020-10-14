@@ -139,15 +139,14 @@ plot_cat_bias <- function(data, cat_journ){
     ggplot() +
     geom_col(aes(x = fct_reorder(category, desc(cat.N)), 
                  y = performance, fill = performance)) + 
-    facet_wrap(~EJP.decision, #scales = "free_y", 
-               ncol = 2)+
+    facet_grid(~EJP.decision, margins = "category")+
     coord_flip()+
     gen_gradient_40+
     scale_y_continuous(breaks = plot_breaks,
                        labels = abs(plot_breaks))+
     labs(x = "\n", 
          y = paste("Difference at ", cat_journ),
-         caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
+         caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
     my_theme_horiz
   
   return(plot)
@@ -223,7 +222,8 @@ Fig_S8_legend <- get_legend(Fig_S8_legend_plot)
 
 Fig_S8_plots <- plot_grid(plotlist = Fig_S8_list, 
                    labels = c('A', 'B', 'C', 'D', 'E'), 
-                  rel_heights = c(1.25, 1.25, 1, 1, 1),
+                  rel_heights = c(1.25, 1.25, 1, 1.25, 1.25),
+                  #rel_widths = c(.8, .8, 1, .8 ,1),
                    label_size = 18, ncol = 1)
 
 plot_grid(Fig_S8_legend, Fig_S8_plots,
@@ -231,4 +231,4 @@ plot_grid(Fig_S8_legend, Fig_S8_plots,
           nrow = 2)
 
 ggsave("Figure_S8.tiff", device = 'tiff', units = "in", scale = 2,
-       path = 'submission', width = 6.8, height = 8)
+       path = 'submission', width = 6.8, height = 8, compression = "lzw")

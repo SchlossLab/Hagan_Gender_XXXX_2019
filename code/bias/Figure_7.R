@@ -63,7 +63,7 @@ figure_7A <- figure_7A_data %>%
   #geom_text(aes(x = journal, y = 0.75, label = n))+
   labs(x = "\n", 
        y = "Difference in Editorial Rejections",
-       caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_horiz
 
 #B. decisions following review for U.S. only----
@@ -126,7 +126,8 @@ figure_7B <- figure_7B_data %>%
   geom_hline(data = US_j_dec, aes(yintercept = performance))+
   #geom_text(aes(x = journal, y = 1.5, label = n))+
   labs(x = "\n", 
-       y = "Difference in Decision after First Review\n\n")+
+       y = "Difference in Decision after First Review",
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_horiz
 
 #C. acceptance & editorial rejection rates by U.S. insitution----
@@ -212,7 +213,8 @@ figure_7C <- fig7c_inst_rates %>%
   scale_y_continuous(breaks = plot_breaks,
                      labels = abs(plot_breaks))+
   gen_gradient+
-  labs(x = "\n", y = "Difference in Decision\n")+
+  labs(x = "\n", y = "Difference in Decision",
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_horiz
 
 #D. acceptance by editor gender and institution type after 1st review----
@@ -278,7 +280,7 @@ figure_7D <- fig7d_inst_total %>%
              scales = "free_y")+
   labs(x = "\n", 
        y = "Difference in Rejection Decision",
-       caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_horiz
 
 #generate & save figure----
@@ -299,4 +301,4 @@ plot_grid(plot_legend, fig_7_row1, figure_7C, figure_7D,
           label_size = 18, nrow = 4)
 
 ggsave("Figure_7.tiff", device = 'tiff', units = "in", scale = 1.75,
-       path = 'submission', width = 6.8, height = 9)
+       path = 'submission', width = 6.8, height = 9, compression = "lzw")

@@ -23,4 +23,4 @@ plot_grid(Fig_S2A, Fig_S2B,
           ncol = 1)
 
 ggsave("Figure_S2.tiff", device = 'tiff', units = "in", scale = 1.25,
-       path = 'submission', width = 6.8, height = 5)
+       path = 'submission', width = 6.8, height = 5, compression = "lzw")

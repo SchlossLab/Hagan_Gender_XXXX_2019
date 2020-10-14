@@ -103,4 +103,4 @@ plot_grid(figure_S6A, figure_S6B, ncol = 1,
           labels = c('A', 'B'), label_size = 18)
 
 ggsave("Figure_S6.tiff", device = 'tiff', units = "in", scale = 1,
-       path = 'submission', width = 6, height = 9)
+       path = 'submission', width = 6, height = 9, compression = "lzw")

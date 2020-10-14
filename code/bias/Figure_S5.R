@@ -80,4 +80,4 @@ plot_grid(Fig_AB, fem_feat_plot,
           label_size = 18, nrow = 2)
 
 ggsave("Figure_S5.tiff", device = 'tiff', units = "in", scale = 1.7, 
-       path = 'submission', width = 5, height = 6)
+       path = 'submission', width = 5, height = 6, compression = "lzw")

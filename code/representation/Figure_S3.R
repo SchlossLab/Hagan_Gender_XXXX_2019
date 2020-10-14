@@ -14,4 +14,4 @@ plot_grid(Fig_S3A, Fig_S3B, labels = c('A', 'B'),
                   label_size = 18, nrow = 2)
 
 ggsave("Figure_S3.tiff", device = 'tiff', units = "in", scale = 1.5,
-       path = 'submission', width = 6, height = 4)
+       path = 'submission', width = 6, height = 4, compression = "lzw")

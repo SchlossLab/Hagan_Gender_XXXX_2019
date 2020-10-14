@@ -74,7 +74,7 @@ figure_5A <- rej_by_journ %>%
                      labels = abs(plot_breaks))+
   labs(x = "\n", y = "Difference in Percent Rejection",
        fill = "% Points\nDifference",
-       caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_leg_horiz+
   theme(plot.caption=element_text(size=12, hjust=.5))
 
@@ -138,7 +138,7 @@ figure_5B <- figure_5B_data %>%
   #geom_text(aes(x = journal, y = 0.75, label = n))+
   labs(x = "\n", 
        y = "Difference in Editorial Rejections",
-       caption = expression("Men" %<-% "Favored Gender" %->% "Women"))+
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_horiz
 
 #C. break decisions after review down by journal----
@@ -198,7 +198,8 @@ figure_5C <- figure_5C_data %>%
                      labels = abs(plot_breaks))+
   #geom_text(aes(x = journal, y = 1.5, label = n))+
   labs(x = "\n", 
-       y = "Difference in Decision\nafter First Review\n")+
+       y = "Difference in Decision\nafter First Review",
+       caption = expression("Women" %<-% "Overrepresented" %->% "Men"))+
   my_theme_horiz
 
 row2 <- plot_grid(figure_5B, figure_5C, 
@@ -207,4 +208,4 @@ row2 <- plot_grid(figure_5B, figure_5C,
 plot_grid(figure_5A, row2, labels = 'A', label_size = 18, nrow = 2)
 
 ggsave("Figure_5.tiff", device = 'tiff', units = "in", scale = 1.75,
-       path = 'submission', width = 6, height = 4)
+       path = 'submission', width = 6, height = 4, compression = "lzw")
